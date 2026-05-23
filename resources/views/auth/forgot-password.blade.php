@@ -1,25 +1,35 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+    <x-slot name="title">Mot de passe oublié</x-slot>
 
-    <!-- Session Status -->
+    <h2 class="text-xl font-semibold mb-3" style="font-family:'Fraunces',serif;">Mot de passe oublié ?</h2>
+    <p class="text-sm mb-6" style="color:hsl(var(--blanc-casse)/0.6);">
+        Saisissez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+    </p>
+
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" class="space-y-5">
         @csrf
 
-        <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <x-input-label for="email" value="Adresse e-mail" />
+            <x-text-input id="email" type="email" name="email"
+                          :value="old('email')" required autofocus class="block mt-1 w-full" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+        <button type="submit"
+                class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all hover:opacity-90"
+                style="background:hsl(var(--orange-ivoire));">
+            Envoyer le lien de réinitialisation
+        </button>
+
+        <p class="text-center text-sm" style="color:hsl(var(--blanc-casse)/0.6);">
+            <a href="{{ route('login') }}"
+               class="hover:underline"
+               style="color:hsl(var(--orange-ivoire));">
+                ← Retour à la connexion
+            </a>
+        </p>
     </form>
 </x-guest-layout>
