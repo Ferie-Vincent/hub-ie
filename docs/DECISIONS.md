@@ -24,6 +24,21 @@
 
 <!-- Les décisions s'ajoutent ci-dessous au fil de l'implémentation. -->
 
+### 2026-05-23 · Stack simplifiée — MySQL + fichier (sans Redis, sans MinIO, sans Docker)
+
+**Contexte** : volume réel de l'événement ~150 personnes. Stack PostgreSQL + Redis + MinIO + Docker initialement prévue surdimensionnée.
+
+**Décision** : MySQL 8 (MAMP) + sessions fichier + cache fichier + queues database + stockage disque local.
+
+**Alternatives écartées** :
+- PostgreSQL + Redis — justifié pour > 10 000 users concurrents, pas pour 150
+- MinIO / S3 — inutile pour ~50 fichiers uploadés (CVs, pièces)
+- Docker Compose — complexité inutile sur environnement MAMP déjà fonctionnel
+
+**Justification** : décision de l'auteur du brief. Simplifie le développement, réduit les dépendances, zéro impact sur les fonctionnalités à cette échelle.
+
+**Impact** : `.env`, `.env.example`, `BRIEF.md`, `CLAUDE.md`, `docker-compose.yml` (conservé pour référence prod future).
+
 ### 2026-05-23 · PHP binaire pour le développement local
 
 **Contexte** : PHP 8.4.x Homebrew cassé (`libnetsnmp.40.dylib` manquante sur macOS 26.1). La commande `php` système pointe sur 8.4 non fonctionnel.

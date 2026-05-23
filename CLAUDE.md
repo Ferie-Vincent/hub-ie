@@ -6,7 +6,7 @@
 
 ## 1. Le projet en 5 lignes
 
-Plateforme institutionnelle (`hubimportexport.ci`) commanditée par le Ministère du Commerce de Côte d'Ivoire pour l'événement Hub Import-Export 2026 (22–25 juin 2026, Abidjan, 180 auditeurs). Trois missions : vitrine publique, portail de candidature avec validation comité, outil de pilotage et de pointage (QR + code 6 chiffres). Stack imposée : **Laravel 12 + Livewire 3 + Alpine + Tailwind 3.4 + Filament 3 + PostgreSQL 16 + Redis 7**. Référence visuelle obligatoire à reproduire : `https://diasporaforgrowth.ci/`. Langue V1 : français uniquement.
+Plateforme institutionnelle (`hubimportexport.ci`) commanditée par le Ministère du Commerce de Côte d'Ivoire pour l'événement Hub Import-Export 2026 (22–25 juin 2026, Abidjan, ~150 auditeurs). Trois missions : vitrine publique, portail de candidature avec validation comité, outil de pilotage et de pointage (QR + code 6 chiffres). Stack : **Laravel 12 + Livewire 3 + Alpine + Tailwind 3.4 + Filament 3 + MySQL 8 + MAMP**. Référence visuelle obligatoire à reproduire : `https://diasporaforgrowth.ci/`. Langue V1 : français uniquement.
 
 ## 2. Commande de démarrage
 
@@ -78,8 +78,7 @@ Dans tous les autres cas, tu décides, tu documentes dans `DECISIONS.md`, tu ava
 - Lighthouse Performance ≥ 90 sur `/` en mobile et desktop (mesure locale en build prod).
 - WCAG 2.1 AA : tous les boutons et liens navigables au clavier, contrastes vérifiés.
 - README.md à la racine permet à un nouveau développeur d'installer en local en < 15 minutes.
-- `docker-compose up` lance app + nginx + postgres + redis + minio + mailpit fonctionnels.
-- 10 mailables visibles dans Mailpit en local lors du déroulement complet d'une candidature jusqu'au pointage.
+- 10 mailables vérifiables en local lors du déroulement complet d'une candidature jusqu'au pointage.
 - Le dossier `docs/` contient `ADMIN.md`, `DEPLOY.md`, `DECISIONS.md` à jour.
 
 ## 7. Index des documents du projet
@@ -96,7 +95,7 @@ Dans tous les autres cas, tu décides, tu documentes dans `DECISIONS.md`, tu ava
 
 ## 8. Stack et versions (rappel synthétique)
 
-PHP 8.3+ · Laravel 12 · Livewire 3 · Alpine 3 · Tailwind 3.4 · Filament 3 · Breeze (Blade) · Spatie Laravel Permission 6 · PostgreSQL 16 · Redis 7 · `simplesoftwareio/simple-qrcode` · `spatie/laravel-pdf` · `maatwebsite/excel` 3 · MinIO (S3-compatible) · `html5-qrcode` (CDN) · Sentry · Pest 3 · Docker Compose.
+PHP 8.3+ · Laravel 12 · Livewire 3 · Alpine 3 · Tailwind 3.4 · Filament 3 · Breeze (Blade) · Spatie Laravel Permission · MySQL 8 · `simplesoftwareio/simple-qrcode` · `spatie/laravel-pdf` · `maatwebsite/excel` 3 · `html5-qrcode` (CDN) · Pest 3 · MAMP.
 
 Détails et justifications : `BRIEF.md` § IV.1.
 

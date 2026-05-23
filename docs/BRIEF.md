@@ -634,37 +634,32 @@ Contenu de tous les emails dans `CONTENT.md` § B.
 | Auth candidats | Laravel Breeze (Blade) | 2.x |
 | Auth admin | Filament natif | — |
 | RBAC | Spatie Laravel Permission | 6.x |
-| Base de données | PostgreSQL | 16+ |
-| Cache, sessions, queue | Redis | 7.x |
+| Base de données | MySQL | 8.0+ |
+| Cache, sessions, queue | Fichier / base de données | — |
 | Mail driver | SMTP (Brevo / Postmark / SMTP institutionnel) | — |
 | QR Code | `simplesoftwareio/simple-qrcode` | dernière |
 | PDF | `spatie/laravel-pdf` (Browsershot) | dernière |
 | Excel | `maatwebsite/excel` | 3.x |
-| Storage fichiers | MinIO (S3-compatible) ou S3 | — |
+| Storage fichiers | Disque local (public) | — |
 | Scan QR client | `html5-qrcode` (CDN, lazy load) | dernière |
-| Monitoring | Sentry | — |
 | Tests | Pest | 3.x |
-| Containerisation | Docker + Docker Compose | — |
 
 **Justifications de fond** :
 - Full Laravel demandé par le commanditaire → pas d'Inertia ni de Next, on reste Blade + Livewire + Alpine.
 - Filament non négociable pour le back-office : widgets graphiques (ApexCharts intégré), exports, intégration Spatie Permission, RBAC, tables filtrables, formulaires schémas — ~80 % du back-office gratuit.
-- PostgreSQL plutôt que MySQL pour types JSON natifs, calcul d'âge fiable (`EXTRACT YEAR FROM AGE(...)`), cohérence avec ECOBASE.
+- MySQL + MAMP : stack simplifiée adaptée au volume réel (~150 personnes). Pas de Redis ni MinIO requis à cette échelle.
 
 ## IV.2 Domaines, environnements, variables
 
 **Domaines** :
 - Production : `hubimportexport.ci`
 - Recette : `staging.hubimportexport.ci`
-- Local dev : `hub.test` (Laravel Herd/Valet) ou `localhost` (Docker Compose)
+- Local dev : `hub.test` (MAMP) ou `localhost`
 
 **Variables d'environnement** (`.env.example` exhaustif) :
 - `APP_*` standards Laravel
-- `DB_*` PostgreSQL
-- `REDIS_*`
+- `DB_*` MySQL
 - `MAIL_*`
-- `AWS_*` (MinIO/S3)
-- `SENTRY_LARAVEL_DSN`
 - `HUB_APPLICATION_OPENS_AT` (date ouverture candidatures)
 - `HUB_APPLICATION_CLOSES_AT` (date clôture)
 - `HUB_EVENT_STARTS_AT` (2026-06-22 09:00:00)
@@ -674,7 +669,7 @@ Contenu de tous les emails dans `CONTENT.md` § B.
 - `HUB_QUOTA_YOUTH_MIN_PCT` (40)
 - `HUB_QUOTA_YOUTH_MAX_AGE` (35)
 
-**Docker Compose local** : `app` (php-fpm), `nginx`, `postgres`, `redis`, `minio`, `mailpit`.
+**Stack locale** : MAMP (Apache + MySQL + PHP 8.3).
 
 ## IV.3 Schéma de base de données
 
@@ -853,7 +848,7 @@ docker/
 - Validation server-side stricte sur tous inputs (types fichiers, taille).
 - Stockage fichiers candidats hors webroot, accès via routes signées.
 - Hash passwords : bcrypt cost 12.
-- Sessions Redis avec rotation à login.
+- Sessions fichier avec rotation à login.
 - Headers : `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`.
 
 ## IV.9 Tests automatisés (Pest)
@@ -883,8 +878,7 @@ Tous les tests dans des transactions DB roll-backées. Aucun fichier écrit sur 
 À la fin de la construction :
 
 1. Repo Git complet avec `README.md` (installation locale, déploiement, paramétrage).
-2. `docker-compose.yml` fonctionnel pour dev local.
-3. Tous les seeders : `php artisan migrate:fresh --seed` démarre une démo fonctionnelle.
+2. Tous les seeders : `php artisan migrate:fresh --seed` démarre une démo fonctionnelle.
 4. Documentation des routes nommées (auto-générée via `php artisan route:list`).
 5. `docs/ADMIN.md` : workflow comité, exports, scan d'entrée.
 6. `docs/DEPLOY.md` : Nginx, supervisor (queue worker), cron (scheduler), sauvegardes.
