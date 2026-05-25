@@ -10,6 +10,7 @@ use App\Mail\ApplicationIncomplete;
 use App\Mail\ApplicationReceived;
 use App\Mail\ApplicationRejected;
 use App\Mail\ApplicationShortlisted;
+use App\Mail\ApplicationUnderReview;
 use App\Mail\ApplicationWaitlisted;
 use App\Models\Application;
 use Illuminate\Support\Facades\Mail;
@@ -121,6 +122,7 @@ class ApplicationStatusService
                 ApplicationStatus::Received    => Mail::to($app->user->email)->queue(new ApplicationReceived($app)),
                 ApplicationStatus::Eligible    => Mail::to($app->user->email)->queue(new ApplicationEligible($app)),
                 ApplicationStatus::Incomplete  => Mail::to($app->user->email)->queue(new ApplicationIncomplete($app)),
+                ApplicationStatus::UnderReview => Mail::to($app->user->email)->queue(new ApplicationUnderReview($app)),
                 ApplicationStatus::Shortlisted => Mail::to($app->user->email)->queue(new ApplicationShortlisted($app)),
                 ApplicationStatus::Accepted    => null, // handled in GenerateBadgePdf job
                 ApplicationStatus::Waitlisted  => Mail::to($app->user->email)->queue(new ApplicationWaitlisted($app)),

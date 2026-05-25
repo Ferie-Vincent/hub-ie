@@ -46,18 +46,20 @@ class ViewApplication extends ViewRecord
                         ->visible(fn(Forms\Get $get) => $get('status') === ApplicationStatus::Rejected->value),
                 ])
                 ->action(function(array $data): void {
-                    $this->record->update([
-                        'status'           => $data['status'],
-                        'admin_notes'      => $data['admin_notes'] ?? $this->record->admin_notes,
-                        'rejection_reason' => $data['rejection_reason'] ?? $this->record->rejection_reason,
-                    ]);
-
-                    $this->refreshFormData(['status', 'admin_notes', 'rejection_reason']);
-
-                    Notification::make()
-                        ->title('Statut mis à jour')
-                        ->success()
-                        ->send();
+                    try {
+                        app(\App\Services\ApplicationStatusService::class)->transition(
+                            $this->record,
+                            ApplicationStatus::from($data['status']),
+                            $data['admin_notes'] ?? null,
+                        );
+                        if (! blank($data['rejection_reason'] ?? null)) {
+                            $this->record->update(['rejection_reason' => $data['rejection_reason']]);
+                        }
+                        $this->refreshFormData(['status', 'admin_notes', 'rejection_reason']);
+                        Notification::make()->title('Statut mis à jour')->success()->send();
+                    } catch (\DomainException $e) {
+                        Notification::make()->title('Transition impossible')->body($e->getMessage())->danger()->send();
+                    }
                 }),
         ];
     }

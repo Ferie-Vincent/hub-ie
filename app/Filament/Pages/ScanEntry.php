@@ -36,11 +36,15 @@ class ScanEntry extends Page
 
     public function processQrToken(string $token): void
     {
-        $app = Application::where('qr_token', $token)->with('user')->first();
+        $app = Application::where('qr_token', $token)
+            ->where('status', 'accepted')
+            ->with('user')
+            ->first();
 
         if (! $app) {
             $this->scanResult = 'error';
-            $this->lastScan   = ['message' => 'QR inconnu.'];
+            $this->lastScan   = ['message' => 'QR inconnu ou candidature non retenue.'];
+            Notification::make()->title('QR invalide')->danger()->send();
             return;
         }
 

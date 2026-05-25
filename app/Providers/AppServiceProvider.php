@@ -7,7 +7,9 @@ use App\Models\Attendance;
 use App\Models\Evaluation;
 use App\Models\News;
 use App\Models\Partner;
+use App\Models\User;
 use App\Observers\ApplicationObserver;
+use App\Observers\EvaluationObserver;
 use App\Policies\ApplicationPolicy;
 use App\Policies\AttendancePolicy;
 use App\Policies\EvaluationPolicy;
@@ -22,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // super_admin bypasses all policy checks
+        Gate::before(function (User $user, string $ability) {
+            if ($user->hasRole('super_admin')) {
+                return true;
+            }
+        });
+
         Gate::policy(Application::class, ApplicationPolicy::class);
         Gate::policy(Evaluation::class, EvaluationPolicy::class);
         Gate::policy(Attendance::class, AttendancePolicy::class);
@@ -29,5 +38,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Partner::class, PartnerPolicy::class);
 
         Application::observe(ApplicationObserver::class);
+        Evaluation::observe(EvaluationObserver::class);
     }
 }
