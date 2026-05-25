@@ -9,12 +9,12 @@ class PartnerPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermissionTo(['manage-content', 'view-applications']);
+        return $user->hasAnyPermission(['manage-content', 'view-applications']);
     }
 
     public function view(User $user, Partner $partner): bool
     {
-        return $user->hasAnyPermissionTo(['manage-content', 'view-applications']);
+        return $user->hasAnyPermission(['manage-content', 'view-applications']);
     }
 
     public function create(User $user): bool

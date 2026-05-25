@@ -9,7 +9,7 @@ class ApplicationPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermissionTo(['view-applications', 'evaluate-applications']);
+        return $user->hasAnyPermission(['view-applications', 'evaluate-applications']);
     }
 
     public function view(User $user, Application $application): bool
@@ -18,7 +18,7 @@ class ApplicationPolicy
             return $application->user_id === $user->id;
         }
 
-        return $user->hasAnyPermissionTo(['view-applications', 'evaluate-applications']);
+        return $user->hasAnyPermission(['view-applications', 'evaluate-applications']);
     }
 
     public function create(User $user): bool

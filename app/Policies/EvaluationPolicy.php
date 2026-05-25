@@ -9,7 +9,7 @@ class EvaluationPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermissionTo(['evaluate-applications', 'view-applications']);
+        return $user->hasAnyPermission(['evaluate-applications', 'view-applications']);
     }
 
     public function view(User $user, Evaluation $evaluation): bool
@@ -18,7 +18,7 @@ class EvaluationPolicy
             return $evaluation->evaluator_id === $user->id;
         }
 
-        return $user->hasAnyPermissionTo(['evaluate-applications', 'view-applications']);
+        return $user->hasAnyPermission(['evaluate-applications', 'view-applications']);
     }
 
     public function create(User $user): bool

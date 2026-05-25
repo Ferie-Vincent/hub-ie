@@ -9,12 +9,12 @@ class AttendancePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyPermissionTo(['scan-attendance', 'view-applications']);
+        return $user->hasAnyPermission(['scan-attendance', 'view-applications']);
     }
 
     public function view(User $user, Attendance $attendance): bool
     {
-        return $user->hasAnyPermissionTo(['scan-attendance', 'view-applications']);
+        return $user->hasAnyPermission(['scan-attendance', 'view-applications']);
     }
 
     public function create(User $user): bool

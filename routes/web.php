@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PreInscriptionController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
@@ -52,8 +53,19 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
     Route::get('/candidature', fn () => view('candidature.index'))
         ->name('candidature.index');
+    Route::get('/candidature/confirmation', fn () => view('candidature.confirmation'))
+        ->name('application.confirmation');
     Route::get('/mon-espace', fn () => view('candidate.dashboard'))
         ->name('candidate.dashboard');
+    Route::delete('/mon-espace/retirer', [ApplicationController::class, 'withdraw'])
+        ->name('application.withdraw');
+    // Phase 7 — badge/convocation download (placeholder until PDFs implemented)
+    Route::get('/mon-espace/badge/{application}/qr', [ApplicationController::class, 'qrCode'])
+        ->name('application.qr');
+    Route::get('/mon-espace/badge/{application}/download', [ApplicationController::class, 'downloadBadge'])
+        ->name('application.badge.download');
+    Route::get('/mon-espace/convocation/{application}/download', [ApplicationController::class, 'downloadConvocation'])
+        ->name('application.convocation.download');
 });
 
 Route::middleware('auth')->group(function () {
