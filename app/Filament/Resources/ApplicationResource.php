@@ -138,12 +138,24 @@ class ApplicationResource extends Resource
                         : $query->whereHas('user', fn($q) => $q->where('gender', $data['value']))
                     ),
 
+                Tables\Filters\Filter::make('women_only')
+                    ->label('Femmes uniquement')
+                    ->query(fn(Builder $query) => $query->whereHas('user', fn($q) => $q->where('gender', 'F'))),
+
+                Tables\Filters\Filter::make('under_35')
+                    ->label('< 35 ans uniquement')
+                    ->query(fn(Builder $query) => $query->whereHas(
+                        'user',
+                        fn($q) => $q->whereNotNull('birth_date')
+                                    ->whereDate('birth_date', '>=', now()->subYears(35)->toDateString())
+                    )),
+
                 Tables\Filters\Filter::make('submitted')
                     ->label('Dossier soumis uniquement')
                     ->query(fn(Builder $query) => $query->whereNotNull('submitted_at'))
                     ->default(),
             ])
-            ->filtersFormColumns(2)
+            ->filtersFormColumns(3)
             ->defaultSort('submitted_at', 'desc')
             ->striped()
             ->persistSortInSession()

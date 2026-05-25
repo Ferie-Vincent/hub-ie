@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\Evaluation;
 use App\Models\News;
 use App\Models\Partner;
+use App\Observers\ApplicationObserver;
 use App\Policies\ApplicationPolicy;
 use App\Policies\AttendancePolicy;
 use App\Policies\EvaluationPolicy;
@@ -26,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Attendance::class, AttendancePolicy::class);
         Gate::policy(News::class, NewsPolicy::class);
         Gate::policy(Partner::class, PartnerPolicy::class);
+
+        Application::observe(ApplicationObserver::class);
     }
 }
