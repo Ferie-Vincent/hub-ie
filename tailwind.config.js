@@ -100,8 +100,21 @@ export default {
                     from: { strokeDashoffset: '200' },
                     to:   { strokeDashoffset: '0' },
                 },
-                // btn-fill via pseudo ::before en CSS pur — pas de keyframe Tailwind nécessaire
-                // link-underline via scaleX CSS pur — pas de keyframe Tailwind nécessaire
+                // hub-float-subtle — flottement ambiant des portraits/éléments décoratifs (§II.9)
+                'hub-float-subtle': {
+                    '0%, 100%': { transform: 'translateY(0px)' },
+                    '50%':      { transform: 'translateY(-8px)' },
+                },
+                // v10-bar-in — barre verticale gauche (.v10-prog-row hover, §II.5.12)
+                'v10-bar-in': {
+                    from: { height: '0%', opacity: '0' },
+                    to:   { height: '70%', opacity: '1' },
+                },
+                // v10-line-in — ligne horizontale bas (.v10-format-card hover, §II.5.11)
+                'v10-line-in': {
+                    from: { transform: 'scaleX(0)', transformOrigin: 'left' },
+                    to:   { transform: 'scaleX(1)', transformOrigin: 'left' },
+                },
             },
 
             animation: {
@@ -115,9 +128,20 @@ export default {
                 'v10-accent-rule':  'v10-accent-rule 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards',
                 'v10-float':        'v10-float 3s ease-in-out infinite',
                 'v10-draw':         'v10-draw 1.2s cubic-bezier(0.16, 1, 0.3, 1) both',
+                'hub-float-subtle': 'hub-float-subtle 6s ease-in-out infinite',
+                'v10-bar-in':       'v10-bar-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+                'v10-line-in':      'v10-line-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
             },
         },
     },
+
+    safelist: [
+        'kicker-sable',
+        'kicker-violet',
+        'prog-tag-sable',
+        'prog-tag-violet',
+        'prog-tag-blue',
+    ],
 
     plugins: [forms],
 };

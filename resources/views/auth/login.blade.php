@@ -1,58 +1,58 @@
 <x-guest-layout>
-    <x-slot name="title">Connexion</x-slot>
+<x-slot name="title">Connexion</x-slot>
 
-    <h2 class="text-xl font-semibold mb-6" style="font-family:'Fraunces',serif;">Se connecter</h2>
+<x-auth-session-status class="mb-5" :status="session('status')" />
 
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<form method="POST" action="{{ route('login') }}">
+    @csrf
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-5">
-        @csrf
+    <div style="margin-bottom: 2rem;">
+        <label class="auth-label" for="email">Adresse e-mail <span style="color:#ef4444;">*</span></label>
+        <input id="email" type="email" name="email"
+               value="{{ old('email') }}"
+               class="auth-input"
+               placeholder="amara@entreprise.ci"
+               required autofocus autocomplete="username">
+        @error('email')
+        <p class="auth-error">{{ $message }}</p>
+        @enderror
+    </div>
 
-        <div>
-            <x-input-label for="email" value="Adresse e-mail" />
-            <x-text-input id="email" type="email" name="email"
-                          :value="old('email')" required autofocus autocomplete="username"
-                          class="block mt-1 w-full" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <div style="margin-bottom: 1.5rem;">
+        <label class="auth-label" for="password">Mot de passe <span style="color:#ef4444;">*</span></label>
+        <input id="password" type="password" name="password"
+               class="auth-input"
+               placeholder="••••••••"
+               required autocomplete="current-password">
+        @error('password')
+        <p class="auth-error">{{ $message }}</p>
+        @enderror
+    </div>
 
-        <div>
-            <x-input-label for="password" value="Mot de passe" />
-            <x-text-input id="password" type="password" name="password"
-                          required autocomplete="current-password" class="block mt-1 w-full" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; gap:1rem; flex-wrap:wrap;">
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-size:0.8125rem; color:rgba(15,12,8,0.50);">
+            <input type="checkbox" name="remember"
+                   style="width:14px; height:14px; accent-color:hsl(var(--orange-ivoire));">
+            Se souvenir de moi
+        </label>
+        @if (Route::has('password.request'))
+        <a href="{{ route('password.request') }}"
+           style="font-size:0.8125rem; font-weight:600; color:hsl(var(--orange-ivoire)); text-decoration:none;">
+            Mot de passe oublié ?
+        </a>
+        @endif
+    </div>
 
-        <div class="flex items-center justify-between flex-wrap gap-2">
-            <label class="flex items-center gap-2 text-sm cursor-pointer"
-                   style="color:hsl(var(--blanc-casse)/0.7);">
-                <input type="checkbox" name="remember"
-                       class="rounded border-gray-600 text-orange-500 focus:ring-orange-500">
-                Se souvenir de moi
-            </label>
+    <button type="submit" class="auth-btn">
+        Se connecter
+    </button>
 
-            @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}"
-                   class="text-sm hover:underline"
-                   style="color:hsl(var(--orange-ivoire));">
-                    Mot de passe oublié ?
-                </a>
-            @endif
-        </div>
-
-        <button type="submit"
-                class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all hover:opacity-90 active:scale-[0.98]"
-                style="background:hsl(var(--orange-ivoire));">
-            Se connecter
-        </button>
-
-        <p class="text-center text-sm" style="color:hsl(var(--blanc-casse)/0.6);">
-            Pas encore de compte ?
-            <a href="{{ route('register') }}"
-               class="font-medium hover:underline"
-               style="color:hsl(var(--orange-ivoire));">
-                Créer un compte
-            </a>
-        </p>
-    </form>
+    <p style="text-align:center; margin-top:1.75rem; font-size:0.8125rem; color:rgba(15,12,8,0.40);">
+        Pas encore de compte ?
+        <a href="{{ route('inscription') }}"
+           style="font-weight:600; color:hsl(var(--orange-ivoire)); text-decoration:none;">
+            S'inscrire
+        </a>
+    </p>
+</form>
 </x-guest-layout>
