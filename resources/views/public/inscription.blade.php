@@ -133,7 +133,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            padding: 1.625rem 1.625rem 1.375rem;
+            padding: 1rem 1.125rem 0.875rem;
             background: #fff;
             border: 1.5px solid rgba(15,12,8,0.08);
             border-top: 2px solid color-mix(in srgb, var(--accent, hsl(var(--orange-ivoire))) 55%, #fff);
@@ -146,9 +146,9 @@
         /* ghost number watermark */
         .a-ghost {
             position: absolute;
-            top: -0.25rem; right: 0.75rem;
+            top: -0.25rem; right: 0.5rem;
             font-family: 'Fraunces', serif;
-            font-size: 5.5rem;
+            font-size: 4rem;
             font-weight: 900;
             line-height: 1;
             color: rgba(15,12,8,0.12);
@@ -158,7 +158,7 @@
         }
         /* colored icon box — light tint background */
         .a-icon {
-            width: 2.5rem; height: 2.5rem;
+            width: 2.125rem; height: 2.125rem;
             border-radius: 0.5rem;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
@@ -168,9 +168,9 @@
         .a-tag {
             display: inline-flex;
             align-items: center;
-            padding: 0.2rem 0.5rem;
+            padding: 0.15rem 0.4rem;
             border-radius: 9999px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 500;
             font-family: 'JetBrains Mono', monospace;
             letter-spacing: 0.03em;
@@ -617,7 +617,7 @@ $ateliers = [
         <div x-show="!done" class="flex flex-col flex-1 w-form-scroll" style="overflow-y: auto;">
 
             {{-- Zone contenu --}}
-            <div class="flex-1 flex flex-col px-10 md:px-14 xl:px-16 pt-28 pb-14 w-full">
+            <div class="flex-1 flex flex-col px-10 md:px-14 xl:px-16 pt-10 pb-4 w-full">
 
                 {{-- Erreur globale --}}
                 <div x-show="errors.global" x-cloak
@@ -627,24 +627,63 @@ $ateliers = [
 
                 {{-- ─── Étape 1 : Atelier ─────────── --}}
                 <div x-show="step === 1" class="flex flex-col flex-1">
-                    <div class="flex items-center gap-3 mb-6">
+                    <div class="flex items-center gap-3 mb-3">
                         <div class="h-px w-7" style="background:hsl(var(--orange-ivoire));"></div>
                         <p class="text-[10px] font-mono font-bold uppercase tracking-[0.22em]"
                            style="color:hsl(var(--orange-ivoire));">Étape 01 — Atelier</p>
                     </div>
-                    <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.8rem,3.2vw,2.625rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08; color:#1A1208;" class="mb-2">
+                    <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.5rem,2.6vw,2.2rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08; color:#1A1208;" class="mb-0.5">
                         Quel atelier souhaitez-vous
                     </h1>
-                    <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.8rem,3.2vw,2.625rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08;" class="mb-7">
+                    <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.5rem,2.6vw,2.2rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08;" class="mb-4">
                         <em style="font-style:italic; color:hsl(var(--orange-ivoire)); font-variation-settings:'opsz' 144,'SOFT' 100;">intégrer ?</em>
                     </h1>
 
-                    <div class="info-box mb-7 text-sm leading-relaxed" style="color:rgba(15,12,8,0.68);">
+                    <div class="info-box mb-4 text-sm leading-relaxed" style="color:rgba(15,12,8,0.68);">
                         Sélectionnez <strong>un seul atelier</strong>. Ce choix conditionne le programme qui vous sera attribué si votre candidature est retenue.
                         <span class="font-semibold" style="color:hsl(var(--orange-ivoire));"> Cochez celui auquel vous souhaitez participer.</span>
                     </div>
 
-                    <div class="flex-1 grid grid-cols-2 gap-4" style="min-height: 0;">
+                    {{-- Indicateur swipe mobile --}}
+                    <div class="flex items-center gap-2 mb-3 md:hidden" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(15,12,8,0.35)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+                        </svg>
+                        <span style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:rgba(15,12,8,0.35);">
+                            Glissez pour voir les ateliers
+                        </span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--orange-ivoire))" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: swipe-hint 1.4s ease-in-out infinite;">
+                            <path d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+
+                    <style>
+                        @keyframes swipe-hint {
+                            0%, 100% { transform: translateX(0); opacity: 1; }
+                            50%       { transform: translateX(5px); opacity: 0.5; }
+                        }
+                        /* Mobile : scroll horizontal snap */
+                        @media (max-width: 767px) {
+                            .ateliers-grid {
+                                display: flex !important;
+                                flex-direction: row !important;
+                                overflow-x: auto;
+                                scroll-snap-type: x mandatory;
+                                -webkit-overflow-scrolling: touch;
+                                gap: 0.75rem;
+                                padding-bottom: 0.5rem;
+                                scrollbar-width: none;
+                            }
+                            .ateliers-grid::-webkit-scrollbar { display: none; }
+                            .ateliers-grid .a-card {
+                                flex: 0 0 82vw;
+                                scroll-snap-align: start;
+                                max-width: 340px;
+                            }
+                        }
+                    </style>
+
+                    <div class="ateliers-grid flex-1 grid grid-cols-2 gap-3" style="min-height: 0;">
                         @foreach($ateliers as $slug => $a)
                         <div class="a-card" style="--accent: {{ $a['hex'] }};"
                              :class="isSel('{{ $slug }}') ? 'sel' : ''"
@@ -654,7 +693,7 @@ $ateliers = [
                             <span class="a-ghost" aria-hidden="true">{{ $a['num'] }}</span>
 
                             {{-- Top row: icon + mono label --}}
-                            <div class="flex items-start justify-between gap-3 mb-4 relative z-10">
+                            <div class="flex items-start justify-between gap-3 mb-2.5 relative z-10">
                                 <div class="a-icon">
                                     @switch($slug)
                                         @case('zlecaf-cedeao')
@@ -675,16 +714,16 @@ $ateliers = [
                             </div>
 
                             {{-- Title + tagline --}}
-                            <div class="relative z-10 mb-2.5">
-                                <h3 style="font-family:'Fraunces',serif; font-size:1.125rem; font-weight:900; letter-spacing:-0.02em; line-height:1.15; color:#1A1208;">{{ $a['titre'] }}</h3>
-                                <p style="font-size:0.78rem; font-weight:500; color:rgba(15,12,8,0.45); margin-top:0.3rem; letter-spacing:0.01em;">{{ $a['tagline'] }}</p>
+                            <div class="relative z-10 mb-2">
+                                <h3 style="font-family:'Fraunces',serif; font-size:1rem; font-weight:900; letter-spacing:-0.02em; line-height:1.15; color:#1A1208;">{{ $a['titre'] }}</h3>
+                                <p style="font-size:0.73rem; font-weight:500; color:rgba(15,12,8,0.45); margin-top:0.2rem; letter-spacing:0.01em;">{{ $a['tagline'] }}</p>
                             </div>
 
                             {{-- Description --}}
-                            <p class="relative z-10 mb-4 leading-relaxed" style="font-size:0.8rem; color:rgba(15,12,8,0.48);">{{ $a['desc'] }}</p>
+                            <p class="relative z-10 mb-2.5 leading-relaxed" style="font-size:0.75rem; color:rgba(15,12,8,0.48);">{{ $a['desc'] }}</p>
 
                             {{-- Tag chips --}}
-                            <div class="relative z-10 flex flex-wrap gap-1.5 mb-4">
+                            <div class="relative z-10 flex flex-wrap gap-1 mb-2">
                                 @foreach($a['tags'] as $tag)
                                 <span class="a-tag">{{ $tag }}</span>
                                 @endforeach

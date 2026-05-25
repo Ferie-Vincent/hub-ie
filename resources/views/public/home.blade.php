@@ -232,13 +232,15 @@
 {{-- SECTION 4 — MOT DU MINISTRE (BRIEF §III.1 #4, CONTENT §A.2)           --}}
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
 <section class="py-24 bg-blanc-creme" aria-labelledby="ministre-title">
-    <div class="max-w-hub mx-auto px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-[3fr_5fr_4fr] gap-10 items-start">
+    <div class="max-w-hub mx-auto px-6 space-y-12">
+
+        {{-- Ligne 1 : Portrait + Discours --}}
+        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_minmax(0,_2.5fr)] gap-10 items-stretch">
 
             {{-- Portrait Ministre --}}
             <div class="reveal" style="perspective: 1200px;">
-                <div class="hub-float hub-float-d1 rounded-3xl shadow-2xl">
-                    <div class="relative w-full rounded-3xl overflow-hidden" style="aspect-ratio: 3/4;">
+                <div class="hub-float hub-float-d1 rounded-3xl shadow-2xl h-full">
+                    <div class="relative w-full rounded-3xl overflow-hidden h-full" style="min-height: 400px;">
                         <img src="{{ asset('images/ministre.png') }}"
                              alt="Monsieur le Ministre du Commerce, de l'Industrie et de l'Artisanat"
                              class="w-full h-full object-cover object-top">
@@ -246,8 +248,8 @@
                         <div class="absolute inset-0"
                              style="background: linear-gradient(to top, hsl(var(--noir-profond)/0.80) 0%, transparent 45%);"></div>
                         <div class="absolute bottom-6 inset-x-0 text-center z-10">
-                            <p class="font-serif italic text-blanc-pur/90 text-sm font-bold">Monsieur le Ministre</p>
-                            <p class="text-xs text-blanc-pur/50 mt-0.5">du Commerce, de l'Industrie et de l'Artisanat</p>
+                            <p class="font-serif font-bold text-blanc-pur text-base tracking-wide">Kalil KONATÉ</p>
+                            <p class="font-serif italic text-blanc-pur/70 text-xs mt-0.5">Ministre du Commerce, de l'Industrie et de l'Artisanat</p>
                             <p class="text-xs text-orange-soft font-medium mt-1">République de Côte d'Ivoire</p>
                         </div>
                     </div>
@@ -275,23 +277,24 @@
                 <div class="flex items-center gap-3 reveal">
                     <div class="h-px flex-1 bg-sable"></div>
                     <p class="font-serif italic text-gris-500 text-sm">
-                        — Monsieur le Ministre du Commerce, de l'Industrie et de l'Artisanat
+                        — Kalil KONATÉ, Ministre du Commerce, de l'Industrie et de l'Artisanat
                     </p>
                 </div>
             </div>
-
-            {{-- 4 Stat cards (BRIEF §III.1 #4) --}}
-            <div class="grid grid-cols-2 gap-4 reveal">
-                @foreach([
-                    ['180',        'Auditeurs sélectionnés', 'sur candidature, répartis en 3 groupes',           'orange'],
-                    ['17 016',     'Mds FCFA d\'exports CI', 'valeur annuelle du commerce extérieur ivoirien',   'vert'],
-                    ['4',          'Ateliers thématiques',   'ZLECAf, Financement, E-commerce, Conformité',      'orange'],
-                    ['+165 %',     'Croissance exports',     'du commerce extérieur ivoirien en 10 ans',          'vert'],
-                ] as [$value, $label, $caption, $color])
-                <x-stat-card :value="$value" :label="$label" :caption="$caption" :color="$color"/>
-                @endforeach
-            </div>
         </div>
+
+        {{-- Ligne 2 : 4 Stat cards full-width (BRIEF §III.1 #4) --}}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 reveal">
+            @foreach([
+                ['180',        'Auditeurs sélectionnés', 'sur candidature, répartis en 3 groupes',           'orange'],
+                ['17 016 Mds', 'FCFA d\'exports CI',     'valeur annuelle du commerce extérieur ivoirien',   'vert'],
+                ['4',          'Ateliers thématiques',   'ZLECAf, Financement, E-commerce, Conformité',      'orange'],
+                ['+165 %',     'Croissance exports',     'du commerce extérieur ivoirien en 10 ans',          'vert'],
+            ] as [$value, $label, $caption, $color])
+            <x-stat-card :value="$value" :label="$label" :caption="$caption" :color="$color"/>
+            @endforeach
+        </div>
+
     </div>
 </section>
 
@@ -702,12 +705,12 @@
                 <div class="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl"
                      style="background: linear-gradient(to right, hsl(var({{ $format['accent'] }})), transparent 80%);"></div>
 
-                {{-- Numéro fantôme en fond --}}
-                <div class="absolute bottom-2 right-4 font-mono font-bold leading-none pointer-events-none select-none"
-                     style="font-size: 6rem; color: hsla(0,0%,100%,0.04);">{{ $format['num'] }}</div>
+                {{-- Numéro fantôme en fond haut-droit --}}
+                <div class="absolute top-3 right-4 font-mono font-bold leading-none pointer-events-none select-none"
+                     style="font-size: 6rem; color: hsla(0,0%,100%,0.06); line-height: 1;">{{ $format['num'] }}</div>
 
                 {{-- Numéro visible petit --}}
-                <div class="font-mono text-xs font-bold mb-5"
+                <div class="font-mono text-xs font-bold mb-5 relative z-10"
                      style="color: hsl(var({{ $format['accent'] }}));">{{ $format['num'] }}</div>
 
                 {{-- Icône --}}
