@@ -313,6 +313,10 @@
             0%, 100% { box-shadow: 0 0 0 14px rgba(26,122,60,0.09), 0 12px 40px rgba(26,122,60,0.22); }
             50%       { box-shadow: 0 0 0 22px rgba(26,122,60,0.05), 0 16px 52px rgba(26,122,60,0.18); }
         }
+        @keyframes bounce-down {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50%       { transform: translateY(6px); opacity: 0.5; }
+        }
     </style>
 </head>
 
@@ -474,6 +478,21 @@ $ateliers = [
                           style="color: hsl(var(--orange-ivoire));"
                           x-text="form.atelier.replace(/-/g,' ')"></span>
                 </div>
+            </div>
+
+            {{-- Indicateur scroll-bas mobile — disparaît dès le premier scroll --}}
+            <div x-data="{ vis: true }"
+                 x-init="window.addEventListener('scroll', () => { if (window.scrollY > 60) vis = false }, { passive: true })"
+                 x-show="vis"
+                 x-transition:leave="transition ease-in duration-300"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="lg:hidden mt-auto pt-10 flex flex-col items-center gap-2"
+                 aria-hidden="true">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:rgba(50,35,20,0.72); white-space:nowrap;">Faites défiler pour commencer</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--orange-brule))" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: bounce-down 1.3s ease-in-out infinite;">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
             </div>
         </div>
 
@@ -644,46 +663,7 @@ $ateliers = [
                         <span class="font-semibold" style="color:hsl(var(--orange-ivoire));"> Cochez celui auquel vous souhaitez participer.</span>
                     </div>
 
-                    {{-- Indicateur swipe mobile --}}
-                    <div class="flex items-center gap-2 mb-3 md:hidden" aria-hidden="true">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(15,12,8,0.35)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
-                        </svg>
-                        <span style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:rgba(15,12,8,0.35);">
-                            Glissez pour voir les ateliers
-                        </span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--orange-ivoire))" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: swipe-hint 1.4s ease-in-out infinite;">
-                            <path d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </div>
-
-                    <style>
-                        @keyframes swipe-hint {
-                            0%, 100% { transform: translateX(0); opacity: 1; }
-                            50%       { transform: translateX(5px); opacity: 0.5; }
-                        }
-                        /* Mobile : scroll horizontal snap */
-                        @media (max-width: 767px) {
-                            .ateliers-grid {
-                                display: flex !important;
-                                flex-direction: row !important;
-                                overflow-x: auto;
-                                scroll-snap-type: x mandatory;
-                                -webkit-overflow-scrolling: touch;
-                                gap: 0.75rem;
-                                padding-bottom: 0.5rem;
-                                scrollbar-width: none;
-                            }
-                            .ateliers-grid::-webkit-scrollbar { display: none; }
-                            .ateliers-grid .a-card {
-                                flex: 0 0 82vw;
-                                scroll-snap-align: start;
-                                max-width: 340px;
-                            }
-                        }
-                    </style>
-
-                    <div class="ateliers-grid flex-1 grid grid-cols-2 gap-3" style="min-height: 0;">
+                    <div class="ateliers-grid flex-1 grid grid-cols-1 md:grid-cols-2 gap-3" style="min-height: 0;">
                         @foreach($ateliers as $slug => $a)
                         <div class="a-card" style="--accent: {{ $a['hex'] }};"
                              :class="isSel('{{ $slug }}') ? 'sel' : ''"
