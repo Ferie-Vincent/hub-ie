@@ -619,13 +619,19 @@ $ateliers = [
                 </div>
             </div>
 
-            {{-- CTA --}}
-            <div style="animation: done-rise 0.55s cubic-bezier(.22,1,.36,1) 0.78s both;">
-                <a href="{{ route('home') }}" class="btn-next">
-                    <span>Retour à l'accueil</span>
+            {{-- CTAs --}}
+            <div style="animation: done-rise 0.55s cubic-bezier(.22,1,.36,1) 0.78s both; display:flex; flex-wrap:wrap; gap:1rem; justify-content:center;">
+                <a :href="`{{ route('register') }}?email=${encodeURIComponent(form.email)}`" class="btn-next">
+                    <span>Déposer ma candidature complète</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
                     </svg>
+                </a>
+                <a href="{{ route('home') }}"
+                   style="padding:0.75rem 1.5rem; border-radius:0.75rem; border:1.5px solid rgba(15,12,8,0.15); font-size:0.875rem; font-weight:600; color:rgba(15,12,8,0.55); transition:border-color 0.2s,color 0.2s; text-decoration:none;"
+                   onmouseover="this.style.color='rgba(15,12,8,0.8)';this.style.borderColor='rgba(15,12,8,0.3)'"
+                   onmouseout="this.style.color='rgba(15,12,8,0.55)';this.style.borderColor='rgba(15,12,8,0.15)'">
+                    Retour à l'accueil
                 </a>
             </div>
         </div>

@@ -129,6 +129,70 @@
         </div>
     </div>
 
+    {{-- ── Zone 1b : Timeline progression --}}
+    @php
+        $timelineSteps = [
+            ['key' => ['received'],               'label' => 'Reçue'],
+            ['key' => ['eligible', 'incomplete'], 'label' => 'Instruction'],
+            ['key' => ['under_review', 'shortlisted'], 'label' => 'Comité'],
+            ['key' => ['accepted', 'waitlisted', 'rejected'], 'label' => 'Décision'],
+        ];
+        $currentStep = 0;
+        foreach ($timelineSteps as $i => $ts) {
+            if (in_array($app->status->value, $ts['key'])) { $currentStep = $i; break; }
+        }
+        $isTerminalPositive = in_array($app->status->value, ['accepted']);
+        $isTerminalNegative = in_array($app->status->value, ['rejected', 'withdrawn']);
+        $isWaitlisted       = $app->status->value === 'waitlisted';
+    @endphp
+    @if(! in_array($app->status->value, ['draft', 'withdrawn']))
+    <div class="rounded-2xl bg-white shadow-card px-6 py-5">
+        <p class="text-xs font-medium text-gris-500 uppercase tracking-widest mb-4">Avancement du dossier</p>
+        <div class="flex items-center gap-0">
+            @foreach($timelineSteps as $i => $ts)
+            @php
+                $done    = $i < $currentStep || ($i === $currentStep && $isTerminalPositive);
+                $active  = $i === $currentStep && ! $isTerminalNegative;
+                $isLast  = $i === count($timelineSteps) - 1;
+                $neg     = $i === $currentStep && $isTerminalNegative;
+                $wait    = $i === $currentStep && $isWaitlisted;
+            @endphp
+            <div class="flex items-center {{ $isLast ? '' : 'flex-1' }}">
+                <div class="flex flex-col items-center gap-1.5">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold transition-all
+                        @if($done) bg-vert-ivoire text-blanc-pur
+                        @elseif($neg) bg-red-500 text-white
+                        @elseif($wait) bg-orange-400 text-white
+                        @elseif($active) bg-orange-ivoire text-blanc-pur ring-4 ring-orange-ivoire/20
+                        @else bg-sable-doux text-gris-500
+                        @endif">
+                        @if($done)
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        @elseif($neg)
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        @else
+                        {{ $i + 1 }}
+                        @endif
+                    </div>
+                    <span class="text-xs font-medium whitespace-nowrap
+                        @if($done || $active) text-noir-profond
+                        @else text-gris-500
+                        @endif">{{ $ts['label'] }}</span>
+                </div>
+                @if(! $isLast)
+                <div class="flex-1 h-0.5 mx-2 mt-[-1rem]
+                    {{ $i < $currentStep ? 'bg-vert-ivoire' : 'bg-sable-doux' }}"></div>
+                @endif
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     {{-- ── Zone 2 : Badge (si accepted) --}}
     @if($app->status->value === 'accepted')
     <div class="rounded-2xl shadow-card overflow-hidden"

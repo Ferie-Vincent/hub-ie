@@ -57,7 +57,8 @@ class ApplicationWizard extends Component
     public bool $rgpdConsent          = false;
     public bool $communicationConsent = false;
 
-    public ?int $applicationId = null;
+    public ?int    $applicationId = null;
+    public ?string $draftResumedAt = null;
 
     public function mount(): void
     {
@@ -82,8 +83,9 @@ class ApplicationWizard extends Component
             ])->first();
 
         if ($existing) {
-            $this->applicationId = $existing->id;
-            $this->step          = min($existing->current_step + 1, 4);
+            $this->applicationId  = $existing->id;
+            $this->step           = min($existing->current_step + 1, 4);
+            $this->draftResumedAt = $existing->updated_at->translatedFormat('d MMMM à H\hi');
             $this->hydrateFromModel($existing);
         }
     }

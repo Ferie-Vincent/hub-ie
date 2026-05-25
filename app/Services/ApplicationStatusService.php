@@ -48,12 +48,16 @@ class ApplicationStatusService
             ApplicationStatus::Accepted->value,
             ApplicationStatus::Waitlisted->value,
             ApplicationStatus::Rejected->value,
+            ApplicationStatus::Withdrawn->value,
         ],
         ApplicationStatus::Waitlisted->value => [
             ApplicationStatus::Accepted->value,
             ApplicationStatus::Rejected->value,
+            ApplicationStatus::Withdrawn->value,
         ],
-        ApplicationStatus::Accepted->value  => [],
+        ApplicationStatus::Accepted->value  => [
+            ApplicationStatus::Withdrawn->value,
+        ],
         ApplicationStatus::Rejected->value  => [],
         ApplicationStatus::Withdrawn->value => [],
     ];
@@ -82,13 +86,30 @@ class ApplicationStatusService
             $updates['accepted_at'] = now();
         }
 
+        $wasAccepted = $app->status === ApplicationStatus::Accepted;
+
         $app->update($updates);
 
         if ($to === ApplicationStatus::Accepted) {
             GenerateBadgePdf::dispatch($app);
         }
 
+        if ($to === ApplicationStatus::Withdrawn && $wasAccepted) {
+            $this->promoteFromWaitlist();
+        }
+
         $this->sendNotificationEmail($app, $to);
+    }
+
+    private function promoteFromWaitlist(): void
+    {
+        $next = Application::where('status', ApplicationStatus::Waitlisted->value)
+            ->orderBy('submitted_at')
+            ->first();
+
+        if ($next) {
+            $this->transition($next, ApplicationStatus::Accepted);
+        }
     }
 
     public function canTransition(Application $app, ApplicationStatus $to): bool

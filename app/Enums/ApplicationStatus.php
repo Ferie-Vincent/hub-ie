@@ -59,6 +59,9 @@ enum ApplicationStatus: string
             self::Incomplete,
             self::Eligible,
             self::UnderReview,
+            self::Shortlisted,
+            self::Accepted,
+            self::Waitlisted,
         ]);
     }
 }

@@ -4,11 +4,14 @@ namespace App\Filament\Pages;
 
 use App\Enums\ApplicationStatus;
 use App\Exports\ApplicationsExport;
+use App\Models\Application;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\LaravelPdf\Facades\Pdf;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExportCenter extends Page
 {
@@ -39,6 +42,22 @@ class ExportCenter extends Page
         );
     }
 
+    public function exportParticipantsPdf(): Response
+    {
+        $applications = Application::where('status', ApplicationStatus::Accepted->value)
+            ->with('user')
+            ->orderBy('group_label')
+            ->orderBy('accepted_at')
+            ->get();
+
+        $filename = 'participants-' . now()->format('Ymd-Hi') . '.pdf';
+
+        return Pdf::view('pdf.participants-list', compact('applications'))
+            ->format('A4')
+            ->landscape()
+            ->download($filename);
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -59,6 +78,12 @@ class ExportCenter extends Page
                 ->icon('heroicon-m-clock')
                 ->color('warning')
                 ->action('exportWaitlisted'),
+
+            Action::make('export_participants_pdf')
+                ->label('PDF — Liste participants')
+                ->icon('heroicon-m-document-text')
+                ->color('primary')
+                ->action('exportParticipantsPdf'),
         ];
     }
 }

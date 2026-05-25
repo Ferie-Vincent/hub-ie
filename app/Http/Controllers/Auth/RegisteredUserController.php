@@ -16,7 +16,9 @@ class RegisteredUserController extends Controller
 {
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'prefillEmail' => request()->query('email', ''),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse

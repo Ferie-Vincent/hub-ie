@@ -63,6 +63,19 @@
             </div>
         </div>
 
+        {{-- Indicateur brouillon repris --}}
+        @if($draftResumedAt)
+        <div class="mb-5 rounded-xl border border-sable-doux px-4 py-2.5 flex items-center gap-2.5 text-sm"
+             style="background:hsl(var(--sable-doux)/0.35)">
+            <svg class="w-4 h-4 flex-shrink-0" style="color:hsl(var(--vert-ivoire))" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span style="color:hsl(var(--gris-700))">
+                Brouillon du <strong class="text-noir-profond">{{ $draftResumedAt }}</strong> repris — étape {{ $step }}/4
+            </span>
+        </div>
+        @endif
+
         {{-- Flash erreur générale --}}
         @if($errors->any())
         <div class="mb-6 rounded-xl bg-red-50 border border-red-200 p-4" role="alert">

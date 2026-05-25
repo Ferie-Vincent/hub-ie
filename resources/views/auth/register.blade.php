@@ -29,7 +29,7 @@
         <div>
             <x-input-label for="email" value="Adresse e-mail" />
             <x-text-input id="email" type="email" name="email"
-                          :value="old('email')" required autocomplete="username"
+                          :value="old('email', $prefillEmail ?? '')" required autocomplete="username"
                           class="block mt-1 w-full" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
