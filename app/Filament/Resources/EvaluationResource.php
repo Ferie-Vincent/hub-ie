@@ -25,6 +25,11 @@ class EvaluationResource extends Resource
     protected static ?string $modelLabel        = 'Évaluation';
     protected static ?string $pluralModelLabel  = 'Évaluations';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('evaluate-applications') ?? false;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery()->with(['application.user', 'evaluator']);

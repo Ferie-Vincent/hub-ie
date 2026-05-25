@@ -23,6 +23,11 @@ class UserResource extends Resource
     protected static ?string $modelLabel          = 'Utilisateur';
     protected static ?string $pluralModelLabel    = 'Utilisateurs';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('manage-system') ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([

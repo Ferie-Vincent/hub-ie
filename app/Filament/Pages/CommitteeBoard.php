@@ -19,6 +19,14 @@ class CommitteeBoard extends Page
     protected static ?string $title           = 'Tableau de délibération';
     protected static string  $view            = 'filament.pages.committee-board';
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        if (! $user) return false;
+        if ($user->hasRole('super_admin')) return true;
+        return $user->hasPermissionTo('evaluate-applications');
+    }
+
     public Collection $eligible;
     public Collection $underReview;
     public Collection $shortlisted;

@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             PartnersSeeder::class,
             FaqSeeder::class,
             SettingsSeeder::class,
+            NewsSeeder::class,
+            SpeakersSeeder::class,
         ]);
 
         // Super admin

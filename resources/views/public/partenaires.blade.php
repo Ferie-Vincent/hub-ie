@@ -5,17 +5,16 @@
 </x-page-hero>
 
 @php
-    $strategicPartners = [
-        ['sigle' => 'TMA', 'name' => 'TradeMark Africa', 'role' => 'Partenaire stratégique', 'accent' => '--vert-ivoire'],
-        ['sigle' => 'GIZ', 'name' => 'GIZ', 'role' => 'Partenaire stratégique', 'accent' => '--vert-ivoire'],
-    ];
+    $organizers  = $grouped->get('organizer', collect());
+    $strategic   = $grouped->get('strategic', collect());
+    $agencies    = $grouped->get('partner', collect());
+    $media       = $grouped->get('media', collect());
 
-    $supportAgencies = [
-        ['sigle' => 'ACIEx', 'name' => 'Agence Ivoirienne pour la Compétitivité à l\'Export', 'accent' => '--orange-ivoire'],
-        ['sigle' => 'CNE', 'name' => 'Conseil National des Exportateurs', 'accent' => '--orange-ivoire'],
-        ['sigle' => 'GUCE-CI', 'name' => 'Guichet Unique du Commerce Extérieur', 'accent' => '--orange-brule'],
-        ['sigle' => 'CODINORM', 'name' => 'Côte d\'Ivoire Normalisation', 'accent' => '--orange-brule'],
-        ['sigle' => 'CI-PME', 'name' => 'Agence CI-PME', 'accent' => '--vert-ivoire'],
+    $tierAccents = [
+        'organizer' => '--orange-ivoire',
+        'strategic' => '--vert-ivoire',
+        'partner'   => '--orange-ivoire',
+        'media'     => '--gris-500',
     ];
 @endphp
 
@@ -107,17 +106,18 @@
                     </div>
 
                     <div class="grid gap-5 md:grid-cols-2">
-                        @foreach($strategicPartners as $partner)
+                        @foreach($strategic as $partner)
+                        @php $accent = '--vert-ivoire'; @endphp
                             <article class="group relative overflow-hidden rounded-2xl bg-blanc-pur p-7 shadow-card" style="border: 1px solid hsl(var(--noir-profond) / 0.08);">
-                                <div class="absolute inset-x-0 top-0 h-1" style="background: hsl(var({{ $partner['accent'] }}));"></div>
+                                <div class="absolute inset-x-0 top-0 h-1" style="background: hsl(var({{ $accent }}));"></div>
                                 <div class="flex items-start justify-between gap-5">
                                     <div class="flex items-start gap-4">
-                                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl font-mono text-sm font-bold transition-transform duration-300 group-hover:-translate-y-1" style="background: hsl(var({{ $partner['accent'] }}) / 0.10); color: hsl(var({{ $partner['accent'] }})); border: 1px solid hsl(var({{ $partner['accent'] }}) / 0.22);">
-                                            {{ $partner['sigle'] }}
+                                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl font-mono text-sm font-bold transition-transform duration-300 group-hover:-translate-y-1" style="background: hsl(var({{ $accent }}) / 0.10); color: hsl(var({{ $accent }})); border: 1px solid hsl(var({{ $accent }}) / 0.22);">
+                                            {{ $partner->acronym }}
                                         </div>
                                         <div>
-                                            <p class="text-xs font-semibold uppercase tracking-[0.16em]" style="color: hsl(var({{ $partner['accent'] }}));">{{ $partner['role'] }}</p>
-                                            <h3 class="mt-2 font-serif text-2xl font-bold leading-tight">{{ $partner['name'] }}</h3>
+                                            <p class="text-xs font-semibold uppercase tracking-[0.16em]" style="color: hsl(var({{ $accent }}));">{{ $partner->tier->label() }}</p>
+                                            <h3 class="mt-2 font-serif text-2xl font-bold leading-tight">{{ $partner->name }}</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -136,19 +136,18 @@
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                        @foreach($supportAgencies as $agency)
+                        @foreach($agencies as $agency)
+                        @php $accent = '--orange-ivoire'; @endphp
                             <article class="group relative min-h-[150px] rounded-2xl bg-blanc-pur p-5 overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-card" style="border: 1px solid hsl(var(--noir-profond) / 0.08);">
-                                {{-- Barre latérale — effet programme --}}
                                 <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full transition-all duration-300 opacity-0 group-hover:opacity-100"
-                                     style="height: 55%; background: hsl(var({{ $agency['accent'] }}));"></div>
+                                     style="height: 55%; background: hsl(var({{ $accent }}));"></div>
                                 <div class="mb-5 flex items-center justify-between gap-4">
-                                    <div class="flex h-11 w-11 items-center justify-center rounded-xl font-mono text-[11px] font-bold transition-transform duration-300 group-hover:-translate-y-0.5" style="background: hsl(var({{ $agency['accent'] }}) / 0.10); color: hsl(var({{ $agency['accent'] }})); border: 1px solid hsl(var({{ $agency['accent'] }}) / 0.20);">
-                                        {{ Str::limit($agency['sigle'], 4, '') }}
+                                    <div class="flex h-11 w-11 items-center justify-center rounded-xl font-mono text-[11px] font-bold transition-transform duration-300 group-hover:-translate-y-0.5" style="background: hsl(var({{ $accent }}) / 0.10); color: hsl(var({{ $accent }})); border: 1px solid hsl(var({{ $accent }}) / 0.20);">
+                                        {{ Str::limit($agency->acronym, 4, '') }}
                                     </div>
-                                    <span class="font-mono text-xs font-bold" style="color: hsl(var({{ $agency['accent'] }}));">{{ $agency['sigle'] }}</span>
+                                    <span class="font-mono text-xs font-bold" style="color: hsl(var({{ $accent }}));">{{ $agency->acronym }}</span>
                                 </div>
-
-                                <h3 class="max-w-[18rem] text-sm font-semibold leading-snug">{{ $agency['name'] }}</h3>
+                                <h3 class="max-w-[18rem] text-sm font-semibold leading-snug">{{ $agency->name }}</h3>
                             </article>
                         @endforeach
                     </div>

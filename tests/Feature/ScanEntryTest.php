@@ -1,6 +1,8 @@
 <?php
 
 use App\Enums\ApplicationStatus;
+use App\Enums\AttendanceLocation;
+use App\Enums\AttendanceScanMethod;
 use App\Filament\Pages\ScanEntry;
 use App\Models\Application;
 use App\Models\Attendance;
@@ -18,7 +20,7 @@ beforeEach(function () {
 
 test('duplicate check-in on same day is blocked with warning status', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('agent_dgce');
+    $user->assignRole('agent_entry');
 
     $app = Application::factory()->create([
         'status'        => ApplicationStatus::Accepted->value,
@@ -27,10 +29,12 @@ test('duplicate check-in on same day is blocked with warning status', function (
     ]);
 
     Attendance::create([
-        'application_id' => $app->id,
-        'event_date'     => today(),
-        'scanned_at'     => now(),
-        'scan_method'    => 'manual',
+        'application_id'     => $app->id,
+        'event_date'         => today(),
+        'scanned_at'         => now(),
+        'scanned_by_user_id' => $user->id,
+        'location'           => AttendanceLocation::Cgeci->value,
+        'scan_method'        => AttendanceScanMethod::Code,
     ]);
 
     $component = Livewire::actingAs($user)
@@ -46,7 +50,7 @@ test('duplicate check-in on same day is blocked with warning status', function (
 
 test('invalid 6-digit code returns error status', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('agent_dgce');
+    $user->assignRole('agent_entry');
 
     Livewire::actingAs($user)
         ->test(ScanEntry::class)
@@ -57,7 +61,7 @@ test('invalid 6-digit code returns error status', function () {
 
 test('unknown check-in code returns error status', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('agent_dgce');
+    $user->assignRole('agent_entry');
 
     Livewire::actingAs($user)
         ->test(ScanEntry::class)
@@ -70,7 +74,7 @@ test('unknown check-in code returns error status', function () {
 
 test('valid check-in code registers attendance', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('agent_dgce');
+    $user->assignRole('agent_entry');
 
     $app = Application::factory()->create([
         'status'        => ApplicationStatus::Accepted->value,

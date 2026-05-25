@@ -20,6 +20,11 @@ class SettingResource extends Resource
     protected static ?string $modelLabel         = 'Paramètre';
     protected static ?string $pluralModelLabel   = 'Paramètres';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('manage-system') ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([

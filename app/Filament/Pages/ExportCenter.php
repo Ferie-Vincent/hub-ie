@@ -21,6 +21,14 @@ class ExportCenter extends Page
     protected static ?string $title           = 'Centre d\'export';
     protected static string  $view            = 'filament.pages.export-center';
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        if (! $user) return false;
+        if ($user->hasRole('super_admin')) return true;
+        return $user->hasAnyPermission('manage-system', 'accept-applications');
+    }
+
     public function exportAll(): BinaryFileResponse
     {
         return Excel::download(new ApplicationsExport(), 'candidatures-' . now()->format('Ymd-Hi') . '.xlsx');

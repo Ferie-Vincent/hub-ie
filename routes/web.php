@@ -6,16 +6,17 @@ use App\Http\Controllers\PreInscriptionController;
 use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
 Route::get('/', fn () => view('public.home'))->name('home');
 Route::get('/programme', fn () => view('public.programme'))->name('programme');
-Route::get('/ateliers', fn () => view('public.ateliers'))->name('ateliers.index');
-Route::get('/ateliers/{slug}', fn (string $slug) => view('public.atelier-show', compact('slug')))->name('ateliers.show');
-Route::get('/partenaires', fn () => view('public.partenaires'))->name('partenaires');
-Route::get('/actualites', fn () => view('public.actualites'))->name('actualites.index');
-Route::get('/actualites/{slug}', fn (string $slug) => view('public.actualite-show', compact('slug')))->name('actualites.show');
+Route::get('/ateliers', [PublicController::class, 'ateliers'])->name('ateliers.index');
+Route::get('/ateliers/{slug}', [PublicController::class, 'atelier'])->name('ateliers.show');
+Route::get('/partenaires', [PublicController::class, 'partenaires'])->name('partenaires');
+Route::get('/actualites', [PublicController::class, 'actualites'])->name('actualites.index');
+Route::get('/actualites/{slug}', [PublicController::class, 'actualite'])->name('actualites.show');
 Route::get('/presse', fn () => view('public.presse'))->name('presse');
 Route::get('/faq', fn () => view('public.faq'))->name('faq');
 Route::get('/contact', fn () => view('public.contact'))->name('contact');

@@ -30,4 +30,27 @@ class Partner extends Model
             'show_in_footer' => 'boolean',
         ];
     }
+
+    public function getAcronymAttribute(): string
+    {
+        $name = $this->name;
+
+        // Short names are their own acronym
+        if (mb_strlen($name) <= 8 && preg_match('/^[A-Z0-9\-]+$/i', $name)) {
+            return mb_strtoupper($name);
+        }
+
+        // Strip parenthetical content
+        $cleaned = preg_replace('/\([^)]+\)/', '', $name);
+
+        // Extract first capital letter of each word boundary
+        preg_match_all('/(?:^|(?<=[^A-Z]))([A-Z])/', $cleaned, $m);
+        $letters = $m[1];
+
+        if (count($letters) >= 2) {
+            return implode('', array_slice($letters, 0, 4));
+        }
+
+        return mb_strtoupper(mb_substr(trim($cleaned), 0, 3));
+    }
 }

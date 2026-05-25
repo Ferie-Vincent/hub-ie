@@ -18,6 +18,7 @@ class AuditLogResource extends Resource
     protected static ?string $modelLabel         = 'Entrée';
     protected static ?string $pluralModelLabel   = 'Journal d\'audit';
 
+    public static function canViewAny(): bool { return auth()->user()?->hasPermissionTo('manage-system') ?? false; }
     public static function canCreate(): bool { return false; }
     public static function canEdit($record): bool { return false; }
     public static function canDelete($record): bool { return false; }

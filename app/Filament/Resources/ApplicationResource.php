@@ -31,6 +31,11 @@ class ApplicationResource extends Resource
     protected static ?string $pluralModelLabel     = 'Candidatures';
     protected static ?string $recordTitleAttribute = 'reference_code';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('view-applications') ?? false;
+    }
+
     public static function canCreate(): bool
     {
         return false;

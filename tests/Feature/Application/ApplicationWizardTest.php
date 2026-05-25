@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Workshop;
 use App\Services\ApplicationStatusService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -194,8 +196,38 @@ test('received can transition to incomplete', function () {
     expect($app->fresh()->status)->toBe(ApplicationStatus::Incomplete);
 });
 
-test('accepted cannot be withdrawn', function () {
+test('accepted can be withdrawn (enables waitlist auto-promotion)', function () {
     $app = Application::factory()->create(['status' => ApplicationStatus::Accepted]);
+    $service = new ApplicationStatusService();
+
+    $service->transition($app, ApplicationStatus::Withdrawn);
+
+    expect($app->fresh()->status)->toBe(ApplicationStatus::Withdrawn);
+});
+
+test('waitlisted candidate auto-promoted when accepted withdraws', function () {
+    Queue::fake();
+    Mail::fake();
+
+    $accepted   = Application::factory()->create([
+        'status'       => ApplicationStatus::Accepted,
+        'qr_token'     => 'tok-accepted',
+        'check_in_code'=> 111111,
+        'group_label'  => 'G1',
+    ]);
+    $waitlisted = Application::factory()->create([
+        'status'       => ApplicationStatus::Waitlisted,
+        'submitted_at' => now()->subDay(),
+    ]);
+    $service = new ApplicationStatusService();
+
+    $service->transition($accepted, ApplicationStatus::Withdrawn);
+
+    expect($waitlisted->fresh()->status)->toBe(ApplicationStatus::Accepted);
+});
+
+test('rejected application cannot be withdrawn', function () {
+    $app = Application::factory()->create(['status' => ApplicationStatus::Rejected]);
     $service = new ApplicationStatusService();
 
     expect(fn () => $service->transition($app, ApplicationStatus::Withdrawn))

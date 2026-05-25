@@ -20,6 +20,11 @@ class SpeakerResource extends Resource
     protected static ?string $modelLabel         = 'Intervenant';
     protected static ?string $pluralModelLabel   = 'Intervenants';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('manage-content') ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([

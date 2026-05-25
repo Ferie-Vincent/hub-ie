@@ -18,6 +18,7 @@ class AttendanceResource extends Resource
     protected static ?string $modelLabel         = 'Pointage';
     protected static ?string $pluralModelLabel   = 'Présences';
 
+    public static function canViewAny(): bool { return auth()->user()?->hasPermissionTo('scan-attendance') ?? false; }
     public static function canCreate(): bool { return false; }
     public static function canEdit($record): bool { return false; }
     public static function canDelete($record): bool { return false; }

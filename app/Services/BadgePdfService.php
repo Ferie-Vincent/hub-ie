@@ -24,7 +24,7 @@ class BadgePdfService
             'application' => $application,
             'qrSvg'       => $qrSvg,
         ])
-        ->format([100, 140]) // mm
+        ->paperSize(100, 140, 'mm')
         ->save(Storage::disk('local')->path($path));
 
         return $path;

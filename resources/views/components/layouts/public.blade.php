@@ -104,8 +104,9 @@
 {{-- darkHero=true → hero sombre → texte blanc au départ (home)           --}}
 {{-- darkHero=false → page claire → glass-light + texte sombre par défaut --}}
 <header
-    x-data="{ scrolled: {{ $darkHero ? 'false' : 'true' }} }"
+    x-data="{ scrolled: {{ $darkHero ? 'false' : 'true' }}, open: false }"
     @scroll.window="scrolled = {{ $darkHero ? 'window.scrollY > 10' : 'true' }}"
+    @keydown.escape.window="open = false"
     :class="scrolled ? 'glass-light shadow-sm' : 'bg-transparent'"
     class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
     role="banner"
@@ -177,17 +178,77 @@
 
             {{-- Mobile menu button --}}
             <button
-                x-data="{ open: false }"
                 @click="open = !open"
+                :aria-expanded="open"
                 :class="scrolled ? 'text-noir-profond' : 'text-blanc-pur'"
                 class="md:hidden p-2 transition-colors"
                 aria-label="Menu"
             >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         </div>
+    </div>
+
+    {{-- Mobile nav panel --}}
+    <div
+        x-show="open"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        @click.outside="open = false"
+        class="md:hidden border-t"
+        :class="scrolled ? 'glass-light border-noir-profond/10' : 'bg-noir-profond/95 border-blanc-pur/10'"
+        x-cloak
+    >
+        <nav class="max-w-hub mx-auto px-6 py-4 flex flex-col gap-1" aria-label="Navigation mobile">
+            @foreach([
+                ['Programme',   route('programme'),      'programme'],
+                ['Ateliers',    route('ateliers.index'), 'ateliers.*'],
+                ['Partenaires', route('partenaires'),    'partenaires'],
+                ['FAQ',         route('faq'),            'faq'],
+                ['Contact',     route('contact'),        'contact'],
+            ] as [$label, $href, $routeName])
+            @php $isActive = request()->routeIs($routeName); @endphp
+            <a href="{{ $href }}"
+               @click="open = false"
+               :class="scrolled ? '{{ $isActive ? 'text-orange-ivoire font-bold' : 'text-noir-profond' }}' : '{{ $isActive ? 'text-orange-ivoire font-bold' : 'text-blanc-pur/90' }}'"
+               class="px-3 py-3 text-sm rounded-lg hover:bg-blanc-pur/10 transition-colors">
+                {{ $label }}
+            </a>
+            @endforeach
+
+            <div class="mt-3 pt-3 border-t flex flex-col gap-2" :class="scrolled ? 'border-noir-profond/10' : 'border-blanc-pur/10'">
+                @guest
+                    <a href="{{ route('login') }}"
+                       :class="scrolled ? 'text-noir-profond' : 'text-blanc-pur/80'"
+                       class="px-3 py-3 text-sm font-medium transition-colors"
+                       @click="open = false">
+                        Se connecter
+                    </a>
+                    <a href="{{ route('inscription') }}" class="btn-fill text-sm text-center py-3" @click="open = false">
+                        <span>S'inscrire</span>
+                    </a>
+                @else
+                    @if(auth()->user()?->hasRole('candidate'))
+                        <a href="{{ route('candidate.dashboard') }}" class="btn-fill text-sm text-center py-3" @click="open = false">
+                            <span>Mon espace</span>
+                        </a>
+                    @else
+                        <a href="{{ route('filament.admin.pages.dashboard') }}" class="btn-fill text-sm text-center py-3" @click="open = false">
+                            <span>Administration</span>
+                        </a>
+                    @endif
+                @endguest
+            </div>
+        </nav>
     </div>
 </header>
 

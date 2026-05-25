@@ -18,6 +18,7 @@ class NewsletterSubscriberResource extends Resource
     protected static ?string $modelLabel         = 'Abonné';
     protected static ?string $pluralModelLabel   = 'Abonnés newsletter';
 
+    public static function canViewAny(): bool { return auth()->user()?->hasPermissionTo('manage-content') ?? false; }
     public static function canCreate(): bool { return false; }
     public static function canEdit($record): bool { return false; }
     public static function canDelete($record): bool { return false; }

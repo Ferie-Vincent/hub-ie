@@ -7,63 +7,6 @@
     Quatre <em class="font-fraunces italic text-orange-soft" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">ateliers</em> pour s'outiller.
 </x-page-hero>
 
-@php
-$ateliers = [
-    [
-        'slug'    => 'zlecaf-cedeao',
-        'num'     => '01',
-        'titre'   => 'ZLECAf & CEDEAO',
-        'tagline' => 'Conquérir les marchés régionaux',
-        'desc'    => 'Maîtriser les règles d\'origine, les protocoles tarifaires et les opportunités ouvertes par la Zone de Libre-Échange Continentale Africaine.',
-        'themes'  => ['Protocoles ZLECAf', 'TEC CEDEAO', 'PAPSS', 'Logistique intra-africaine'],
-        'accent'  => '--orange-ivoire',
-        'accentBg'=> 'hsl(var(--orange-ivoire) / 0.10)',
-        'accentBorder' => 'hsl(var(--orange-ivoire) / 0.35)',
-        'numColor'=> 'hsl(var(--orange-ivoire) / 0.08)',
-        'icon'    => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 004 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
-    ],
-    [
-        'slug'    => 'financement-garanties',
-        'num'     => '02',
-        'titre'   => 'Financement & garanties',
-        'tagline' => 'Sécuriser ses opérations',
-        'desc'    => 'Découvrir les mécanismes de financement export, les garanties bancaires, l\'assurance-crédit et les dispositifs publics d\'appui à l\'international.',
-        'themes'  => ['Crédoc', 'Assurance-crédit', 'Afreximbank', 'Risk management'],
-        'accent'  => '--orange-brule',
-        'accentBg'=> 'hsl(var(--orange-brule) / 0.10)',
-        'accentBorder' => 'hsl(var(--orange-brule) / 0.35)',
-        'numColor'=> 'hsl(var(--orange-brule) / 0.08)',
-        'icon'    => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
-    ],
-    [
-        'slug'    => 'commerce-electronique',
-        'num'     => '03',
-        'titre'   => 'Commerce électronique',
-        'tagline' => 'Digitaliser ses échanges',
-        'desc'    => 'Utiliser les plateformes B2B/B2C internationales, structurer sa présence digitale et exploiter les guichets uniques numériques pour exporter.',
-        'themes'  => ['SEO export', 'Marketplaces B2B', 'GUCE-CI', 'E-commerce transfrontalier'],
-        'accent'  => '--vert-ivoire',
-        'accentBg'=> 'hsl(var(--vert-ivoire) / 0.10)',
-        'accentBorder' => 'hsl(var(--vert-ivoire) / 0.35)',
-        'numColor'=> 'hsl(var(--vert-ivoire) / 0.08)',
-        'icon'    => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>',
-    ],
-    [
-        'slug'    => 'conformite-qualite',
-        'num'     => '04',
-        'titre'   => 'Conformité & qualité',
-        'tagline' => 'Maîtriser les normes',
-        'desc'    => 'Comprendre les exigences normatives (sanitaires, environnementales, techniques) et structurer une démarche de certification pour accéder aux marchés cibles.',
-        'themes'  => ['Normes ISO', 'HACCP', 'CODINORM', 'Étiquetage UE'],
-        'accent'  => '--orange-brule',
-        'accentBg'=> 'hsl(var(--orange-brule) / 0.08)',
-        'accentBorder' => 'hsl(var(--orange-brule) / 0.25)',
-        'numColor'=> 'hsl(var(--noir-profond) / 0.04)',
-        'icon'    => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
-    ],
-];
-@endphp
-
 {{-- Section principale : fond clair --}}
 <section class="relative overflow-hidden py-24 bg-blanc-creme">
 
@@ -82,9 +25,9 @@ $ateliers = [
             </p>
         </div>
 
-        {{-- Grille des 4 ateliers --}}
+        {{-- Grille des ateliers --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            @foreach($ateliers as $atelier)
+            @foreach($workshops as $atelier)
             <a href="{{ route('ateliers.show', $atelier['slug']) }}"
                class="group relative overflow-hidden rounded-2xl block transition-all duration-300 hover:-translate-y-1 bg-blanc-pur"
                style="border: 1px solid hsl(var(--noir-profond) / 0.08); box-shadow: 0 2px 12px hsl(var(--noir-profond) / 0.06);">

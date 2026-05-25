@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\AttendanceLocation;
+use App\Enums\AttendanceScanMethod;
 use App\Models\Application;
 use App\Models\Attendance;
 use Filament\Notifications\Notification;
@@ -15,9 +17,18 @@ class ScanEntry extends Page
     protected static ?string $title           = 'Pointage';
     protected static string  $view            = 'filament.pages.scan-entry';
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        if (! $user) return false;
+        if ($user->hasRole('super_admin')) return true;
+        return $user->hasPermissionTo('scan-attendance');
+    }
+
     public string $manualCode = '';
     public ?array $lastScan   = null;
     public string $scanResult = '';
+    public string $location   = 'CGECI';
 
     public function submitManualCode(): void
     {
@@ -48,7 +59,7 @@ class ScanEntry extends Page
             return;
         }
 
-        $this->recordAttendance($app, 'qr');
+        $this->recordAttendance($app, AttendanceScanMethod::Qr);
     }
 
     private function processCheckIn(int $checkInCode): void
@@ -65,10 +76,10 @@ class ScanEntry extends Page
             return;
         }
 
-        $this->recordAttendance($app, 'manual');
+        $this->recordAttendance($app, AttendanceScanMethod::Code);
     }
 
-    private function recordAttendance(Application $app, string $method): void
+    private function recordAttendance(Application $app, AttendanceScanMethod $method): void
     {
         $alreadyCheckedIn = Attendance::where('application_id', $app->id)
             ->whereDate('event_date', today())
@@ -89,6 +100,7 @@ class ScanEntry extends Page
             'event_date'         => today(),
             'scanned_at'         => now(),
             'scanned_by_user_id' => auth()->id(),
+            'location'           => $this->location,
             'scan_method'        => $method,
             'scanner_ip'         => request()->ip(),
         ]);

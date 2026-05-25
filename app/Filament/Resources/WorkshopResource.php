@@ -20,6 +20,11 @@ class WorkshopResource extends Resource
     protected static ?string $modelLabel         = 'Atelier';
     protected static ?string $pluralModelLabel   = 'Ateliers';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('manage-content') ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
