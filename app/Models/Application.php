@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ApplicationCategory;
 use App\Enums\ApplicationStatus;
+use App\Services\QrCodeService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -94,6 +95,15 @@ class Application extends Model
     public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function getQrSignedUrlAttribute(): ?string
+    {
+        if (! $this->qr_token) {
+            return null;
+        }
+
+        return app(QrCodeService::class)->generateSignedUrl($this->qr_token);
     }
 
     public function isAccepted(): bool

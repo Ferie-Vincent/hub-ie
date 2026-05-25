@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PreInscriptionController;
+use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,11 @@ Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
     Route::get('/mon-espace/convocation/{application}/download', [ApplicationController::class, 'downloadConvocation'])
         ->name('application.convocation.download');
 });
+
+// ── QR scan confirmation (signed URL, BRIEF §III.6) ─────────────────────────
+Route::get('/scan/qr/{token}', [QrScanController::class, 'handle'])
+    ->middleware('signed')
+    ->name('scan.qr');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
