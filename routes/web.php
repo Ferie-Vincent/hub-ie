@@ -19,7 +19,7 @@ Route::get('/actualites/{slug}', fn (string $slug) => view('public.actualite-sho
 Route::get('/presse', fn () => view('public.presse'))->name('presse');
 Route::get('/faq', fn () => view('public.faq'))->name('faq');
 Route::get('/contact', fn () => view('public.contact'))->name('contact');
-Route::post('/contact', fn () => back()->with('contact_sent', true))->name('contact.submit');
+Route::post('/contact', fn () => back()->with('contact_sent', true))->middleware('throttle:contact')->name('contact.submit');
 Route::get('/mentions-legales', fn () => view('public.mentions-legales'))->name('mentions-legales');
 Route::get('/politique-de-confidentialite', fn () => view('public.politique-confidentialite'))->name('politique-confidentialite');
 Route::get('/conditions-utilisation', fn () => view('public.conditions-utilisation'))->name('conditions-utilisation');
@@ -27,8 +27,8 @@ Route::get('/conditions-utilisation', fn () => view('public.conditions-utilisati
 Route::get('/inscription', fn () => view('public.inscription'))->name('inscription');
 
 // ── Newsletter (double opt-in, BRIEF §IV.6) ──────────────────────────────────
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');
-Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->middleware('throttle:newsletter')->name('newsletter.subscribe');
+Route::post('/newsletter', [NewsletterController::class, 'store'])->middleware('throttle:newsletter')->name('newsletter.store');
 Route::get('/newsletter/confirm/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
