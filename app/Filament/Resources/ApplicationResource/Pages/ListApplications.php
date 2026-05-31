@@ -19,9 +19,9 @@ class ListApplications extends ListRecords
                 ->label('Exporter Excel')
                 ->icon('heroicon-m-arrow-down-tray')
                 ->color('gray')
-                ->action(fn() => Excel::download(
-                    new ApplicationsExport(),
-                    'candidatures-' . now()->format('Y-m-d') . '.xlsx'
+                ->action(fn () => Excel::download(
+                    new ApplicationsExport,
+                    'candidatures-'.now()->format('Y-m-d').'.xlsx'
                 )),
         ];
     }

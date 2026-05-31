@@ -17,8 +17,8 @@ test('profile information can be updated', function () {
     $this->actingAs($user)
         ->patch('/profile', [
             'first_name' => 'Konan',
-            'last_name'  => 'Yao',
-            'email'      => 'konan@example.com',
+            'last_name' => 'Yao',
+            'email' => 'konan@example.com',
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/profile');
@@ -37,8 +37,8 @@ test('email verification status is unchanged when the email address is unchanged
     $this->actingAs($user)
         ->patch('/profile', [
             'first_name' => $user->first_name,
-            'last_name'  => $user->last_name,
-            'email'      => $user->email,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
         ])
         ->assertSessionHasNoErrors()
         ->assertRedirect('/profile');

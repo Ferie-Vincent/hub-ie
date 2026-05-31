@@ -21,15 +21,15 @@ class QrScanController extends Controller
         if (! $alreadyCheckedIn) {
             Attendance::create([
                 'application_id' => $application->id,
-                'event_date'     => today(),
-                'scanned_at'     => now(),
-                'scan_method'    => 'qr',
-                'scanner_ip'     => request()->ip(),
+                'event_date' => today(),
+                'scanned_at' => now(),
+                'scan_method' => 'qr',
+                'scanner_ip' => request()->ip(),
             ]);
         }
 
         return view('public.scan-confirmation', [
-            'application'      => $application,
+            'application' => $application,
             'alreadyCheckedIn' => $alreadyCheckedIn,
         ]);
     }

@@ -26,8 +26,8 @@ class Speaker extends Model
     {
         return [
             'display_order' => 'integer',
-            'is_featured'   => 'boolean',
-            'is_published'  => 'boolean',
+            'is_featured' => 'boolean',
+            'is_published' => 'boolean',
         ];
     }
 

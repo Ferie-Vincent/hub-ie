@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ApplicationsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
+class ApplicationsExport implements FromQuery, ShouldAutoSize, WithHeadings, WithMapping
 {
     public function __construct(private array $statuses = []) {}
 
@@ -21,7 +21,7 @@ class ApplicationsExport implements FromQuery, WithHeadings, WithMapping, Should
             ->orderBy('submitted_at', 'desc');
 
         if ($this->statuses) {
-            $query->whereIn('status', array_map(fn($s) => $s->value, $this->statuses));
+            $query->whereIn('status', array_map(fn ($s) => $s->value, $this->statuses));
         }
 
         return $query;

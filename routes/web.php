@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PreInscriptionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
@@ -49,6 +49,7 @@ Route::get('/dashboard', function () {
     if ($user?->hasRole('candidate')) {
         return redirect()->route('candidate.dashboard');
     }
+
     return redirect()->route('filament.admin.pages.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 

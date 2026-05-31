@@ -13,7 +13,7 @@ class StatsOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function getStats(): array
     {
@@ -25,12 +25,12 @@ class StatsOverviewWidget extends BaseWidget
         $delta24h = Application::where('submitted_at', '>=', now()->subDay())->count();
 
         $accepted = Application::where('status', ApplicationStatus::Accepted->value)->count();
-        $quota    = 180;
+        $quota = 180;
 
-        $today    = Carbon::today();
-        $present  = Attendance::whereDate('event_date', $today)->distinct('application_id')->count('application_id');
+        $today = Carbon::today();
+        $present = Attendance::whereDate('event_date', $today)->distinct('application_id')->count('application_id');
 
-        $toEval   = Application::whereIn('status', [
+        $toEval = Application::whereIn('status', [
             ApplicationStatus::Eligible->value,
             ApplicationStatus::UnderReview->value,
         ])->count();
@@ -39,18 +39,18 @@ class StatsOverviewWidget extends BaseWidget
 
         return [
             Stat::make('Candidatures reçues', $total)
-                ->description('+' . $delta24h . ' dernières 24h')
+                ->description('+'.$delta24h.' dernières 24h')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('primary')
                 ->chart($sparkline),
 
-            Stat::make('Auditeurs retenus', $accepted . ' / ' . $quota)
-                ->description(round($accepted / $quota * 100) . ' % du quota atteint')
+            Stat::make('Auditeurs retenus', $accepted.' / '.$quota)
+                ->description(round($accepted / $quota * 100).' % du quota atteint')
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('success'),
 
             Stat::make('Présents aujourd\'hui', $present)
-                ->description('Pointage du ' . $today->translatedFormat('d M'))
+                ->description('Pointage du '.$today->translatedFormat('d M'))
                 ->descriptionIcon('heroicon-m-map-pin')
                 ->color('info'),
 
@@ -65,9 +65,10 @@ class StatsOverviewWidget extends BaseWidget
     {
         $data = [];
         for ($i = 29; $i >= 0; $i--) {
-            $date   = Carbon::today()->subDays($i);
+            $date = Carbon::today()->subDays($i);
             $data[] = Application::whereDate('submitted_at', $date)->count();
         }
+
         return $data;
     }
 }

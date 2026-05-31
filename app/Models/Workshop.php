@@ -26,10 +26,10 @@ class Workshop extends Model
     protected function casts(): array
     {
         return [
-            'objectives'   => 'array',
-            'themes'       => 'array',
-            'capacity'     => 'integer',
-            'display_order'=> 'integer',
+            'objectives' => 'array',
+            'themes' => 'array',
+            'capacity' => 'integer',
+            'display_order' => 'integer',
             'is_published' => 'boolean',
         ];
     }

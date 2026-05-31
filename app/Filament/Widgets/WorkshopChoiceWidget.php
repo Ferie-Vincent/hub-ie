@@ -9,15 +9,16 @@ use Filament\Widgets\ChartWidget;
 class WorkshopChoiceWidget extends ChartWidget
 {
     protected static ?string $heading = 'Choix d\'ateliers';
+
     protected static ?int $sort = 6;
 
     protected function getData(): array
     {
         $slugs = [
-            'zlecaf-cedeao'       => 'ZLECAf & CEDEAO',
-            'financement-garanties'=> 'Financement & garanties',
-            'commerce-electronique'=> 'Commerce électronique',
-            'conformite-qualite'  => 'Conformité & qualité',
+            'zlecaf-cedeao' => 'ZLECAf & CEDEAO',
+            'financement-garanties' => 'Financement & garanties',
+            'commerce-electronique' => 'Commerce électronique',
+            'conformite-qualite' => 'Conformité & qualité',
         ];
 
         $counts = array_fill_keys(array_keys($slugs), 0);
@@ -35,15 +36,15 @@ class WorkshopChoiceWidget extends ChartWidget
 
         return [
             'datasets' => [[
-                'label'           => 'Inscriptions',
-                'data'            => array_values($counts),
+                'label' => 'Inscriptions',
+                'data' => array_values($counts),
                 'backgroundColor' => [
                     'hsla(18,58%,38%,0.80)',
                     'hsla(25,68%,44%,0.80)',
                     'hsla(140,45%,35%,0.80)',
                     'hsla(46,62%,38%,0.80)',
                 ],
-                'borderRadius'    => 4,
+                'borderRadius' => 4,
             ]],
             'labels' => array_values($slugs),
         ];
@@ -58,7 +59,7 @@ class WorkshopChoiceWidget extends ChartWidget
     {
         return [
             'plugins' => ['legend' => ['display' => false]],
-            'scales'  => ['y' => ['beginAtZero' => true, 'ticks' => ['stepSize' => 1]]],
+            'scales' => ['y' => ['beginAtZero' => true, 'ticks' => ['stepSize' => 1]]],
         ];
     }
 }

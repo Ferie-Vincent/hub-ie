@@ -9,6 +9,7 @@ use Filament\Widgets\Widget;
 class GeographyWidget extends Widget
 {
     protected static string $view = 'filament.widgets.geography';
+
     protected static ?int $sort = 10;
 
     protected function getViewData(): array

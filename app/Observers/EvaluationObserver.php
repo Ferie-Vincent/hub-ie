@@ -9,11 +9,11 @@ class EvaluationObserver
     public function saving(Evaluation $evaluation): void
     {
         $evaluation->weighted_score = round(
-            $evaluation->score_profile        * 0.25
-            + $evaluation->score_motivation   * 0.25
-            + $evaluation->score_relevance    * 0.20
+            $evaluation->score_profile * 0.25
+            + $evaluation->score_motivation * 0.25
+            + $evaluation->score_relevance * 0.20
             + $evaluation->score_representativity * 0.15
-            + $evaluation->score_balance      * 0.15,
+            + $evaluation->score_balance * 0.15,
             2
         );
     }
@@ -36,7 +36,7 @@ class EvaluationObserver
 
         $evaluation->application()->update([
             'evaluations_count' => $stats->cnt ?? 0,
-            'average_score'     => $stats->avg,
+            'average_score' => $stats->avg,
         ]);
     }
 }

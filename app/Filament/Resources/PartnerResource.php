@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class PartnerResource extends Resource
 {
-    protected static ?string $model              = Partner::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-building-office-2';
-    protected static ?string $navigationGroup    = 'Contenu';
-    protected static ?int    $navigationSort     = 21;
-    protected static ?string $navigationLabel    = 'Partenaires';
-    protected static ?string $modelLabel         = 'Partenaire';
-    protected static ?string $pluralModelLabel   = 'Partenaires';
+    protected static ?string $model = Partner::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+
+    protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 21;
+
+    protected static ?string $navigationLabel = 'Partenaires';
+
+    protected static ?string $modelLabel = 'Partenaire';
+
+    protected static ?string $pluralModelLabel = 'Partenaires';
 
     public static function canViewAny(): bool
     {
@@ -53,11 +59,11 @@ class PartnerResource extends Resource
                 Tables\Columns\TextColumn::make('name')->label('Nom')->searchable()->weight('medium'),
                 Tables\Columns\BadgeColumn::make('tier')
                     ->label('Niveau')
-                    ->formatStateUsing(fn($state) => match($state) {
+                    ->formatStateUsing(fn ($state) => match ($state) {
                         'gold' => 'Or', 'silver' => 'Argent', 'bronze' => 'Bronze',
                         default => 'Institutionnel',
                     })
-                    ->color(fn($state) => match($state) {
+                    ->color(fn ($state) => match ($state) {
                         'gold' => 'warning', 'silver' => 'gray', 'bronze' => 'danger',
                         default => 'info',
                     }),
@@ -72,9 +78,9 @@ class PartnerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListPartners::route('/'),
+            'index' => Pages\ListPartners::route('/'),
             'create' => Pages\CreatePartner::route('/create'),
-            'edit'   => Pages\EditPartner::route('/{record}/edit'),
+            'edit' => Pages\EditPartner::route('/{record}/edit'),
         ];
     }
 }

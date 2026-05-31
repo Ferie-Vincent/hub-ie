@@ -4,19 +4,21 @@ namespace App\Filament\Widgets;
 
 use App\Models\Attendance;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Carbon;
 
 class AttendanceWidget extends ChartWidget
 {
     protected static ?string $heading = 'Pointage par jour';
+
     protected static ?int $sort = 9;
+
     protected static ?string $pollingInterval = '15s';
-    protected int | string | array $columnSpan = 2;
+
+    protected int|string|array $columnSpan = 2;
 
     protected function getData(): array
     {
-        $days   = ['22 juin', '23 juin', '24 juin', '25 juin'];
-        $dates  = ['2026-06-22', '2026-06-23', '2026-06-24', '2026-06-25'];
+        $days = ['22 juin', '23 juin', '24 juin', '25 juin'];
+        $dates = ['2026-06-22', '2026-06-23', '2026-06-24', '2026-06-25'];
         $counts = [];
 
         foreach ($dates as $date) {
@@ -27,12 +29,12 @@ class AttendanceWidget extends ChartWidget
 
         return [
             'datasets' => [[
-                'label'           => 'Présents',
-                'data'            => $counts,
+                'label' => 'Présents',
+                'data' => $counts,
                 'backgroundColor' => 'hsla(140,50%,38%,0.80)',
-                'borderColor'     => 'hsl(140 50% 38%)',
-                'borderWidth'     => 1,
-                'borderRadius'    => 6,
+                'borderColor' => 'hsl(140 50% 38%)',
+                'borderWidth' => 1,
+                'borderRadius' => 6,
             ]],
             'labels' => $days,
         ];
@@ -47,7 +49,7 @@ class AttendanceWidget extends ChartWidget
     {
         return [
             'plugins' => ['legend' => ['display' => false]],
-            'scales'  => ['y' => ['beginAtZero' => true, 'max' => 180, 'ticks' => ['stepSize' => 30]]],
+            'scales' => ['y' => ['beginAtZero' => true, 'max' => 180, 'ticks' => ['stepSize' => 30]]],
         ];
     }
 }

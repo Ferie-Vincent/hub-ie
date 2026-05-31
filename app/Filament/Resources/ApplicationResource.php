@@ -22,13 +22,20 @@ use Illuminate\Support\Collection;
 
 class ApplicationResource extends Resource
 {
-    protected static ?string $model                = Application::class;
-    protected static ?string $navigationIcon       = 'heroicon-o-users';
-    protected static ?string $navigationGroup      = 'Candidatures';
-    protected static ?int    $navigationSort       = 1;
-    protected static ?string $navigationLabel      = 'Liste des inscrits';
-    protected static ?string $modelLabel           = 'Candidature';
-    protected static ?string $pluralModelLabel     = 'Candidatures';
+    protected static ?string $model = Application::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    protected static ?string $navigationGroup = 'Candidatures';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Liste des inscrits';
+
+    protected static ?string $modelLabel = 'Candidature';
+
+    protected static ?string $pluralModelLabel = 'Candidatures';
+
     protected static ?string $recordTitleAttribute = 'reference_code';
 
     public static function canViewAny(): bool
@@ -57,7 +64,7 @@ class ApplicationResource extends Resource
     }
 
     /* ─────────────────────────────────────────────────────────── */
-    /*  TABLE                                                       */
+    /*  TABLE */
     /* ─────────────────────────────────────────────────────────── */
 
     public static function table(Table $table): Table
@@ -74,13 +81,13 @@ class ApplicationResource extends Resource
 
                 Tables\Columns\TextColumn::make('user.full_name')
                     ->label('Candidat(e)')
-                    ->searchable(query: fn(Builder $query, string $search) => $query->whereHas(
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
                         'user',
-                        fn($q) => $q->where('first_name', 'like', "%{$search}%")
-                                    ->orWhere('last_name',  'like', "%{$search}%")
-                                    ->orWhere('email',      'like', "%{$search}%")
+                        fn ($q) => $q->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%")
                     ))
-                    ->description(fn(Application $record): string => $record->user?->email ?? '')
+                    ->description(fn (Application $record): string => $record->user?->email ?? '')
                     ->weight(FontWeight::Medium),
 
                 Tables\Columns\TextColumn::make('user.city')
@@ -91,15 +98,15 @@ class ApplicationResource extends Resource
                 Tables\Columns\TextColumn::make('category')
                     ->label('Profil')
                     ->badge()
-                    ->formatStateUsing(fn($state) => $state?->label())
-                    ->color(fn($state) => $state?->color())
+                    ->formatStateUsing(fn ($state) => $state?->label())
+                    ->color(fn ($state) => $state?->color())
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Statut')
                     ->badge()
-                    ->formatStateUsing(fn($state) => $state?->label())
-                    ->color(fn($state) => $state?->color())
+                    ->formatStateUsing(fn ($state) => $state?->label())
+                    ->color(fn ($state) => $state?->color())
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('average_score')
@@ -119,8 +126,8 @@ class ApplicationResource extends Resource
                     ->label('Statut')
                     ->options(
                         collect(ApplicationStatus::cases())
-                            ->reject(fn($s) => $s === ApplicationStatus::Draft)
-                            ->mapWithKeys(fn($s) => [$s->value => $s->label()])
+                            ->reject(fn ($s) => $s === ApplicationStatus::Draft)
+                            ->mapWithKeys(fn ($s) => [$s->value => $s->label()])
                     )
                     ->multiple()
                     ->preload(),
@@ -129,7 +136,7 @@ class ApplicationResource extends Resource
                     ->label('Profil professionnel')
                     ->options(
                         collect(ApplicationCategory::cases())
-                            ->mapWithKeys(fn($c) => [$c->value => $c->label()])
+                            ->mapWithKeys(fn ($c) => [$c->value => $c->label()])
                     )
                     ->multiple()
                     ->preload(),
@@ -138,28 +145,28 @@ class ApplicationResource extends Resource
                     ->label('Genre')
                     ->options(
                         collect(Gender::cases())
-                            ->mapWithKeys(fn($g) => [$g->value => $g->label()])
+                            ->mapWithKeys(fn ($g) => [$g->value => $g->label()])
                     )
-                    ->query(fn(Builder $query, array $data) => blank($data['value'])
+                    ->query(fn (Builder $query, array $data) => blank($data['value'])
                         ? $query
-                        : $query->whereHas('user', fn($q) => $q->where('gender', $data['value']))
+                        : $query->whereHas('user', fn ($q) => $q->where('gender', $data['value']))
                     ),
 
                 Tables\Filters\Filter::make('women_only')
                     ->label('Femmes uniquement')
-                    ->query(fn(Builder $query) => $query->whereHas('user', fn($q) => $q->where('gender', 'F'))),
+                    ->query(fn (Builder $query) => $query->whereHas('user', fn ($q) => $q->where('gender', 'F'))),
 
                 Tables\Filters\Filter::make('under_35')
                     ->label('< 35 ans uniquement')
-                    ->query(fn(Builder $query) => $query->whereHas(
+                    ->query(fn (Builder $query) => $query->whereHas(
                         'user',
-                        fn($q) => $q->whereNotNull('birth_date')
-                                    ->whereDate('birth_date', '>=', now()->subYears(35)->toDateString())
+                        fn ($q) => $q->whereNotNull('birth_date')
+                            ->whereDate('birth_date', '>=', now()->subYears(35)->toDateString())
                     )),
 
                 Tables\Filters\Filter::make('submitted')
                     ->label('Dossier soumis uniquement')
-                    ->query(fn(Builder $query) => $query->whereNotNull('submitted_at'))
+                    ->query(fn (Builder $query) => $query->whereNotNull('submitted_at'))
                     ->default(),
             ])
             ->filtersFormColumns(3)
@@ -178,27 +185,26 @@ class ApplicationResource extends Resource
                     ->form([
                         Forms\Components\Select::make('status')
                             ->label('Nouveau statut')
-                            ->options(fn(Application $record) =>
-                                collect(ApplicationStatus::cases())
-                                    ->reject(fn($s) => $s === ApplicationStatus::Draft)
-                                    ->filter(fn($s) => app(ApplicationStatusService::class)->canTransition($record, $s))
-                                    ->mapWithKeys(fn($s) => [$s->value => $s->label()])
+                            ->options(fn (Application $record) => collect(ApplicationStatus::cases())
+                                ->reject(fn ($s) => $s === ApplicationStatus::Draft)
+                                ->filter(fn ($s) => app(ApplicationStatusService::class)->canTransition($record, $s))
+                                ->mapWithKeys(fn ($s) => [$s->value => $s->label()])
                             )
                             ->required()
                             ->live()
-                            ->default(fn(Application $record) => $record->status->value),
+                            ->default(fn (Application $record) => $record->status->value),
                         Forms\Components\Textarea::make('admin_notes')
                             ->label('Notes internes')
                             ->placeholder('Visible uniquement par les administrateurs')
                             ->rows(2)
-                            ->default(fn(Application $record) => $record->admin_notes),
+                            ->default(fn (Application $record) => $record->admin_notes),
                         Forms\Components\Textarea::make('rejection_reason')
                             ->label('Motif de refus')
                             ->placeholder('Communiqué au candidat si non retenu(e)')
                             ->rows(2)
-                            ->hidden(fn(Forms\Get $get) => $get('status') !== ApplicationStatus::Rejected->value),
+                            ->hidden(fn (Forms\Get $get) => $get('status') !== ApplicationStatus::Rejected->value),
                     ])
-                    ->action(function(Application $record, array $data): void {
+                    ->action(function (Application $record, array $data): void {
                         try {
                             app(ApplicationStatusService::class)->transition(
                                 $record,
@@ -225,15 +231,15 @@ class ApplicationResource extends Resource
                                 ->label('Nouveau statut')
                                 ->options(
                                     collect(ApplicationStatus::cases())
-                                        ->reject(fn($s) => $s === ApplicationStatus::Draft)
-                                        ->mapWithKeys(fn($s) => [$s->value => $s->label()])
+                                        ->reject(fn ($s) => $s === ApplicationStatus::Draft)
+                                        ->mapWithKeys(fn ($s) => [$s->value => $s->label()])
                                 )
                                 ->required(),
                         ])
-                        ->action(function(Collection $records, array $data): void {
+                        ->action(function (Collection $records, array $data): void {
                             $service = app(ApplicationStatusService::class);
-                            $to      = ApplicationStatus::from($data['status']);
-                            $errors  = 0;
+                            $to = ApplicationStatus::from($data['status']);
+                            $errors = 0;
                             foreach ($records as $record) {
                                 try {
                                     $service->transition($record, $to);
@@ -255,7 +261,7 @@ class ApplicationResource extends Resource
     }
 
     /* ─────────────────────────────────────────────────────────── */
-    /*  INFOLIST (View page)                                        */
+    /*  INFOLIST (View page) */
     /* ─────────────────────────────────────────────────────────── */
 
     public static function infolist(Infolist $infolist): Infolist
@@ -274,8 +280,8 @@ class ApplicationResource extends Resource
                     Infolists\Components\TextEntry::make('status')
                         ->label('Statut actuel')
                         ->badge()
-                        ->formatStateUsing(fn($state) => $state?->label())
-                        ->color(fn($state) => $state?->color()),
+                        ->formatStateUsing(fn ($state) => $state?->label())
+                        ->color(fn ($state) => $state?->color()),
                     Infolists\Components\TextEntry::make('submitted_at')
                         ->label('Soumis le')
                         ->dateTime('d/m/Y à H:i')
@@ -293,8 +299,8 @@ class ApplicationResource extends Resource
                     Infolists\Components\TextEntry::make('user.gender')
                         ->label('Genre')
                         ->badge()
-                        ->formatStateUsing(fn($state) => $state?->label())
-                        ->color(fn($state) => $state?->color()),
+                        ->formatStateUsing(fn ($state) => $state?->label())
+                        ->color(fn ($state) => $state?->color()),
                     Infolists\Components\TextEntry::make('user.email')
                         ->label('Email')
                         ->copyable()
@@ -325,8 +331,8 @@ class ApplicationResource extends Resource
                     Infolists\Components\TextEntry::make('category')
                         ->label('Catégorie')
                         ->badge()
-                        ->formatStateUsing(fn($state) => $state?->label())
-                        ->color(fn($state) => $state?->color()),
+                        ->formatStateUsing(fn ($state) => $state?->label())
+                        ->color(fn ($state) => $state?->color()),
                     Infolists\Components\TextEntry::make('organization_name')
                         ->label('Organisation')
                         ->placeholder('—'),
@@ -362,15 +368,16 @@ class ApplicationResource extends Resource
                         ->columnSpanFull(),
                     Infolists\Components\TextEntry::make('chosen_workshops')
                         ->label('Ateliers choisis')
-                        ->formatStateUsing(function($state): string {
+                        ->formatStateUsing(function ($state): string {
                             $labels = [
                                 1 => 'ZLECAf & CEDEAO',
                                 2 => 'Financement',
                                 3 => 'E-commerce',
                                 4 => 'Conformité',
                             ];
+
                             return collect((array) $state)
-                                ->map(fn($i) => $labels[(int) $i] ?? "Atelier {$i}")
+                                ->map(fn ($i) => $labels[(int) $i] ?? "Atelier {$i}")
                                 ->join(', ');
                         })
                         ->placeholder('—'),
@@ -406,21 +413,21 @@ class ApplicationResource extends Resource
                         ->label('Motif de refus')
                         ->placeholder('—')
                         ->columnSpanFull()
-                        ->visible(fn($record) => $record->status === ApplicationStatus::Rejected),
+                        ->visible(fn ($record) => $record->status === ApplicationStatus::Rejected),
                 ]),
 
         ]);
     }
 
     /* ─────────────────────────────────────────────────────────── */
-    /*  PAGES                                                       */
+    /*  PAGES */
     /* ─────────────────────────────────────────────────────────── */
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListApplications::route('/'),
-            'view'  => Pages\ViewApplication::route('/{record}'),
+            'view' => Pages\ViewApplication::route('/{record}'),
         ];
     }
 }

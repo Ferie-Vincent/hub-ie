@@ -7,18 +7,18 @@ use App\Notifications\VerifyEmailNotification;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasRoles, SoftDeletes;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'first_name',
@@ -44,16 +44,16 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
     {
         return [
             'email_verified_at' => 'datetime',
-            'birth_date'        => 'date',
-            'gender'            => Gender::class,
-            'is_active'         => 'boolean',
-            'password'          => 'hashed',
+            'birth_date' => 'date',
+            'gender' => Gender::class,
+            'is_active' => 'boolean',
+            'password' => 'hashed',
         ];
     }
 
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new VerifyEmailNotification());
+        $this->notify(new VerifyEmailNotification);
     }
 
     public function canAccessPanel(Panel $panel): bool

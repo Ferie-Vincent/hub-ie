@@ -12,12 +12,12 @@ class PartnerFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'            => fake()->company(),
-            'website'         => fake()->url(),
-            'tier'            => fake()->randomElement(PartnerTier::cases())->value,
-            'display_order'   => fake()->numberBetween(0, 10),
+            'name' => fake()->company(),
+            'website' => fake()->url(),
+            'tier' => fake()->randomElement(PartnerTier::cases())->value,
+            'display_order' => fake()->numberBetween(0, 10),
             'show_in_marquee' => true,
-            'show_in_footer'  => false,
+            'show_in_footer' => false,
         ];
     }
 }

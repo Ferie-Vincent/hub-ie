@@ -10,26 +10,27 @@ use Illuminate\Support\Carbon;
 class AgeGroupWidget extends ChartWidget
 {
     protected static ?string $heading = 'Tranches d\'âge';
+
     protected static ?int $sort = 4;
 
     protected function getData(): array
     {
         $exclude = [ApplicationStatus::Draft->value, ApplicationStatus::Withdrawn->value];
-        $base    = Application::whereNotIn('status', $exclude)
+        $base = Application::whereNotIn('status', $exclude)
             ->join('users', 'users.id', '=', 'applications.user_id')
             ->whereNotNull('users.birth_date');
 
         $ranges = [
-            '< 25 ans'   => [0,  24],
-            '25 – 34 ans'=> [25, 34],
-            '35 – 44 ans'=> [35, 44],
-            '45 – 54 ans'=> [45, 54],
-            '55 ans+'    => [55, 99],
+            '< 25 ans' => [0,  24],
+            '25 – 34 ans' => [25, 34],
+            '35 – 44 ans' => [35, 44],
+            '45 – 54 ans' => [45, 54],
+            '55 ans+' => [55, 99],
         ];
 
         $labels = [];
         $counts = [];
-        $now    = Carbon::now();
+        $now = Carbon::now();
 
         foreach ($ranges as $label => [$min, $max]) {
             $labels[] = $label;
@@ -41,12 +42,12 @@ class AgeGroupWidget extends ChartWidget
 
         return [
             'datasets' => [[
-                'label'           => 'Candidats',
-                'data'            => $counts,
+                'label' => 'Candidats',
+                'data' => $counts,
                 'backgroundColor' => 'hsla(25,68%,44%,0.75)',
-                'borderColor'     => 'hsl(25 68% 44%)',
-                'borderWidth'     => 1,
-                'borderRadius'    => 4,
+                'borderColor' => 'hsl(25 68% 44%)',
+                'borderWidth' => 1,
+                'borderRadius' => 4,
             ]],
             'labels' => $labels,
         ];
@@ -61,7 +62,7 @@ class AgeGroupWidget extends ChartWidget
     {
         return [
             'plugins' => ['legend' => ['display' => false]],
-            'scales'  => ['y' => ['beginAtZero' => true, 'ticks' => ['stepSize' => 1]]],
+            'scales' => ['y' => ['beginAtZero' => true, 'ticks' => ['stepSize' => 1]]],
         ];
     }
 }

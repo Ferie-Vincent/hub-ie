@@ -14,10 +14,10 @@ test('registration screen can be rendered', function () {
 
 test('new users can register with first and last name', function () {
     $this->post('/register', [
-        'first_name'            => 'Konan',
-        'last_name'             => 'Yao',
-        'email'                 => 'test@example.com',
-        'password'              => 'Password123!',
+        'first_name' => 'Konan',
+        'last_name' => 'Yao',
+        'email' => 'test@example.com',
+        'password' => 'Password123!',
         'password_confirmation' => 'Password123!',
     ])->assertRedirect(route('verification.notice'));
 

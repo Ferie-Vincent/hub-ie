@@ -28,9 +28,9 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@hubimportexport.ci'],
             [
                 'first_name' => 'Admin',
-                'last_name'  => 'DGCE',
-                'password'   => Hash::make('password'),
-                'is_active'  => true,
+                'last_name' => 'DGCE',
+                'password' => Hash::make('password'),
+                'is_active' => true,
             ]
         );
         $admin->assignRole('super_admin');

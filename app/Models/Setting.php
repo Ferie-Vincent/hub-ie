@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
@@ -23,11 +24,11 @@ class Setting extends Model
             return $default;
         }
 
-        return match($setting->type) {
-            'bool'  => filter_var($setting->value, FILTER_VALIDATE_BOOLEAN),
-            'int'   => (int) $setting->value,
-            'json'  => json_decode($setting->value, true),
-            'date'  => $setting->value ? new \Carbon\Carbon($setting->value) : null,
+        return match ($setting->type) {
+            'bool' => filter_var($setting->value, FILTER_VALIDATE_BOOLEAN),
+            'int' => (int) $setting->value,
+            'json' => json_decode($setting->value, true),
+            'date' => $setting->value ? new Carbon($setting->value) : null,
             default => $setting->value,
         };
     }

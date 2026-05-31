@@ -6,7 +6,6 @@ use App\Enums\ApplicationStatus;
 use App\Exports\ApplicationsExport;
 use App\Models\Application;
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -15,30 +14,39 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportCenter extends Page
 {
-    protected static ?string $navigationIcon  = 'heroicon-o-arrow-down-tray';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
+
     protected static ?string $navigationGroup = 'Administration';
-    protected static ?int    $navigationSort  = 50;
-    protected static ?string $title           = 'Centre d\'export';
-    protected static string  $view            = 'filament.pages.export-center';
+
+    protected static ?int $navigationSort = 50;
+
+    protected static ?string $title = 'Centre d\'export';
+
+    protected static string $view = 'filament.pages.export-center';
 
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if (! $user) return false;
-        if ($user->hasRole('super_admin')) return true;
+        if (! $user) {
+            return false;
+        }
+        if ($user->hasRole('super_admin')) {
+            return true;
+        }
+
         return $user->hasAnyPermission('manage-system', 'accept-applications');
     }
 
     public function exportAll(): BinaryFileResponse
     {
-        return Excel::download(new ApplicationsExport(), 'candidatures-' . now()->format('Ymd-Hi') . '.xlsx');
+        return Excel::download(new ApplicationsExport, 'candidatures-'.now()->format('Ymd-Hi').'.xlsx');
     }
 
     public function exportAccepted(): BinaryFileResponse
     {
         return Excel::download(
             new ApplicationsExport(statuses: [ApplicationStatus::Accepted]),
-            'candidatures-retenues-' . now()->format('Ymd-Hi') . '.xlsx'
+            'candidatures-retenues-'.now()->format('Ymd-Hi').'.xlsx'
         );
     }
 
@@ -46,7 +54,7 @@ class ExportCenter extends Page
     {
         return Excel::download(
             new ApplicationsExport(statuses: [ApplicationStatus::Waitlisted]),
-            'liste-attente-' . now()->format('Ymd-Hi') . '.xlsx'
+            'liste-attente-'.now()->format('Ymd-Hi').'.xlsx'
         );
     }
 
@@ -58,7 +66,7 @@ class ExportCenter extends Page
             ->orderBy('accepted_at')
             ->get();
 
-        $filename = 'participants-' . now()->format('Ymd-Hi') . '.pdf';
+        $filename = 'participants-'.now()->format('Ymd-Hi').'.pdf';
 
         return Pdf::view('pdf.participants-list', compact('applications'))
             ->format('A4')

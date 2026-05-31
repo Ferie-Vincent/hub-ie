@@ -11,21 +11,21 @@ enum PartnerTier: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Organizer => 'Organisateur',
             self::Strategic => 'Partenaire stratégique',
-            self::Partner   => 'Agence d\'appui',
-            self::Media     => 'Médias',
+            self::Partner => 'Agence d\'appui',
+            self::Media => 'Médias',
         };
     }
 
     public function color(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Organizer => 'warning',
             self::Strategic => 'success',
-            self::Partner   => 'indigo',
-            self::Media     => 'gray',
+            self::Partner => 'indigo',
+            self::Media => 'gray',
         };
     }
 }

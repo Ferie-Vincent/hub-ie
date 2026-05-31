@@ -56,19 +56,19 @@ class Application extends Model
     protected function casts(): array
     {
         return [
-            'status'                 => ApplicationStatus::class,
-            'category'               => ApplicationCategory::class,
-            'chosen_workshops'       => 'array',
+            'status' => ApplicationStatus::class,
+            'category' => ApplicationCategory::class,
+            'chosen_workshops' => 'array',
             'is_first_participation' => 'boolean',
-            'rgpd_consent'           => 'boolean',
-            'communication_consent'  => 'boolean',
-            'submitted_at'           => 'datetime',
-            'accepted_at'            => 'datetime',
-            'notified_at'            => 'datetime',
-            'average_score'          => 'decimal:2',
-            'current_step'           => 'integer',
-            'experience_years'       => 'integer',
-            'evaluations_count'      => 'integer',
+            'rgpd_consent' => 'boolean',
+            'communication_consent' => 'boolean',
+            'submitted_at' => 'datetime',
+            'accepted_at' => 'datetime',
+            'notified_at' => 'datetime',
+            'average_score' => 'decimal:2',
+            'current_step' => 'integer',
+            'experience_years' => 'integer',
+            'evaluations_count' => 'integer',
         ];
     }
 

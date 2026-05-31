@@ -10,8 +10,10 @@ use Filament\Widgets\ChartWidget;
 class CategoryWidget extends ChartWidget
 {
     protected static ?string $heading = 'Profils professionnels';
+
     protected static ?int $sort = 5;
-    protected int | string | array $columnSpan = 2;
+
+    protected int|string|array $columnSpan = 2;
 
     protected function getData(): array
     {
@@ -32,13 +34,13 @@ class CategoryWidget extends ChartWidget
 
         return [
             'datasets' => [[
-                'axis'            => 'y',
-                'label'           => 'Candidats',
-                'data'            => $counts,
+                'axis' => 'y',
+                'label' => 'Candidats',
+                'data' => $counts,
                 'backgroundColor' => 'hsla(25,68%,44%,0.72)',
-                'borderColor'     => 'hsl(25 68% 44%)',
-                'borderWidth'     => 1,
-                'borderRadius'    => 4,
+                'borderColor' => 'hsl(25 68% 44%)',
+                'borderWidth' => 1,
+                'borderRadius' => 4,
             ]],
             'labels' => $labels,
         ];
@@ -53,8 +55,8 @@ class CategoryWidget extends ChartWidget
     {
         return [
             'indexAxis' => 'y',
-            'plugins'   => ['legend' => ['display' => false]],
-            'scales'    => ['x' => ['beginAtZero' => true, 'ticks' => ['stepSize' => 1]]],
+            'plugins' => ['legend' => ['display' => false]],
+            'scales' => ['x' => ['beginAtZero' => true, 'ticks' => ['stepSize' => 1]]],
         ];
     }
 }

@@ -25,7 +25,7 @@ class News extends Model
     {
         return [
             'published_at' => 'datetime',
-            'is_featured'  => 'boolean',
+            'is_featured' => 'boolean',
         ];
     }
 

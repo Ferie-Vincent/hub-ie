@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Application;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 
 class QrCodeService
 {

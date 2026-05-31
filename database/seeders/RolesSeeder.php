@@ -5,12 +5,13 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesSeeder extends Seeder
 {
     public function run(): void
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
             'view-applications',
@@ -28,14 +29,14 @@ class RolesSeeder extends Seeder
         }
 
         $roles = [
-            'super_admin'        => $permissions,
-            'committee_president'=> ['view-applications', 'evaluate-applications', 'accept-applications', 'reject-applications'],
-            'committee_member'   => ['view-applications', 'evaluate-applications'],
-            'admin_dgce'         => ['view-applications', 'mark-eligible'],
-            'communication'      => ['manage-content'],
-            'agent_entry'        => ['scan-attendance'],
-            'reader'             => ['view-applications'],
-            'candidate'          => [],
+            'super_admin' => $permissions,
+            'committee_president' => ['view-applications', 'evaluate-applications', 'accept-applications', 'reject-applications'],
+            'committee_member' => ['view-applications', 'evaluate-applications'],
+            'admin_dgce' => ['view-applications', 'mark-eligible'],
+            'communication' => ['manage-content'],
+            'agent_entry' => ['scan-attendance'],
+            'reader' => ['view-applications'],
+            'candidate' => [],
         ];
 
         foreach ($roles as $name => $perms) {

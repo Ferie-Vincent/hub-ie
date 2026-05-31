@@ -12,6 +12,7 @@ class CreateEvaluation extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['evaluator_id'] = auth()->id();
+
         return $data;
     }
 }

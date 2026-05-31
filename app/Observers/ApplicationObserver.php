@@ -16,28 +16,28 @@ class ApplicationObserver
         }
 
         AuditLog::create([
-            'user_id'      => auth()->id(),
-            'action'       => 'application.updated',
+            'user_id' => auth()->id(),
+            'action' => 'application.updated',
             'subject_type' => Application::class,
-            'subject_id'   => $application->id,
-            'old_values'   => json_encode(array_intersect_key($application->getOriginal(), $dirty)),
-            'new_values'   => json_encode($dirty),
-            'ip'           => request()->ip(),
-            'user_agent'   => request()->userAgent(),
+            'subject_id' => $application->id,
+            'old_values' => json_encode(array_intersect_key($application->getOriginal(), $dirty)),
+            'new_values' => json_encode($dirty),
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
         ]);
     }
 
     public function created(Application $application): void
     {
         AuditLog::create([
-            'user_id'      => auth()->id(),
-            'action'       => 'application.created',
+            'user_id' => auth()->id(),
+            'action' => 'application.created',
             'subject_type' => Application::class,
-            'subject_id'   => $application->id,
-            'old_values'   => null,
-            'new_values'   => json_encode($application->getAttributes()),
-            'ip'           => request()->ip(),
-            'user_agent'   => request()->userAgent(),
+            'subject_id' => $application->id,
+            'old_values' => null,
+            'new_values' => json_encode($application->getAttributes()),
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
         ]);
     }
 }

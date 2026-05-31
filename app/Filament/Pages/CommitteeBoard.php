@@ -6,31 +6,42 @@ use App\Enums\ApplicationStatus;
 use App\Models\Application;
 use App\Services\ApplicationStatusService;
 use Filament\Actions\Action;
-use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Database\Eloquent\Collection;
 
 class CommitteeBoard extends Page
 {
-    protected static ?string $navigationIcon  = 'heroicon-o-clipboard-document-check';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
+
     protected static ?string $navigationGroup = 'Candidatures';
-    protected static ?int    $navigationSort  = 5;
-    protected static ?string $title           = 'Tableau de délibération';
-    protected static string  $view            = 'filament.pages.committee-board';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $title = 'Tableau de délibération';
+
+    protected static string $view = 'filament.pages.committee-board';
 
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if (! $user) return false;
-        if ($user->hasRole('super_admin')) return true;
+        if (! $user) {
+            return false;
+        }
+        if ($user->hasRole('super_admin')) {
+            return true;
+        }
+
         return $user->hasPermissionTo('evaluate-applications');
     }
 
     public Collection $eligible;
+
     public Collection $underReview;
+
     public Collection $shortlisted;
-    public array      $quotas = [];
+
+    public array $quotas = [];
 
     public function mount(): void
     {
@@ -39,7 +50,7 @@ class CommitteeBoard extends Page
 
     public function refresh(): void
     {
-        $this->eligible    = Application::with('user')
+        $this->eligible = Application::with('user')
             ->where('status', ApplicationStatus::Eligible->value)
             ->orderBy('submitted_at')
             ->get();
@@ -56,16 +67,16 @@ class CommitteeBoard extends Page
 
         $accepted = Application::where('status', ApplicationStatus::Accepted->value)->count();
         $this->quotas = [
-            'accepted'   => $accepted,
-            'quota'      => 180,
-            'remaining'  => max(0, 180 - $accepted),
+            'accepted' => $accepted,
+            'quota' => 180,
+            'remaining' => max(0, 180 - $accepted),
             'shortlisted' => $this->shortlisted->count(),
         ];
     }
 
     public function transition(int $applicationId, string $to): void
     {
-        $app     = Application::findOrFail($applicationId);
+        $app = Application::findOrFail($applicationId);
         $service = app(ApplicationStatusService::class);
 
         try {

@@ -13,9 +13,7 @@ class ApplicationReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public readonly Application $application)
-    {
-    }
+    public function __construct(public readonly Application $application) {}
 
     public function envelope(): Envelope
     {
@@ -30,7 +28,7 @@ class ApplicationReceived extends Mailable
             markdown: 'mail.application.received',
             with: [
                 'application' => $this->application,
-                'user'        => $this->application->user,
+                'user' => $this->application->user,
             ],
         );
     }

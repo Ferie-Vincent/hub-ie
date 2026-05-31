@@ -19,30 +19,30 @@ enum ApplicationCategory: string
 
     public function label(): string
     {
-        return match($this) {
-            self::AgroTransformateur   => 'Agro-transformateur',
-            self::PmeExportatrice      => 'PME exportatrice / importatrice',
-            self::Transitaire          => 'Transitaire',
-            self::BanqueFinance        => 'Banque / assurance / finance',
+        return match ($this) {
+            self::AgroTransformateur => 'Agro-transformateur',
+            self::PmeExportatrice => 'PME exportatrice / importatrice',
+            self::Transitaire => 'Transitaire',
+            self::BanqueFinance => 'Banque / assurance / finance',
             self::DouaneAdministration => 'Administration douanière',
-            self::AgentAppui           => 'Agent d\'agence d\'appui (ACIEx, CNE, GUCE-CI…)',
-            self::AgentMcia            => 'Agent MCIA',
-            self::Transporteur         => 'Transporteur',
-            self::Universitaire        => 'Universitaire / chercheur',
-            self::Journaliste          => 'Journaliste',
-            self::SocieteCivile        => 'Société civile',
-            self::Autre                => 'Autre',
+            self::AgentAppui => 'Agent d\'agence d\'appui (ACIEx, CNE, GUCE-CI…)',
+            self::AgentMcia => 'Agent MCIA',
+            self::Transporteur => 'Transporteur',
+            self::Universitaire => 'Universitaire / chercheur',
+            self::Journaliste => 'Journaliste',
+            self::SocieteCivile => 'Société civile',
+            self::Autre => 'Autre',
         };
     }
 
     public function color(): string
     {
-        return match($this) {
+        return match ($this) {
             self::AgroTransformateur, self::PmeExportatrice => 'success',
-            self::BanqueFinance                             => 'indigo',
-            self::Journaliste                               => 'orange',
-            self::Universitaire                             => 'purple',
-            default                                         => 'gray',
+            self::BanqueFinance => 'indigo',
+            self::Journaliste => 'orange',
+            self::Universitaire => 'purple',
+            default => 'gray',
         };
     }
 

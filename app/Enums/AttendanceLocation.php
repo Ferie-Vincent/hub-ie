@@ -10,19 +10,19 @@ enum AttendanceLocation: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Cgeci => 'CGECI — Plateau',
             self::CciCi => 'CCI-CI — Plateau',
-            self::Seen  => 'SEEN Hôtel — Abidjan-Plateau',
+            self::Seen => 'SEEN Hôtel — Abidjan-Plateau',
         };
     }
 
     public function color(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Cgeci => 'blue',
             self::CciCi => 'indigo',
-            self::Seen  => 'purple',
+            self::Seen => 'purple',
         };
     }
 }

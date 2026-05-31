@@ -22,12 +22,12 @@ class Evaluation extends Model
     protected function casts(): array
     {
         return [
-            'score_profile'          => 'integer',
-            'score_motivation'       => 'integer',
-            'score_relevance'        => 'integer',
+            'score_profile' => 'integer',
+            'score_motivation' => 'integer',
+            'score_relevance' => 'integer',
             'score_representativity' => 'integer',
-            'score_balance'          => 'integer',
-            'weighted_score'         => 'decimal:2',
+            'score_balance' => 'integer',
+            'weighted_score' => 'decimal:2',
         ];
     }
 

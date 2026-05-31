@@ -79,7 +79,7 @@ test('user cannot create two active applications', function () {
 
     Application::factory()->create([
         'user_id' => $user->id,
-        'status'  => ApplicationStatus::Received->value,
+        'status' => ApplicationStatus::Received->value,
     ]);
 
     $component = Livewire::actingAs($user)->test(ApplicationWizard::class);
@@ -172,7 +172,7 @@ test('invalid phone format fails step 1', function () {
 
 test('draft can transition to received', function () {
     $app = Application::factory()->create(['status' => ApplicationStatus::Draft]);
-    $service = new ApplicationStatusService();
+    $service = new ApplicationStatusService;
 
     $service->transition($app, ApplicationStatus::Received);
 
@@ -181,15 +181,15 @@ test('draft can transition to received', function () {
 
 test('forbidden transition throws DomainException', function () {
     $app = Application::factory()->create(['status' => ApplicationStatus::Draft]);
-    $service = new ApplicationStatusService();
+    $service = new ApplicationStatusService;
 
     expect(fn () => $service->transition($app, ApplicationStatus::Accepted))
-        ->toThrow(\DomainException::class);
+        ->toThrow(DomainException::class);
 });
 
 test('received can transition to incomplete', function () {
     $app = Application::factory()->create(['status' => ApplicationStatus::Received]);
-    $service = new ApplicationStatusService();
+    $service = new ApplicationStatusService;
 
     $service->transition($app, ApplicationStatus::Incomplete);
 
@@ -198,7 +198,7 @@ test('received can transition to incomplete', function () {
 
 test('accepted can be withdrawn (enables waitlist auto-promotion)', function () {
     $app = Application::factory()->create(['status' => ApplicationStatus::Accepted]);
-    $service = new ApplicationStatusService();
+    $service = new ApplicationStatusService;
 
     $service->transition($app, ApplicationStatus::Withdrawn);
 
@@ -209,17 +209,17 @@ test('waitlisted candidate auto-promoted when accepted withdraws', function () {
     Queue::fake();
     Mail::fake();
 
-    $accepted   = Application::factory()->create([
-        'status'       => ApplicationStatus::Accepted,
-        'qr_token'     => 'tok-accepted',
-        'check_in_code'=> 111111,
-        'group_label'  => 'G1',
+    $accepted = Application::factory()->create([
+        'status' => ApplicationStatus::Accepted,
+        'qr_token' => 'tok-accepted',
+        'check_in_code' => 111111,
+        'group_label' => 'G1',
     ]);
     $waitlisted = Application::factory()->create([
-        'status'       => ApplicationStatus::Waitlisted,
+        'status' => ApplicationStatus::Waitlisted,
         'submitted_at' => now()->subDay(),
     ]);
-    $service = new ApplicationStatusService();
+    $service = new ApplicationStatusService;
 
     $service->transition($accepted, ApplicationStatus::Withdrawn);
 
@@ -228,8 +228,8 @@ test('waitlisted candidate auto-promoted when accepted withdraws', function () {
 
 test('rejected application cannot be withdrawn', function () {
     $app = Application::factory()->create(['status' => ApplicationStatus::Rejected]);
-    $service = new ApplicationStatusService();
+    $service = new ApplicationStatusService;
 
     expect(fn () => $service->transition($app, ApplicationStatus::Withdrawn))
-        ->toThrow(\DomainException::class);
+        ->toThrow(DomainException::class);
 });

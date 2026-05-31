@@ -10,19 +10,19 @@ enum Gender: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Female => 'Femme',
-            self::Male   => 'Homme',
-            self::Other  => 'Préfère ne pas préciser',
+            self::Male => 'Homme',
+            self::Other => 'Préfère ne pas préciser',
         };
     }
 
     public function color(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Female => 'pink',
-            self::Male   => 'blue',
-            self::Other  => 'gray',
+            self::Male => 'blue',
+            self::Other => 'gray',
         };
     }
 }

@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class SpeakerResource extends Resource
 {
-    protected static ?string $model              = Speaker::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-microphone';
-    protected static ?string $navigationGroup    = 'Contenu';
-    protected static ?int    $navigationSort     = 23;
-    protected static ?string $navigationLabel    = 'Intervenants';
-    protected static ?string $modelLabel         = 'Intervenant';
-    protected static ?string $pluralModelLabel   = 'Intervenants';
+    protected static ?string $model = Speaker::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-microphone';
+
+    protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 23;
+
+    protected static ?string $navigationLabel = 'Intervenants';
+
+    protected static ?string $modelLabel = 'Intervenant';
+
+    protected static ?string $pluralModelLabel = 'Intervenants';
 
     public static function canViewAny(): bool
     {
@@ -62,9 +68,9 @@ class SpeakerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListSpeakers::route('/'),
+            'index' => Pages\ListSpeakers::route('/'),
             'create' => Pages\CreateSpeaker::route('/create'),
-            'edit'   => Pages\EditSpeaker::route('/{record}/edit'),
+            'edit' => Pages\EditSpeaker::route('/{record}/edit'),
         ];
     }
 }

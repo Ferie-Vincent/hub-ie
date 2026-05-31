@@ -21,7 +21,7 @@ class FaqItem extends Model
     {
         return [
             'display_order' => 'integer',
-            'is_published'  => 'boolean',
+            'is_published' => 'boolean',
         ];
     }
 }

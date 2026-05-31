@@ -15,13 +15,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
-    protected static ?string $model               = User::class;
-    protected static ?string $navigationIcon      = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup     = 'Administration';
-    protected static ?int    $navigationSort      = 10;
-    protected static ?string $navigationLabel     = 'Utilisateurs';
-    protected static ?string $modelLabel          = 'Utilisateur';
-    protected static ?string $pluralModelLabel    = 'Utilisateurs';
+    protected static ?string $model = User::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?string $navigationGroup = 'Administration';
+
+    protected static ?int $navigationSort = 10;
+
+    protected static ?string $navigationLabel = 'Utilisateurs';
+
+    protected static ?string $modelLabel = 'Utilisateur';
+
+    protected static ?string $pluralModelLabel = 'Utilisateurs';
 
     public static function canViewAny(): bool
     {
@@ -42,7 +48,7 @@ class UserResource extends Resource
                     ->label('Téléphone')->tel()->placeholder('+2250700000000'),
                 Forms\Components\Select::make('gender')
                     ->label('Genre')
-                    ->options(collect(Gender::cases())->mapWithKeys(fn($g) => [$g->value => $g->label()])),
+                    ->options(collect(Gender::cases())->mapWithKeys(fn ($g) => [$g->value => $g->label()])),
                 Forms\Components\DatePicker::make('birth_date')
                     ->label('Date de naissance')->displayFormat('d/m/Y'),
                 Forms\Components\TextInput::make('city')->label('Ville'),
@@ -55,9 +61,9 @@ class UserResource extends Resource
                     ->label('Mot de passe')
                     ->password()
                     ->revealable()
-                    ->dehydrated(fn($state) => filled($state))
-                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
-                    ->required(fn(string $operation) => $operation === 'create'),
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->required(fn (string $operation) => $operation === 'create'),
                 Forms\Components\Select::make('roles')
                     ->label('Rôle(s)')
                     ->relationship('roles', 'name')
@@ -82,8 +88,8 @@ class UserResource extends Resource
                     ->icon('heroicon-m-envelope'),
                 Tables\Columns\BadgeColumn::make('gender')
                     ->label('Genre')
-                    ->formatStateUsing(fn($state) => $state?->label())
-                    ->color(fn($state) => $state?->color())
+                    ->formatStateUsing(fn ($state) => $state?->label())
+                    ->color(fn ($state) => $state?->color())
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('city')
                     ->label('Ville')
@@ -122,9 +128,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListUsers::route('/'),
+            'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'edit'   => Pages\EditUser::route('/{record}/edit'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }

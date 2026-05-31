@@ -6,7 +6,8 @@ use App\Models\Application;
 
 class GroupAssignmentService
 {
-    private const GROUPS   = ['G1', 'G2', 'G3'];
+    private const GROUPS = ['G1', 'G2', 'G3'];
+
     private const MAX_EACH = 60; // 180 / 3
 
     public function assign(Application $application): string
@@ -26,12 +27,12 @@ class GroupAssignmentService
         }
 
         // All groups at cap — return the least-filled one
-        $min   = PHP_INT_MAX;
-        $best  = 'G1';
+        $min = PHP_INT_MAX;
+        $best = 'G1';
         foreach (self::GROUPS as $group) {
             $n = $counts[$group] ?? 0;
             if ($n < $min) {
-                $min  = $n;
+                $min = $n;
                 $best = $group;
             }
         }

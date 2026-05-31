@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\Application;
 use Illuminate\Support\Facades\Storage;
-use Spatie\LaravelPdf\Facades\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class BadgePdfService
 {
@@ -22,10 +22,10 @@ class BadgePdfService
 
         Pdf::view('pdf.badge', [
             'application' => $application,
-            'qrSvg'       => $qrSvg,
+            'qrSvg' => $qrSvg,
         ])
-        ->paperSize(100, 140, 'mm')
-        ->save(Storage::disk('local')->path($path));
+            ->paperSize(100, 140, 'mm')
+            ->save(Storage::disk('local')->path($path));
 
         return $path;
     }

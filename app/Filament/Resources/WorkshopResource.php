@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class WorkshopResource extends Resource
 {
-    protected static ?string $model              = Workshop::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-academic-cap';
-    protected static ?string $navigationGroup    = 'Contenu';
-    protected static ?int    $navigationSort     = 20;
-    protected static ?string $navigationLabel    = 'Ateliers';
-    protected static ?string $modelLabel         = 'Atelier';
-    protected static ?string $pluralModelLabel   = 'Ateliers';
+    protected static ?string $model = Workshop::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+
+    protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 20;
+
+    protected static ?string $navigationLabel = 'Ateliers';
+
+    protected static ?string $modelLabel = 'Atelier';
+
+    protected static ?string $pluralModelLabel = 'Ateliers';
 
     public static function canViewAny(): bool
     {
@@ -70,9 +76,9 @@ class WorkshopResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListWorkshops::route('/'),
+            'index' => Pages\ListWorkshops::route('/'),
             'create' => Pages\CreateWorkshop::route('/create'),
-            'edit'   => Pages\EditWorkshop::route('/{record}/edit'),
+            'edit' => Pages\EditWorkshop::route('/{record}/edit'),
         ];
     }
 }

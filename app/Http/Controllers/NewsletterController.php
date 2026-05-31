@@ -25,8 +25,8 @@ class NewsletterController extends Controller
         }
 
         $subscriber->confirmation_token = Str::random(64);
-        $subscriber->unsubscribe_token  = $subscriber->unsubscribe_token ?? Str::random(64);
-        $subscriber->source             = $request->input('source', 'footer');
+        $subscriber->unsubscribe_token = $subscriber->unsubscribe_token ?? Str::random(64);
+        $subscriber->source = $request->input('source', 'footer');
         $subscriber->save();
 
         Mail::to($email)->send(new NewsletterConfirmation($subscriber));

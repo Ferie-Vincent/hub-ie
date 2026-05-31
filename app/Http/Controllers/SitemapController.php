@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FaqItem;
-use App\Models\News;
-use App\Models\Workshop;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
@@ -34,10 +31,10 @@ class SitemapController extends Controller
         ];
 
         $base = rtrim(config('app.url'), '/');
-        $now  = Carbon::now()->toAtomString();
+        $now = Carbon::now()->toAtomString();
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         foreach ($staticUrls as [$path, $priority, $freq]) {
             $xml .= "  <url>\n";
@@ -60,7 +57,7 @@ class SitemapController extends Controller
         $xml .= '</urlset>';
 
         return response($xml, 200, [
-            'Content-Type'  => 'application/xml',
+            'Content-Type' => 'application/xml',
             'Cache-Control' => 'public, max-age=3600',
         ]);
     }

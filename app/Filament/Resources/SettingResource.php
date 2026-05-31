@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class SettingResource extends Resource
 {
-    protected static ?string $model              = Setting::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationGroup    = 'Administration';
-    protected static ?int    $navigationSort     = 30;
-    protected static ?string $navigationLabel    = 'Paramètres';
-    protected static ?string $modelLabel         = 'Paramètre';
-    protected static ?string $pluralModelLabel   = 'Paramètres';
+    protected static ?string $model = Setting::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+
+    protected static ?string $navigationGroup = 'Administration';
+
+    protected static ?int $navigationSort = 30;
+
+    protected static ?string $navigationLabel = 'Paramètres';
+
+    protected static ?string $modelLabel = 'Paramètre';
+
+    protected static ?string $pluralModelLabel = 'Paramètres';
 
     public static function canViewAny(): bool
     {
@@ -58,9 +64,9 @@ class SettingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListSettings::route('/'),
+            'index' => Pages\ListSettings::route('/'),
             'create' => Pages\CreateSetting::route('/create'),
-            'edit'   => Pages\EditSetting::route('/{record}/edit'),
+            'edit' => Pages\EditSetting::route('/{record}/edit'),
         ];
     }
 }

@@ -24,9 +24,9 @@ class Partner extends Model
     protected function casts(): array
     {
         return [
-            'tier'           => PartnerTier::class,
-            'display_order'  => 'integer',
-            'show_in_marquee'=> 'boolean',
+            'tier' => PartnerTier::class,
+            'display_order' => 'integer',
+            'show_in_marquee' => 'boolean',
             'show_in_footer' => 'boolean',
         ];
     }

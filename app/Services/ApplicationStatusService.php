@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Enums\ApplicationStatus;
 use App\Jobs\GenerateBadgePdf;
-use App\Mail\ApplicationAccepted;
 use App\Mail\ApplicationEligible;
 use App\Mail\ApplicationIncomplete;
 use App\Mail\ApplicationReceived;
@@ -55,10 +54,10 @@ class ApplicationStatusService
             ApplicationStatus::Rejected->value,
             ApplicationStatus::Withdrawn->value,
         ],
-        ApplicationStatus::Accepted->value  => [
+        ApplicationStatus::Accepted->value => [
             ApplicationStatus::Withdrawn->value,
         ],
-        ApplicationStatus::Rejected->value  => [],
+        ApplicationStatus::Rejected->value => [],
         ApplicationStatus::Withdrawn->value => [],
     ];
 
@@ -73,7 +72,7 @@ class ApplicationStatusService
         }
 
         $updates = [
-            'status'      => $to,
+            'status' => $to,
             'admin_notes' => $notes ?? $app->admin_notes,
         ];
 
@@ -119,11 +118,11 @@ class ApplicationStatusService
 
     private function assignQrAndGroup(Application $app, array &$updates): void
     {
-        $qrService    = app(QrCodeService::class);
+        $qrService = app(QrCodeService::class);
         $groupService = app(GroupAssignmentService::class);
 
         if (! $app->qr_token) {
-            $token              = $qrService->generateUniqueQrToken();
+            $token = $qrService->generateUniqueQrToken();
             $updates['qr_token'] = $token;
         }
 
@@ -140,15 +139,15 @@ class ApplicationStatusService
     {
         try {
             match ($to) {
-                ApplicationStatus::Received    => Mail::to($app->user->email)->queue(new ApplicationReceived($app)),
-                ApplicationStatus::Eligible    => Mail::to($app->user->email)->queue(new ApplicationEligible($app)),
-                ApplicationStatus::Incomplete  => Mail::to($app->user->email)->queue(new ApplicationIncomplete($app)),
+                ApplicationStatus::Received => Mail::to($app->user->email)->queue(new ApplicationReceived($app)),
+                ApplicationStatus::Eligible => Mail::to($app->user->email)->queue(new ApplicationEligible($app)),
+                ApplicationStatus::Incomplete => Mail::to($app->user->email)->queue(new ApplicationIncomplete($app)),
                 ApplicationStatus::UnderReview => Mail::to($app->user->email)->queue(new ApplicationUnderReview($app)),
                 ApplicationStatus::Shortlisted => Mail::to($app->user->email)->queue(new ApplicationShortlisted($app)),
-                ApplicationStatus::Accepted    => null, // handled in GenerateBadgePdf job
-                ApplicationStatus::Waitlisted  => Mail::to($app->user->email)->queue(new ApplicationWaitlisted($app)),
-                ApplicationStatus::Rejected    => Mail::to($app->user->email)->queue(new ApplicationRejected($app)),
-                default                        => null,
+                ApplicationStatus::Accepted => null, // handled in GenerateBadgePdf job
+                ApplicationStatus::Waitlisted => Mail::to($app->user->email)->queue(new ApplicationWaitlisted($app)),
+                ApplicationStatus::Rejected => Mail::to($app->user->email)->queue(new ApplicationRejected($app)),
+                default => null,
             };
         } catch (\Throwable) {
             // Mail failures must not block status transitions

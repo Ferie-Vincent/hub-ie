@@ -20,7 +20,7 @@ class ApplicationDocument extends Model
     protected function casts(): array
     {
         return [
-            'type'       => DocumentType::class,
+            'type' => DocumentType::class,
             'size_bytes' => 'integer',
         ];
     }

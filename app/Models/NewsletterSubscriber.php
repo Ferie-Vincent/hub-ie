@@ -19,9 +19,9 @@ class NewsletterSubscriber extends Model
     protected function casts(): array
     {
         return [
-            'confirmed_at'    => 'datetime',
+            'confirmed_at' => 'datetime',
             'unsubscribed_at' => 'datetime',
-            'source'          => NewsletterSource::class,
+            'source' => NewsletterSource::class,
         ];
     }
 

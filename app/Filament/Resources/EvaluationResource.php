@@ -17,13 +17,19 @@ use Illuminate\Database\Eloquent\Builder;
 
 class EvaluationResource extends Resource
 {
-    protected static ?string $model             = Evaluation::class;
-    protected static ?string $navigationIcon    = 'heroicon-o-star';
-    protected static ?string $navigationGroup   = 'Candidatures';
-    protected static ?int    $navigationSort    = 10;
-    protected static ?string $navigationLabel   = 'Évaluations';
-    protected static ?string $modelLabel        = 'Évaluation';
-    protected static ?string $pluralModelLabel  = 'Évaluations';
+    protected static ?string $model = Evaluation::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-star';
+
+    protected static ?string $navigationGroup = 'Candidatures';
+
+    protected static ?int $navigationSort = 10;
+
+    protected static ?string $navigationLabel = 'Évaluations';
+
+    protected static ?string $modelLabel = 'Évaluation';
+
+    protected static ?string $pluralModelLabel = 'Évaluations';
 
     public static function canViewAny(): bool
     {
@@ -55,18 +61,18 @@ class EvaluationResource extends Resource
                                 ApplicationStatus::Eligible->value,
                                 ApplicationStatus::UnderReview->value,
                             ])
-                            ->with('user')
-                            ->get()
-                            ->mapWithKeys(fn($app) => [
-                                $app->id => "{$app->reference_code} — {$app->user?->full_name}",
-                            ])
+                                ->with('user')
+                                ->get()
+                                ->mapWithKeys(fn ($app) => [
+                                    $app->id => "{$app->reference_code} — {$app->user?->full_name}",
+                                ])
                         )
                         ->searchable()
                         ->required()
                         ->disabledOn('edit'),
 
                     Forms\Components\Hidden::make('evaluator_id')
-                        ->default(fn() => auth()->id()),
+                        ->default(fn () => auth()->id()),
                 ]),
 
             Forms\Components\Section::make('Notation — 1 (insuffisant) à 5 (excellent)')
@@ -127,10 +133,10 @@ class EvaluationResource extends Resource
                         ->label('Score pondéré')
                         ->numeric(decimalPlaces: 2)
                         ->badge()
-                        ->color(fn($state) => match(true) {
-                            $state >= 4   => 'success',
+                        ->color(fn ($state) => match (true) {
+                            $state >= 4 => 'success',
                             $state >= 2.5 => 'warning',
-                            default       => 'danger',
+                            default => 'danger',
                         }),
                 ]),
 
@@ -194,10 +200,10 @@ class EvaluationResource extends Resource
                     ->numeric(decimalPlaces: 2)
                     ->sortable()
                     ->badge()
-                    ->color(fn($state) => match(true) {
-                        $state >= 4   => 'success',
+                    ->color(fn ($state) => match (true) {
+                        $state >= 4 => 'success',
                         $state >= 2.5 => 'warning',
-                        default       => 'danger',
+                        default => 'danger',
                     }),
 
                 Tables\Columns\TextColumn::make('created_at')
@@ -210,19 +216,18 @@ class EvaluationResource extends Resource
                 Tables\Filters\SelectFilter::make('application_status')
                     ->label('Statut candidature')
                     ->options([
-                        ApplicationStatus::Eligible->value    => ApplicationStatus::Eligible->label(),
+                        ApplicationStatus::Eligible->value => ApplicationStatus::Eligible->label(),
                         ApplicationStatus::UnderReview->value => ApplicationStatus::UnderReview->label(),
                     ])
-                    ->query(fn(Builder $query, array $data) => blank($data['value'])
+                    ->query(fn (Builder $query, array $data) => blank($data['value'])
                         ? $query
-                        : $query->whereHas('application', fn($q) => $q->where('status', $data['value']))
+                        : $query->whereHas('application', fn ($q) => $q->where('status', $data['value']))
                     ),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make()
-                    ->visible(fn(Evaluation $record) =>
-                        auth()->id() === $record->evaluator_id
+                    ->visible(fn (Evaluation $record) => auth()->id() === $record->evaluator_id
                         || auth()->user()?->hasRole('super_admin')
                     ),
             ]);
@@ -236,10 +241,10 @@ class EvaluationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListEvaluations::route('/'),
+            'index' => Pages\ListEvaluations::route('/'),
             'create' => Pages\CreateEvaluation::route('/create'),
-            'view'   => Pages\ViewEvaluation::route('/{record}'),
-            'edit'   => Pages\EditEvaluation::route('/{record}/edit'),
+            'view' => Pages\ViewEvaluation::route('/{record}'),
+            'edit' => Pages\EditEvaluation::route('/{record}/edit'),
         ];
     }
 }

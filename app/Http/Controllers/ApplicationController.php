@@ -58,8 +58,9 @@ class ApplicationController extends Controller
         }
 
         $content = Storage::disk('local')->get($application->badge_path);
+
         return response($content, 200, [
-            'Content-Type'        => 'application/pdf',
+            'Content-Type' => 'application/pdf',
             'Content-Disposition' => "inline; filename=\"badge-{$application->reference_code}.pdf\"",
         ]);
     }
@@ -76,8 +77,9 @@ class ApplicationController extends Controller
         }
 
         $content = Storage::disk('local')->get($path);
+
         return response($content, 200, [
-            'Content-Type'        => 'application/pdf',
+            'Content-Type' => 'application/pdf',
             'Content-Disposition' => "inline; filename=\"convocation-{$application->reference_code}.pdf\"",
         ]);
     }

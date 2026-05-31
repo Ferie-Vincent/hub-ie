@@ -10,10 +10,10 @@ enum NewsletterSource: string
 
     public function label(): string
     {
-        return match($this) {
-            self::Hero   => 'Hero (accueil)',
+        return match ($this) {
+            self::Hero => 'Hero (accueil)',
             self::Footer => 'Pied de page',
-            self::News   => 'Actualités',
+            self::News => 'Actualités',
         };
     }
 

@@ -11,75 +11,98 @@ use Illuminate\Support\Carbon;
 
 class Dashboard extends BaseDashboard
 {
-    protected static ?string $navigationIcon  = 'heroicon-o-chart-bar-square';
-    protected static string  $view            = 'filament.pages.hub-dashboard';
-    protected static string  $routePath       = '/';
-    protected static ?int    $navigationSort  = -2;
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar-square';
+
+    protected static string $view = 'filament.pages.hub-dashboard';
+
+    protected static string $routePath = '/';
+
+    protected static ?int $navigationSort = -2;
 
     // KPIs
-    public int $totalSubmitted  = 0;
-    public int $delta24h        = 0;
-    public int $accepted        = 0;
-    public int $quota           = 180;
-    public int $presentToday    = 0;
-    public int $toEvaluate      = 0;
-    public int $daysToEvent     = 0;
+    public int $totalSubmitted = 0;
+
+    public int $delta24h = 0;
+
+    public int $accepted = 0;
+
+    public int $quota = 180;
+
+    public int $presentToday = 0;
+
+    public int $toEvaluate = 0;
+
+    public int $daysToEvent = 0;
 
     // Chart data
     public array $sparklineCumul = [];
+
     public array $sparklineLabels = [];
-    public array $genderData     = ['F' => 0, 'M' => 0, 'X' => 0];
-    public int   $genderTotal    = 0;
-    public array $ageData        = [];
-    public array $categoryData   = [];
-    public array $workshopData   = [];
-    public array $statusFunnel   = [];
+
+    public array $genderData = ['F' => 0, 'M' => 0, 'X' => 0];
+
+    public int $genderTotal = 0;
+
+    public array $ageData = [];
+
+    public array $categoryData = [];
+
+    public array $workshopData = [];
+
+    public array $statusFunnel = [];
+
     public array $attendanceData = [];
-    public array $geographyData  = [];
-    public array $referralData   = [];
-    public int   $women          = 0;
-    public int   $young          = 0;
-    public int   $womenPct       = 0;
-    public int   $youngPct       = 0;
+
+    public array $geographyData = [];
+
+    public array $referralData = [];
+
+    public int $women = 0;
+
+    public int $young = 0;
+
+    public int $womenPct = 0;
+
+    public int $youngPct = 0;
 
     public function mount(): void
     {
         $exclude = [ApplicationStatus::Draft->value, ApplicationStatus::Withdrawn->value];
-        $now     = Carbon::now();
+        $now = Carbon::now();
 
         // --- KPIs ---
         $this->totalSubmitted = Application::whereNotIn('status', $exclude)->count();
-        $this->delta24h       = Application::where('submitted_at', '>=', $now->copy()->subDay())->count();
-        $this->accepted       = Application::where('status', ApplicationStatus::Accepted->value)->count();
-        $this->presentToday   = Attendance::whereDate('event_date', Carbon::today())
+        $this->delta24h = Application::where('submitted_at', '>=', $now->copy()->subDay())->count();
+        $this->accepted = Application::where('status', ApplicationStatus::Accepted->value)->count();
+        $this->presentToday = Attendance::whereDate('event_date', Carbon::today())
             ->distinct('application_id')->count('application_id');
-        $this->toEvaluate     = Application::whereIn('status', [
+        $this->toEvaluate = Application::whereIn('status', [
             ApplicationStatus::Eligible->value,
             ApplicationStatus::UnderReview->value,
         ])->count();
         $this->daysToEvent = max(0, (int) $now->diffInDays(Carbon::parse('2026-06-22'), false));
 
         // --- Cumulative 30-day sparkline ---
-        $cumul  = 0;
+        $cumul = 0;
         $labels = [];
         $values = [];
         for ($i = 29; $i >= 0; $i--) {
-            $date    = Carbon::today()->subDays($i);
-            $daily   = Application::whereDate('submitted_at', $date)->count();
-            $cumul  += $daily;
+            $date = Carbon::today()->subDays($i);
+            $daily = Application::whereDate('submitted_at', $date)->count();
+            $cumul += $daily;
             $values[] = $cumul;
             $labels[] = $i % 5 === 0 ? $date->format('d/m') : '';
         }
-        $this->sparklineCumul  = $values;
+        $this->sparklineCumul = $values;
         $this->sparklineLabels = $labels;
 
         // --- Gender ---
         $joinBase = Application::whereNotIn('status', $exclude)
             ->join('users', 'users.id', '=', 'applications.user_id');
-        $this->genderData  = [
+        $this->genderData = [
             'F' => (clone $joinBase)->where('users.gender', 'F')->count(),
             'M' => (clone $joinBase)->where('users.gender', 'M')->count(),
-            'X' => (clone $joinBase)->where(fn($q) => $q->where('users.gender', 'X')->orWhereNull('users.gender'))->count(),
+            'X' => (clone $joinBase)->where(fn ($q) => $q->where('users.gender', 'X')->orWhereNull('users.gender'))->count(),
         ];
         $this->genderTotal = array_sum($this->genderData);
 
@@ -88,11 +111,11 @@ class Dashboard extends BaseDashboard
             ->join('users', 'users.id', '=', 'applications.user_id')
             ->whereNotNull('users.birth_date');
         $this->ageData = [
-            '< 25 ans'    => (clone $ageBase)->where('users.birth_date', '>=', $now->copy()->subYears(25)->toDateString())->count(),
-            '25–34 ans'   => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(25)->toDateString())->where('users.birth_date', '>=', $now->copy()->subYears(35)->toDateString())->count(),
-            '35–44 ans'   => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(35)->toDateString())->where('users.birth_date', '>=', $now->copy()->subYears(45)->toDateString())->count(),
-            '45–54 ans'   => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(45)->toDateString())->where('users.birth_date', '>=', $now->copy()->subYears(55)->toDateString())->count(),
-            '55 ans+'     => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(55)->toDateString())->count(),
+            '< 25 ans' => (clone $ageBase)->where('users.birth_date', '>=', $now->copy()->subYears(25)->toDateString())->count(),
+            '25–34 ans' => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(25)->toDateString())->where('users.birth_date', '>=', $now->copy()->subYears(35)->toDateString())->count(),
+            '35–44 ans' => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(35)->toDateString())->where('users.birth_date', '>=', $now->copy()->subYears(45)->toDateString())->count(),
+            '45–54 ans' => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(45)->toDateString())->where('users.birth_date', '>=', $now->copy()->subYears(55)->toDateString())->count(),
+            '55 ans+' => (clone $ageBase)->where('users.birth_date', '<', $now->copy()->subYears(55)->toDateString())->count(),
         ];
 
         // --- Category ---
@@ -138,7 +161,7 @@ class Dashboard extends BaseDashboard
             $this->statusFunnel[] = [
                 'label' => $s->label(),
                 'count' => $c,
-                'pct'   => round($c / $maxFunnel * 100),
+                'pct' => round($c / $maxFunnel * 100),
             ];
         }
 
@@ -173,15 +196,15 @@ class Dashboard extends BaseDashboard
         // --- Quota ---
         $acceptedJoin = Application::where('status', ApplicationStatus::Accepted->value)
             ->join('users', 'users.id', '=', 'applications.user_id');
-        $this->women    = (clone $acceptedJoin)->where('users.gender', 'F')->count();
-        $this->young    = (clone $acceptedJoin)->where('users.birth_date', '>=', $now->copy()->subYears(35)->toDateString())->count();
+        $this->women = (clone $acceptedJoin)->where('users.gender', 'F')->count();
+        $this->young = (clone $acceptedJoin)->where('users.birth_date', '>=', $now->copy()->subYears(35)->toDateString())->count();
         $this->womenPct = $this->quota > 0 ? round($this->women / $this->quota * 100) : 0;
         $this->youngPct = $this->quota > 0 ? round($this->young / $this->quota * 100) : 0;
     }
 
     public function getSubheading(): ?string
     {
-        return 'J-' . $this->daysToEvent . ' · Évènement du 22 au 25 juin 2026, Abidjan';
+        return 'J-'.$this->daysToEvent.' · Évènement du 22 au 25 juin 2026, Abidjan';
     }
 
     public function getWidgets(): array

@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class FaqItemResource extends Resource
 {
-    protected static ?string $model              = FaqItem::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-question-mark-circle';
-    protected static ?string $navigationGroup    = 'Contenu';
-    protected static ?int    $navigationSort     = 24;
-    protected static ?string $navigationLabel    = 'FAQ';
-    protected static ?string $modelLabel         = 'Question FAQ';
-    protected static ?string $pluralModelLabel   = 'Questions FAQ';
+    protected static ?string $model = FaqItem::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
+
+    protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 24;
+
+    protected static ?string $navigationLabel = 'FAQ';
+
+    protected static ?string $modelLabel = 'Question FAQ';
+
+    protected static ?string $pluralModelLabel = 'Questions FAQ';
 
     public static function canViewAny(): bool
     {
@@ -60,9 +66,9 @@ class FaqItemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListFaqItems::route('/'),
+            'index' => Pages\ListFaqItems::route('/'),
             'create' => Pages\CreateFaqItem::route('/create'),
-            'edit'   => Pages\EditFaqItem::route('/{record}/edit'),
+            'edit' => Pages\EditFaqItem::route('/{record}/edit'),
         ];
     }
 }

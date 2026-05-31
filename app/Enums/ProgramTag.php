@@ -13,25 +13,25 @@ enum ProgramTag: string
 
     public function label(): string
     {
-        return match($this) {
-            self::Accueil  => 'Accueil',
+        return match ($this) {
+            self::Accueil => 'Accueil',
             self::Pleniere => 'Plénière',
-            self::Atelier  => 'Atelier',
-            self::Pause    => 'Pause',
-            self::B2b      => 'B2B',
-            self::Presse   => 'Presse',
+            self::Atelier => 'Atelier',
+            self::Pause => 'Pause',
+            self::B2b => 'B2B',
+            self::Presse => 'Presse',
         };
     }
 
     public function color(): string
     {
-        return match($this) {
-            self::Accueil  => 'warning',
+        return match ($this) {
+            self::Accueil => 'warning',
             self::Pleniere => 'success',
-            self::Atelier  => 'success',
-            self::Pause    => 'gray',
-            self::B2b      => 'purple',
-            self::Presse   => 'orange',
+            self::Atelier => 'success',
+            self::Pause => 'gray',
+            self::B2b => 'purple',
+            self::Presse => 'orange',
         };
     }
 }

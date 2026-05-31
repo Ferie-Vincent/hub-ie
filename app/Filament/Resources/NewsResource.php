@@ -12,13 +12,19 @@ use Filament\Tables\Table;
 
 class NewsResource extends Resource
 {
-    protected static ?string $model              = News::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-newspaper';
-    protected static ?string $navigationGroup    = 'Contenu';
-    protected static ?int    $navigationSort     = 22;
-    protected static ?string $navigationLabel    = 'Actualités';
-    protected static ?string $modelLabel         = 'Actualité';
-    protected static ?string $pluralModelLabel   = 'Actualités';
+    protected static ?string $model = News::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+
+    protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 22;
+
+    protected static ?string $navigationLabel = 'Actualités';
+
+    protected static ?string $modelLabel = 'Actualité';
+
+    protected static ?string $pluralModelLabel = 'Actualités';
 
     public static function canViewAny(): bool
     {
@@ -67,9 +73,9 @@ class NewsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListNews::route('/'),
+            'index' => Pages\ListNews::route('/'),
             'create' => Pages\CreateNews::route('/create'),
-            'edit'   => Pages\EditNews::route('/{record}/edit'),
+            'edit' => Pages\EditNews::route('/{record}/edit'),
         ];
     }
 }

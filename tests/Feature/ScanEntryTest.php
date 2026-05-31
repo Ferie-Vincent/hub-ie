@@ -23,18 +23,18 @@ test('duplicate check-in on same day is blocked with warning status', function (
     $user->assignRole('agent_entry');
 
     $app = Application::factory()->create([
-        'status'        => ApplicationStatus::Accepted->value,
+        'status' => ApplicationStatus::Accepted->value,
         'check_in_code' => 123456,
-        'group_label'   => 'G1',
+        'group_label' => 'G1',
     ]);
 
     Attendance::create([
-        'application_id'     => $app->id,
-        'event_date'         => today(),
-        'scanned_at'         => now(),
+        'application_id' => $app->id,
+        'event_date' => today(),
+        'scanned_at' => now(),
         'scanned_by_user_id' => $user->id,
-        'location'           => AttendanceLocation::Cgeci->value,
-        'scan_method'        => AttendanceScanMethod::Code,
+        'location' => AttendanceLocation::Cgeci->value,
+        'scan_method' => AttendanceScanMethod::Code,
     ]);
 
     $component = Livewire::actingAs($user)
@@ -77,9 +77,9 @@ test('valid check-in code registers attendance', function () {
     $user->assignRole('agent_entry');
 
     $app = Application::factory()->create([
-        'status'        => ApplicationStatus::Accepted->value,
+        'status' => ApplicationStatus::Accepted->value,
         'check_in_code' => 654321,
-        'group_label'   => 'G1',
+        'group_label' => 'G1',
     ]);
 
     Livewire::actingAs($user)

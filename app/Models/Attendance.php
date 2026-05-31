@@ -22,9 +22,9 @@ class Attendance extends Model
     protected function casts(): array
     {
         return [
-            'event_date'  => 'date',
-            'scanned_at'  => 'datetime',
-            'location'    => AttendanceLocation::class,
+            'event_date' => 'date',
+            'scanned_at' => 'datetime',
+            'location' => AttendanceLocation::class,
             'scan_method' => AttendanceScanMethod::class,
         ];
     }

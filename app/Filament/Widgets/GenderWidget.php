@@ -5,11 +5,11 @@ namespace App\Filament\Widgets;
 use App\Enums\ApplicationStatus;
 use App\Models\Application;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Facades\DB;
 
 class GenderWidget extends ChartWidget
 {
     protected static ?string $heading = 'Répartition par genre';
+
     protected static ?int $sort = 3;
 
     protected function getData(): array
@@ -20,13 +20,13 @@ class GenderWidget extends ChartWidget
 
         $f = (clone $base)->where('users.gender', 'F')->count();
         $m = (clone $base)->where('users.gender', 'M')->count();
-        $x = (clone $base)->where(fn($q) => $q->where('users.gender', 'X')->orWhereNull('users.gender'))->count();
+        $x = (clone $base)->where(fn ($q) => $q->where('users.gender', 'X')->orWhereNull('users.gender'))->count();
 
         return [
             'datasets' => [[
-                'data'            => [$f, $m, $x],
+                'data' => [$f, $m, $x],
                 'backgroundColor' => ['hsl(330 60% 60%)', 'hsl(210 70% 55%)', 'hsl(0 0% 70%)'],
-                'hoverOffset'     => 6,
+                'hoverOffset' => 6,
             ]],
             'labels' => ['Femmes', 'Hommes', 'Autre / NR'],
         ];
@@ -41,7 +41,7 @@ class GenderWidget extends ChartWidget
     {
         return [
             'plugins' => ['legend' => ['position' => 'bottom']],
-            'cutout'  => '65%',
+            'cutout' => '65%',
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use App\Enums\AttendanceLocation;
 use App\Enums\AttendanceScanMethod;
 use App\Models\Application;
 use App\Models\Attendance;
@@ -11,24 +10,36 @@ use Filament\Pages\Page;
 
 class ScanEntry extends Page
 {
-    protected static ?string $navigationIcon  = 'heroicon-o-qr-code';
+    protected static ?string $navigationIcon = 'heroicon-o-qr-code';
+
     protected static ?string $navigationGroup = 'Événement';
-    protected static ?int    $navigationSort  = 60;
-    protected static ?string $title           = 'Pointage';
-    protected static string  $view            = 'filament.pages.scan-entry';
+
+    protected static ?int $navigationSort = 60;
+
+    protected static ?string $title = 'Pointage';
+
+    protected static string $view = 'filament.pages.scan-entry';
 
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if (! $user) return false;
-        if ($user->hasRole('super_admin')) return true;
+        if (! $user) {
+            return false;
+        }
+        if ($user->hasRole('super_admin')) {
+            return true;
+        }
+
         return $user->hasPermissionTo('scan-attendance');
     }
 
     public string $manualCode = '';
-    public ?array $lastScan   = null;
+
+    public ?array $lastScan = null;
+
     public string $scanResult = '';
-    public string $location   = 'CGECI';
+
+    public string $location = 'CGECI';
 
     public function submitManualCode(): void
     {
@@ -36,8 +47,9 @@ class ScanEntry extends Page
 
         if (! preg_match('/^\d{6}$/', $code)) {
             $this->scanResult = 'error';
-            $this->lastScan   = ['message' => 'Code invalide. Saisissez exactement 6 chiffres.'];
+            $this->lastScan = ['message' => 'Code invalide. Saisissez exactement 6 chiffres.'];
             Notification::make()->title('Code invalide')->danger()->send();
+
             return;
         }
 
@@ -54,8 +66,9 @@ class ScanEntry extends Page
 
         if (! $app) {
             $this->scanResult = 'error';
-            $this->lastScan   = ['message' => 'QR inconnu ou candidature non retenue.'];
+            $this->lastScan = ['message' => 'QR inconnu ou candidature non retenue.'];
             Notification::make()->title('QR invalide')->danger()->send();
+
             return;
         }
 
@@ -71,8 +84,9 @@ class ScanEntry extends Page
 
         if (! $app) {
             $this->scanResult = 'error';
-            $this->lastScan   = ['message' => 'Code inconnu ou candidature non retenue.'];
+            $this->lastScan = ['message' => 'Code inconnu ou candidature non retenue.'];
             Notification::make()->title('Code inconnu')->danger()->send();
+
             return;
         }
 
@@ -87,28 +101,29 @@ class ScanEntry extends Page
 
         if ($alreadyCheckedIn) {
             $this->scanResult = 'warning';
-            $this->lastScan   = [
-                'message'   => 'Déjà pointé aujourd\'hui.',
-                'app'       => $app,
+            $this->lastScan = [
+                'message' => 'Déjà pointé aujourd\'hui.',
+                'app' => $app,
             ];
             Notification::make()->title('Déjà pointé aujourd\'hui')->warning()->send();
+
             return;
         }
 
         Attendance::create([
-            'application_id'     => $app->id,
-            'event_date'         => today(),
-            'scanned_at'         => now(),
+            'application_id' => $app->id,
+            'event_date' => today(),
+            'scanned_at' => now(),
             'scanned_by_user_id' => auth()->id(),
-            'location'           => $this->location,
-            'scan_method'        => $method,
-            'scanner_ip'         => request()->ip(),
+            'location' => $this->location,
+            'scan_method' => $method,
+            'scanner_ip' => request()->ip(),
         ]);
 
         $this->scanResult = 'success';
-        $this->lastScan   = [
+        $this->lastScan = [
             'message' => 'Pointage enregistré.',
-            'app'     => $app,
+            'app' => $app,
         ];
         Notification::make()
             ->title("✓ {$app->user->full_name} — {$app->group_label}")

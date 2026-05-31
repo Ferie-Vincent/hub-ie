@@ -10,18 +10,39 @@ use Filament\Tables\Table;
 
 class AuditLogResource extends Resource
 {
-    protected static ?string $model              = AuditLog::class;
-    protected static ?string $navigationIcon     = 'heroicon-o-clipboard-document-list';
-    protected static ?string $navigationGroup    = 'Administration';
-    protected static ?int    $navigationSort     = 40;
-    protected static ?string $navigationLabel    = 'Journal d\'audit';
-    protected static ?string $modelLabel         = 'Entrée';
-    protected static ?string $pluralModelLabel   = 'Journal d\'audit';
+    protected static ?string $model = AuditLog::class;
 
-    public static function canViewAny(): bool { return auth()->user()?->hasPermissionTo('manage-system') ?? false; }
-    public static function canCreate(): bool { return false; }
-    public static function canEdit($record): bool { return false; }
-    public static function canDelete($record): bool { return false; }
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+
+    protected static ?string $navigationGroup = 'Administration';
+
+    protected static ?int $navigationSort = 40;
+
+    protected static ?string $navigationLabel = 'Journal d\'audit';
+
+    protected static ?string $modelLabel = 'Entrée';
+
+    protected static ?string $pluralModelLabel = 'Journal d\'audit';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasPermissionTo('manage-system') ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return false;
+    }
 
     public static function table(Table $table): Table
     {
@@ -35,7 +56,7 @@ class AuditLogResource extends Resource
                     ->label('Action')->badge()->searchable(),
                 Tables\Columns\TextColumn::make('subject_type')
                     ->label('Objet')
-                    ->formatStateUsing(fn($state) => class_basename($state))
+                    ->formatStateUsing(fn ($state) => class_basename($state))
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('subject_id')
                     ->label('ID')->numeric()->toggleable(),
@@ -45,7 +66,7 @@ class AuditLogResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('action')
                     ->label('Action')
-                    ->options(fn() => AuditLog::distinct()->pluck('action', 'action')->toArray()),
+                    ->options(fn () => AuditLog::distinct()->pluck('action', 'action')->toArray()),
             ])
             ->defaultSort('created_at', 'desc')
             ->striped();

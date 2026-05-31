@@ -8,12 +8,14 @@ use App\Services\BadgePdfService;
 use App\Services\ConvocationPdfService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Mail;
 
 class GenerateBadgePdf implements ShouldQueue
 {
     use Queueable;
 
-    public int $tries   = 3;
+    public int $tries = 3;
+
     public int $timeout = 120;
 
     public function __construct(public readonly Application $application) {}
@@ -27,6 +29,6 @@ class GenerateBadgePdf implements ShouldQueue
 
         $convService->generate($app);
 
-        \Illuminate\Support\Facades\Mail::to($app->user)->send(new ApplicationAccepted($app));
+        Mail::to($app->user)->send(new ApplicationAccepted($app));
     }
 }

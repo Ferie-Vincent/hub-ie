@@ -17,33 +17,33 @@ enum ApplicationStatus: string
 
     public function label(): string
     {
-        return match($this) {
-            self::Draft       => 'Brouillon',
-            self::Received    => 'Candidature reçue',
-            self::Incomplete  => 'Dossier incomplet',
-            self::Eligible    => 'Dossier recevable',
+        return match ($this) {
+            self::Draft => 'Brouillon',
+            self::Received => 'Candidature reçue',
+            self::Incomplete => 'Dossier incomplet',
+            self::Eligible => 'Dossier recevable',
             self::UnderReview => 'En évaluation',
             self::Shortlisted => 'Présélectionné(e)',
-            self::Accepted    => 'Retenu(e) — Auditeur confirmé',
-            self::Waitlisted  => 'Sur liste d\'attente',
-            self::Rejected    => 'Non retenu(e)',
-            self::Withdrawn   => 'Candidature retirée',
+            self::Accepted => 'Retenu(e) — Auditeur confirmé',
+            self::Waitlisted => 'Sur liste d\'attente',
+            self::Rejected => 'Non retenu(e)',
+            self::Withdrawn => 'Candidature retirée',
         };
     }
 
     public function color(): string
     {
-        return match($this) {
-            self::Draft       => 'gray',
-            self::Received    => 'blue',
-            self::Incomplete  => 'warning',
-            self::Eligible    => 'cyan',
+        return match ($this) {
+            self::Draft => 'gray',
+            self::Received => 'blue',
+            self::Incomplete => 'warning',
+            self::Eligible => 'cyan',
             self::UnderReview => 'indigo',
             self::Shortlisted => 'purple',
-            self::Accepted    => 'success',
-            self::Waitlisted  => 'orange',
-            self::Rejected    => 'danger',
-            self::Withdrawn   => 'gray',
+            self::Accepted => 'success',
+            self::Waitlisted => 'orange',
+            self::Rejected => 'danger',
+            self::Withdrawn => 'gray',
         };
     }
 

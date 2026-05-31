@@ -87,10 +87,10 @@ test('staff member is redirected away from candidature', function () {
 
 test('registration creates candidate role and redirects to verification', function () {
     $this->post('/register', [
-        'first_name'            => 'Konan',
-        'last_name'             => 'Yao',
-        'email'                 => 'konan@example.com',
-        'password'              => 'Password123!',
+        'first_name' => 'Konan',
+        'last_name' => 'Yao',
+        'email' => 'konan@example.com',
+        'password' => 'Password123!',
         'password_confirmation' => 'Password123!',
     ])->assertRedirect(route('verification.notice'));
 
