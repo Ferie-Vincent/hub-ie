@@ -17,7 +17,6 @@ use App\Policies\NewsPolicy;
 use App\Policies\PartnerPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Spatie\Browsershot\Browsershot;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,9 +38,5 @@ class AppServiceProvider extends ServiceProvider
 
         Application::observe(ApplicationObserver::class);
         Evaluation::observe(EvaluationObserver::class);
-
-        if (app()->isProduction()) {
-            Browsershot::setChromePath(env('CHROME_PATH', '/usr/bin/chromium'));
-        }
     }
 }
