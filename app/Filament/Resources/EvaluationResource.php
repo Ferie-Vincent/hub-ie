@@ -34,7 +34,7 @@ class EvaluationResource extends Resource
     {
         $query = parent::getEloquentQuery()->with(['application.user', 'evaluator']);
 
-        if (! auth()->user()?->hasRole('super_admin') && ! auth()->user()?->hasRole('admin')) {
+        if (! auth()->user()?->hasRole('super_admin')) {
             $query->where('evaluator_id', auth()->id());
         }
 
@@ -224,7 +224,6 @@ class EvaluationResource extends Resource
                     ->visible(fn(Evaluation $record) =>
                         auth()->id() === $record->evaluator_id
                         || auth()->user()?->hasRole('super_admin')
-                        || auth()->user()?->hasRole('admin')
                     ),
             ]);
     }

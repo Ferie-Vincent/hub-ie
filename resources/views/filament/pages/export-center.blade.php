@@ -14,6 +14,7 @@
   --hd-shadow:none;
 }
 @keyframes hd-fade-up { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 .ec-wrap { animation:hd-fade-up .4s ease both; padding-bottom:2rem; }
 .ec-card { background:#fff; border:1px solid var(--hd-border); border-radius:1rem; padding:1.5rem; box-shadow:var(--hd-shadow); display:flex; flex-direction:column; gap:1rem; }
 .dark .ec-card { background:rgba(255,255,255,.045); }

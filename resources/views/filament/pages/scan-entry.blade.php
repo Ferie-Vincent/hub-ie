@@ -15,6 +15,7 @@
 }
 @keyframes hd-fade-up { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 @keyframes se-live { 0%,100%{opacity:1} 50%{opacity:.4} }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 .se-wrap { display:flex; flex-direction:column; gap:1rem; animation:hd-fade-up .4s ease both; padding-bottom:2rem; }
 .se-card { background:#fff; border:1px solid var(--hd-border); border-radius:1rem; padding:1.5rem; box-shadow:var(--hd-shadow); }
 .dark .se-card { background:rgba(255,255,255,.045); }
@@ -40,14 +41,9 @@
     <div style="display:flex;align-items:center;gap:.625rem;">
       <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;color:var(--hd-t3);">Salle :</span>
       <select wire:model.live="location" class="se-loc-select dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600">
-        <option value="CGECI">CGECI</option>
-        <option value="Salle A">Salle A</option>
-        <option value="Salle B">Salle B</option>
-        <option value="Atelier 1">Atelier 1</option>
-        <option value="Atelier 2">Atelier 2</option>
-        <option value="Atelier 3">Atelier 3</option>
-        <option value="Atelier 4">Atelier 4</option>
-        <option value="Accueil">Accueil</option>
+        <option value="CGECI">CGECI — Plateau</option>
+        <option value="CCI-CI">CCI-CI — Plateau</option>
+        <option value="SEEN">SEEN Hôtel — Abidjan-Plateau</option>
       </select>
     </div>
   </div>
@@ -80,7 +76,16 @@
                  placeholder="· · · · · ·"
                  autofocus
                  class="se-input dark:border-gray-600 dark:text-gray-100">
-          <button type="submit" class="se-btn">Valider le pointage</button>
+          <button type="submit" class="se-btn"
+                  wire:loading.attr="disabled"
+                  wire:loading.class="opacity-60 cursor-wait"
+                  wire:target="submitManualCode">
+            <span wire:loading.remove wire:target="submitManualCode">Valider le pointage</span>
+            <span wire:loading wire:target="submitManualCode" style="display:inline-flex;align-items:center;gap:.5rem;justify-content:center;">
+              <svg style="width:14px;height:14px;animation:spin 1s linear infinite;" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity=".25"/><path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              Traitement…
+            </span>
+          </button>
         </form>
 
         @if($lastScan)

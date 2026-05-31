@@ -77,8 +77,8 @@
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
 
   {{-- Éligibles --}}
-  <div>
-    <div class="cb-col-hd" style="background:rgba(59,130,246,.10);color:rgb(59,130,246);">
+  <div style="display:flex;flex-direction:column;max-height:70vh;">
+    <div class="cb-col-hd" style="background:rgba(59,130,246,.10);color:rgb(59,130,246);flex-shrink:0;">
       <svg style="width:12px;height:12px;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       Éligibles <span style="opacity:.55;margin-left:.25rem;">{{ $eligible->count() }}</span>
     </div>
@@ -87,10 +87,15 @@
       <p class="cb-name">{{ $app->user?->full_name }}</p>
       <p class="cb-ref">{{ $app->reference_code }}</p>
       <div style="display:flex;gap:.375rem;flex-wrap:wrap;margin-top:.625rem;">
-        <button wire:click="transition({{ $app->id }}, 'under_review')" class="cb-btn" style="background:rgba(168,85,247,.12);color:rgb(147,51,234);">
+        <button wire:click="transition({{ $app->id }}, 'under_review')"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'under_review')"
+                class="cb-btn" style="background:rgba(168,85,247,.12);color:rgb(147,51,234);">
           Évaluer →
         </button>
-        <button wire:click="transition({{ $app->id }}, 'incomplete')" class="cb-btn" style="background:rgba(232,116,28,.12);color:var(--hd-orange);">
+        <button wire:click="transition({{ $app->id }}, 'incomplete')"
+                wire:confirm="Marquer ce dossier comme incomplet ?"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'incomplete')"
+                class="cb-btn" style="background:rgba(232,116,28,.12);color:var(--hd-orange);">
           Incomplet
         </button>
       </div>
@@ -101,8 +106,8 @@
   </div>
 
   {{-- En évaluation --}}
-  <div>
-    <div class="cb-col-hd" style="background:rgba(168,85,247,.10);color:rgb(147,51,234);">
+  <div style="display:flex;flex-direction:column;max-height:70vh;">
+    <div class="cb-col-hd" style="background:rgba(168,85,247,.10);color:rgb(147,51,234);flex-shrink:0;">
       <svg style="width:12px;height:12px;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
       En évaluation <span style="opacity:.55;margin-left:.25rem;">{{ $underReview->count() }}</span>
     </div>
@@ -116,10 +121,15 @@
       </div>
       <p class="cb-ref">{{ $app->reference_code }}</p>
       <div style="display:flex;gap:.375rem;flex-wrap:wrap;margin-top:.625rem;">
-        <button wire:click="transition({{ $app->id }}, 'shortlisted')" class="cb-btn" style="background:rgba(197,169,106,.14);color:var(--hd-sable);">
+        <button wire:click="transition({{ $app->id }}, 'shortlisted')"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'shortlisted')"
+                class="cb-btn" style="background:rgba(197,169,106,.14);color:var(--hd-sable);">
           Présélectionner →
         </button>
-        <button wire:click="transition({{ $app->id }}, 'rejected')" class="cb-btn" style="background:rgba(239,68,68,.10);color:#ef4444;">
+        <button wire:click="transition({{ $app->id }}, 'rejected')"
+                wire:confirm="Confirmer le refus de {{ $app->user?->full_name }} ?"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'rejected')"
+                class="cb-btn" style="background:rgba(239,68,68,.10);color:#ef4444;">
           Refuser
         </button>
       </div>
@@ -130,8 +140,8 @@
   </div>
 
   {{-- Présélectionné(e)s --}}
-  <div>
-    <div class="cb-col-hd" style="background:rgba(197,169,106,.14);color:var(--hd-sable);">
+  <div style="display:flex;flex-direction:column;max-height:70vh;">
+    <div class="cb-col-hd" style="background:rgba(197,169,106,.14);color:var(--hd-sable);flex-shrink:0;">
       <svg style="width:12px;height:12px;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
       Présélectionné(e)s <span style="opacity:.55;margin-left:.25rem;">{{ $shortlisted->count() }}</span>
     </div>
@@ -145,13 +155,20 @@
       </div>
       <p class="cb-ref">{{ $app->reference_code }}</p>
       <div style="display:flex;gap:.375rem;flex-wrap:wrap;margin-top:.625rem;">
-        <button wire:click="transition({{ $app->id }}, 'accepted')" class="cb-btn" style="background:rgba(0,154,68,.14);color:var(--hd-vert);">
+        <button wire:click="transition({{ $app->id }}, 'accepted')"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'accepted')"
+                class="cb-btn" style="background:rgba(0,154,68,.14);color:var(--hd-vert);">
           Retenir ✓
         </button>
-        <button wire:click="transition({{ $app->id }}, 'waitlisted')" class="cb-btn" style="background:rgba(59,130,246,.10);color:rgb(59,130,246);">
+        <button wire:click="transition({{ $app->id }}, 'waitlisted')"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'waitlisted')"
+                class="cb-btn" style="background:rgba(59,130,246,.10);color:rgb(59,130,246);">
           Attente
         </button>
-        <button wire:click="transition({{ $app->id }}, 'rejected')" class="cb-btn" style="background:rgba(239,68,68,.10);color:#ef4444;">
+        <button wire:click="transition({{ $app->id }}, 'rejected')"
+                wire:confirm="Confirmer le refus définitif de {{ $app->user?->full_name }} ?"
+                wire:loading.attr="disabled" wire:target="transition({{ $app->id }}, 'rejected')"
+                class="cb-btn" style="background:rgba(239,68,68,.10);color:#ef4444;">
           Refuser
         </button>
       </div>
