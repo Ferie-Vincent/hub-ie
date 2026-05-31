@@ -68,3 +68,51 @@
 **Justification** : approche hybride standard Laravel. Meilleure performance DX. Conforme critères Phase 0.
 
 **Impact** : Phase 0. `.env` local pointe sur `127.0.0.1` ports exposés Docker.
+
+---
+
+### 2026-05-24 · Single Livewire component pour le wizard de candidature
+
+**Contexte** : formulaire 4 étapes — options : multi-composants Livewire ou composant unique avec état `step`.
+
+**Décision** : composant unique `ApplicationWizard` avec propriété `step` (1–4), draft persisté à chaque `nextStep()`.
+
+**Alternatives écartées** :
+- Multi-composants Livewire (un par étape) — complexité de synchronisation d'état entre composants
+- Session server-side uniquement — perte de données si expiration de session
+
+**Justification** : un seul composant simplifie la logique de validation par étape et le persist de draft. Pas de navigation multi-page = meilleure UX. Le draft en DB évite les pertes si l'utilisateur revient plus tard.
+
+**Impact** : `ApplicationWizard.php`, candidature migrations, `Application` model.
+
+---
+
+### 2026-05-24 · QR token : 48 chars hex via random_bytes
+
+**Contexte** : le QR token doit être non-devinable, unique, et inclus dans une URL signée Laravel.
+
+**Décision** : `bin2hex(random_bytes(24))` = 48 caractères hexadécimaux, unicité vérifiée par boucle do-while.
+
+**Alternatives écartées** :
+- UUID v4 — structure prévisible (variante + version visibles)
+- random_int → base62 — plus complexe sans gain de sécurité
+
+**Justification** : 48 chars hex = 192 bits d'entropie. Probabilité de collision négligeable (<1/2^192). Conforme OWASP recommandations tokens uniques.
+
+**Impact** : `QrCodeService`, `Application` model (`qr_token` column), badge PDF, route `/scan/qr/{token}`.
+
+---
+
+### 2026-05-24 · Audit log via Eloquent Observer
+
+**Contexte** : traçabilité de tous les changements de statut de candidature requise.
+
+**Décision** : `ApplicationObserver` enregistré dans `AppServiceProvider`, écrit dans `audit_logs` sur `created` et `updated`.
+
+**Alternatives écartées** :
+- Log fichier — non requêtable depuis Filament
+- Event/Listener dédié — plus de code pour même résultat
+
+**Justification** : Observer = pattern standard Laravel pour les side-effects liés aux modèles. Centralisé, transparent pour les appelants.
+
+**Impact** : `ApplicationObserver`, `AppServiceProvider`, `AuditLogResource` Filament.

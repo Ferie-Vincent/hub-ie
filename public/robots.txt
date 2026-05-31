@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /mon-espace/
+Disallow: /candidature/
+Disallow: /profile/
+Disallow: /dashboard/
+
+Sitemap: https://hubimportexport.ci/sitemap.xml

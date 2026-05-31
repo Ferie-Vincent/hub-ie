@@ -9,15 +9,16 @@
         --noir-doux:      240 6% 11%;
         --blanc-pur:      0 0% 100%;
         --blanc-creme:    36 35% 97%;
-        --orange-ivoire:  30 100% 48%;
-        --orange-brule:   22 67% 52%;
-        --orange-soft:    28 100% 67%;
-        --orange-soft-bg: 30 100% 95%;
+        --orange-ivoire:  25 68% 44%;
+        --orange-brule:   18 58% 38%;
+        --orange-soft:    26 62% 62%;
+        --orange-soft-bg: 26 60% 95%;
         --vert-ivoire:    147 100% 30%;
         --vert-soft:      147 55% 55%;
         --vert-soft-bg:   147 50% 94%;
         --sable:          33 35% 87%;
         --gris-500:       24 5% 47%;
+        --gris-700:       24 5% 38%;
     }
 }
 
@@ -71,15 +72,39 @@
 
     .kicker-vert {
         @apply kicker;
-        color: hsl(var(--vert-ivoire));
+        color: hsl(141 100% 22%);
         background: hsl(var(--vert-soft-bg));
+    }
+
+    .kicker-sable {
+        @apply kicker;
+        color: hsl(36 42% 32%);
+        background: hsl(36 52% 90%);
+    }
+
+    .kicker-violet {
+        @apply kicker;
+        color: hsl(258 48% 32%);
+        background: hsl(258 52% 93%);
     }
 
     /* ── Bouton CTA (BRIEF §II.5.13 — btn-fill) ────────────────────────── */
     .btn-fill {
         @apply relative inline-flex items-center justify-center overflow-hidden px-6 py-3 font-semibold text-white rounded-xl;
         background: hsl(var(--orange-ivoire));
-        transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-fill:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px hsl(var(--orange-ivoire) / 0.4);
+    }
+
+    .btn-fill:active {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px hsl(var(--orange-ivoire) / 0.3);
     }
 
     .btn-fill::before {
@@ -252,5 +277,156 @@
     .reveal.is-visible {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ── Effets de survol inspirés d'Ayenah ──────────────────────────────────── */
+
+/* Keyframe flottement 3D subtil (cardFloatSubtle d'Ayenah) */
+@keyframes hub-float-subtle {
+    0%, 100% { transform: rotateY(0deg)   rotateX(0deg)    translateY(0px);  }
+    33%       { transform: rotateY(4deg)   rotateX(1.5deg)  translateY(-5px); }
+    66%       { transform: rotateY(0deg)   rotateX(0deg)    translateY(-2px); }
+}
+
+/* Flottement ambiant 3D — se met en pause + lift au hover */
+@layer components {
+
+    /* Appliqué aux cartes du hero (countdown, dates), sans .reveal */
+    .hub-float {
+        perspective: 1200px;
+        transform-style: preserve-3d;
+        animation: hub-float-subtle 6s ease-in-out infinite;
+        transition: box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hub-float:hover {
+        animation-play-state: paused;
+        box-shadow: 0 24px 52px rgba(0, 0, 0, 0.25) !important;
+    }
+    /* Décalages pour éviter que toutes les cartes flottent en même temps */
+    .hub-float-delay-1 { animation-delay: 0s;   }
+    .hub-float-delay-2 { animation-delay: 2s;   }
+    .hub-float-delay-3 { animation-delay: 4s;   }
+
+    /* Lift simple sans animation ambiante — pour cartes révélées au scroll */
+    .hub-card-lift {
+        transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hub-card-lift:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Stat card — scale + lift (inspiré stat-card Ayenah) */
+    .hub-stat-lift {
+        transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 300ms;
+        border: 1px solid transparent;
+    }
+    .hub-stat-lift:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        border-color: hsl(var(--orange-ivoire) / 0.25);
+    }
+
+    /* Items marquee partenaires */
+    .hub-partner-item {
+        opacity: 0.4;
+        transition: opacity 300ms, transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hub-partner-item:hover {
+        opacity: 1;
+        transform: translateY(-4px);
+    }
+
+    /* Boutons d'onglet — lift subtil au hover */
+    .hub-tab-hover {
+        transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 250ms;
+    }
+    .hub-tab-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Liens footer — glissement à droite au hover (form-sidebar Ayenah) */
+    .hub-footer-link {
+        display: inline-block;
+        transition: padding-left 250ms cubic-bezier(0.16, 1, 0.3, 1),
+                    color 200ms,
+                    opacity 200ms;
+    }
+    .hub-footer-link:hover {
+        padding-left: 8px;
+        color: hsl(var(--orange-soft));
+        opacity: 1;
+    }
+
+    /* Icône avec bounce rotation au hover */
+    .hub-icon-bounce {
+        transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-block;
+    }
+    .hub-icon-bounce:hover {
+        transform: translateY(-4px) rotate(-8deg) scale(1.1);
+    }
+
+    /* CTA secondaire (outline/transparent) */
+    .btn-secondary-hub {
+        @apply inline-flex items-center gap-2 font-semibold rounded-xl;
+        transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 0.3s;
+    }
+    .btn-secondary-hub:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Image card — ombre renforcée au hover (pilier-card Ayenah) */
+    .hub-image-hover {
+        transition: box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hub-image-hover:hover {
+        box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2);
+        transform: translateY(-4px) scale(1.01);
+    }
+}
+
+/* Delay de flottement sur nth-child pour les stat cards */
+@layer utilities {
+    .hub-float-d0 { animation-delay: 0s;   }
+    .hub-float-d1 { animation-delay: 1.5s; }
+    .hub-float-d2 { animation-delay: 3s;   }
+    .hub-float-d3 { animation-delay: 4.5s; }
+
+    /* Respect prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+        .hub-float   { animation: none !important; }
+        .hub-float-subtle { animation: none !important; }
+    }
+}
+
+/* ── Formulaires candidature (wizard) ─────────────────────────────────── */
+@layer components {
+    .form-label {
+        @apply block text-sm font-semibold text-noir-profond mb-1;
+    }
+    .form-input {
+        @apply block w-full rounded-xl bg-white px-4 py-2.5 text-sm
+               text-noir-profond transition-colors duration-150
+               focus:outline-none focus:ring-0
+               placeholder:text-gris-500;
+        border: 2px solid hsl(var(--sable-doux));
+    }
+    .form-input:focus {
+        border-color: hsl(var(--orange-ivoire));
+    }
+    .form-error {
+        @apply text-red-600 text-xs mt-1;
     }
 }

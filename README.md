@@ -1,59 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Hub Import-Export 2026
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plateforme institutionnelle du Hub Import-Export 2026, organisé par la Direction Générale du Commerce Extérieur (DGCE) — Ministère du Commerce, de l'Industrie et de l'Artisanat de Côte d'Ivoire.
 
-## About Laravel
+**Dates :** 22–25 juin 2026, Abidjan  
+**Capacité :** 180 auditeurs sélectionnés sur candidature
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Composant | Version |
+|---|---|
+| PHP | 8.3+ |
+| Laravel | 12 |
+| Livewire | 3 |
+| Alpine.js | 3 |
+| Tailwind CSS | 3.4 |
+| Filament | 3 |
+| MySQL | 8 |
+| Pest | 3 |
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Installation locale (< 15 minutes)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prérequis
 
-## Laravel Sponsors
+- MAMP (PHP 8.3+, MySQL 8)
+- Composer
+- Node.js 20+
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Étapes
 
-### Premium Partners
+```bash
+# 1. Cloner le dépôt
+git clone <repo-url> hub-ie
+cd hub-ie
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 2. Variables d'environnement
+cp .env.example .env
+# Éditer .env : DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD
 
-## Contributing
+# 3. Dépendances PHP
+composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 4. Clé d'application
+php artisan key:generate
 
-## Code of Conduct
+# 5. Migrations + seeders
+php artisan migrate:fresh --seed
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 6. Dépendances JS + build
+npm install && npm run build
 
-## Security Vulnerabilities
+# 7. Lancer le serveur
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Accéder à :
+- Site public : `http://127.0.0.1:8000`
+- Back-office Filament : `http://127.0.0.1:8000/admin`
 
-## License
+### Compte admin par défaut (seeder)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+Email    : admin@hubimportexport.ci
+Password : password
+```
+
+---
+
+## Commandes utiles
+
+```bash
+# Tests
+php artisan test
+php artisan test --coverage
+
+# Compilation assets
+npm run dev     # watch mode
+npm run build   # production
+
+# Linter PHP
+./vendor/bin/pint
+
+# Fresh database avec données de test
+php artisan migrate:fresh --seed
+
+# Queue worker (requis pour les emails et les PDFs)
+php artisan queue:work
+
+# Scheduler (optionnel en dev)
+php artisan schedule:run
+```
+
+---
+
+## Architecture
+
+```
+app/
+├── Enums/           # ApplicationStatus, ApplicationCategory, Gender
+├── Filament/
+│   ├── Pages/       # Dashboard, CommitteeBoard, ExportCenter, ScanEntry
+│   ├── Resources/   # 11 ressources Filament
+│   └── Widgets/     # 11 widgets dashboard
+├── Http/
+│   ├── Controllers/ # ApplicationController, QrScanController, Newsletter...
+│   └── Middleware/  # EnsureCandidateRole
+├── Jobs/            # GenerateBadgePdf
+├── Livewire/        # ApplicationWizard (formulaire 4 étapes)
+├── Mail/            # 10 Mailables
+├── Models/          # 13 modèles Eloquent
+├── Observers/       # ApplicationObserver (audit log)
+├── Policies/        # Policies par modèle
+└── Services/        # ApplicationStatusService, QrCodeService, GroupAssignmentService...
+
+resources/
+├── css/app.css      # Design system (variables HSL, composants)
+├── js/              # countdown.js, reveal.js, app.js
+└── views/
+    ├── public/      # 11 sections site public
+    ├── candidate/   # Espace candidat
+    ├── candidature/ # Wizard formulaire
+    ├── filament/    # Vues custom Filament
+    ├── mail/        # 10 templates email Markdown
+    └── pdf/         # Badge 100×140mm, Convocation A4
+```
+
+---
+
+## Rôles
+
+| Rôle | Accès |
+|---|---|
+| `super_admin` | Tout |
+| `agent_dgce` | Candidatures : recevabilité, demande complément |
+| `committee_member` | Évaluation |
+| `committee_president` | Présélection, décision finale |
+| `reader` | Lecture seule |
+| `candidate` | Espace candidat uniquement |
+
+---
+
+## Documentation
+
+- `docs/ADMIN.md` — Guide opérationnel DGCE
+- `docs/DEPLOY.md` — Installation production
+- `docs/DECISIONS.md` — Journal des décisions techniques
+- `docs/BRIEF.md` — Cahier des charges complet
+- `docs/IMPLEMENTATION-PLAN.md` — Plan de phases

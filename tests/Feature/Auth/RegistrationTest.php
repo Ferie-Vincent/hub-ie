@@ -1,19 +1,25 @@
 <?php
 
-test('registration screen can be rendered', function () {
-    $response = $this->get('/register');
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-    $response->assertStatus(200);
+uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->artisan('db:seed', ['--class' => 'RolesSeeder']);
 });
 
-test('new users can register', function () {
-    $response = $this->post('/register', [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+test('registration screen can be rendered', function () {
+    $this->get('/register')->assertStatus(200);
+});
+
+test('new users can register with first and last name', function () {
+    $this->post('/register', [
+        'first_name'            => 'Konan',
+        'last_name'             => 'Yao',
+        'email'                 => 'test@example.com',
+        'password'              => 'Password123!',
+        'password_confirmation' => 'Password123!',
+    ])->assertRedirect(route('verification.notice'));
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
 });
