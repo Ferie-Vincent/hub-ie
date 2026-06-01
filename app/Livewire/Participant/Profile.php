@@ -76,6 +76,7 @@ class Profile extends Component
             'lastName.required' => 'Le nom est obligatoire.',
             'email.required' => "L'adresse email est obligatoire.",
             'email.unique' => 'Cette adresse email est déjà utilisée.',
+            'birthDate.before' => 'La date de naissance doit être antérieure à aujourd\'hui.',
             'photo.image' => 'Le fichier doit être une image.',
             'photo.max' => 'La photo ne doit pas dépasser 2 Mo.',
         ]);
