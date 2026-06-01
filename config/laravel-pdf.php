@@ -27,11 +27,11 @@ return [
          * Configure the paths to Node.js, npm, Chrome, and other binaries.
          * Leave null to use system defaults or Browsershot's auto-detection.
          */
-        'node_binary' => env('LARAVEL_PDF_NODE_BINARY'),
-        'npm_binary' => env('LARAVEL_PDF_NPM_BINARY'),
-        'include_path' => env('LARAVEL_PDF_INCLUDE_PATH'),
-        'chrome_path' => env('LARAVEL_PDF_CHROME_PATH'),
-        'node_modules_path' => env('LARAVEL_PDF_NODE_MODULES_PATH'),
+        'node_binary' => env('LARAVEL_PDF_NODE_BINARY', '/opt/homebrew/bin/node'),
+        'npm_binary' => env('LARAVEL_PDF_NPM_BINARY', '/opt/homebrew/bin/npm'),
+        'include_path' => env('LARAVEL_PDF_INCLUDE_PATH', '$PATH:/opt/homebrew/bin'),
+        'chrome_path' => env('LARAVEL_PDF_CHROME_PATH', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),
+        'node_modules_path' => env('LARAVEL_PDF_NODE_MODULES_PATH', base_path('node_modules')),
         'bin_path' => env('LARAVEL_PDF_BIN_PATH'),
         'temp_path' => env('LARAVEL_PDF_TEMP_PATH'),
 

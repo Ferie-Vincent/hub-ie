@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "chrome-php/chrome": "^1.15",
         "filament/filament": "^3.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
@@ -14,6 +15,7 @@
         "maatwebsite/excel": "^3.0",
         "sentry/sentry-laravel": "^4.25",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/browsershot": "^5.4",
         "spatie/laravel-pdf": "^2.9",
         "spatie/laravel-permission": "^7.4"
     },
