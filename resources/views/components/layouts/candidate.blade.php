@@ -53,6 +53,7 @@
                 ['Ma candidature',  route('candidature.index'),     'candidature.*'],
                 ['Documents',       route('participant.downloads'), 'participant.downloads'],
                 ['Messages',        route('participant.messages'),  'participant.messages'],
+                ['Mon profil',      route('participant.profile'),   'participant.profile'],
             ] as [$label, $href, $routeName])
             @php $navActive = request()->routeIs($routeName); @endphp
             <a href="{{ $href }}"
@@ -69,7 +70,21 @@
         </nav>
 
         <div class="flex items-center gap-3">
-            <span class="hidden sm:block text-xs text-gris-500 truncate max-w-[160px]">{{ auth()->user()?->email }}</span>
+            <a href="{{ route('participant.profile') }}" class="flex items-center gap-2 group cursor-pointer">
+                @if(auth()->user()?->photo_path)
+                    <img src="{{ Storage::url(auth()->user()->photo_path) }}"
+                         alt="Mon profil"
+                         class="h-8 w-8 rounded-xl object-cover ring-2 ring-transparent group-hover:ring-orange-300 transition-all">
+                @else
+                    <div class="h-8 w-8 rounded-xl flex items-center justify-center text-xs font-bold text-blanc-pur transition-all group-hover:ring-2 group-hover:ring-orange-300"
+                         style="background:hsl(var(--orange-ivoire));">
+                        {{ mb_strtoupper(mb_substr(auth()->user()?->first_name ?? 'U', 0, 1) . mb_substr(auth()->user()?->last_name ?? '', 0, 1)) }}
+                    </div>
+                @endif
+                <span class="hidden sm:block text-xs text-gris-500 truncate max-w-[120px] group-hover:text-noir-profond transition-colors">
+                    {{ auth()->user()?->email }}
+                </span>
+            </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="text-xs text-gris-500 hover:text-orange-ivoire transition-colors link-underline">

@@ -9,6 +9,7 @@ use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
 use App\Livewire\Participant\Downloads as ParticipantDownloads;
 use App\Livewire\Participant\Messages as ParticipantMessages;
+use App\Livewire\Participant\Profile;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
@@ -76,6 +77,8 @@ Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
         ->name('participant.downloads');
     Route::get('/mon-espace/messages', ParticipantMessages::class)
         ->name('participant.messages');
+    Route::get('/mon-espace/profil', Profile::class)
+        ->name('participant.profile');
 });
 
 // ── QR scan confirmation (signed URL, BRIEF §III.6) ─────────────────────────
