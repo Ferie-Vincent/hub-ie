@@ -4,483 +4,532 @@
     $user = auth()->user();
     $app  = $user->applications()
         ->whereNotIn('status', ['withdrawn', 'rejected'])
-        ->with('documents')
+        ->with(['documents', 'workshops', 'edition'])
         ->latest()
         ->first();
+
+    $isAccepted = $app && $app->status->value === 'accepted';
+
+    // Accès rapide stats (accepted uniquement)
+    $unreadCount = 0;
+    $docCount    = 0;
+    $newDocCount = 0;
+    $groupMembers = collect();
+
+    if ($isAccepted) {
+        $workshopIds = $app->workshops->pluck('id')->toArray();
+
+        $convIds = \App\Models\Conversation::where('application_id', $app->id)->pluck('id');
+        $unreadCount = \App\Models\ConversationMessage::whereIn('conversation_id', $convIds)
+            ->where('sender_id', '!=', auth()->id())
+            ->whereNull('read_at')
+            ->count();
+
+        $docCount = \App\Models\WorkshopCourseFile::where('is_published', true)
+            ->whereIn('workshop_id', $workshopIds)->count();
+
+        $newDocCount = \App\Models\WorkshopCourseFile::where('is_published', true)
+            ->whereIn('workshop_id', $workshopIds)
+            ->where('created_at', '>=', now()->subDays(7))->count();
+
+        if ($app->group_label) {
+            $groupMembers = \App\Models\User::select('first_name', 'last_name')
+                ->join('applications', 'applications.user_id', '=', 'users.id')
+                ->where('applications.group_label', $app->group_label)
+                ->where('applications.edition_id', $app->edition_id)
+                ->where('applications.status', 'accepted')
+                ->where('users.id', '!=', auth()->id())
+                ->orderBy('users.last_name')->orderBy('users.first_name')
+                ->get();
+        }
+    }
+
+    $statusColors = [
+        'draft'        => ['pill' => 'bg-gray-100 text-gray-600',       'dot' => 'bg-gray-400'],
+        'received'     => ['pill' => 'bg-blue-100 text-blue-700',        'dot' => 'bg-blue-500'],
+        'incomplete'   => ['pill' => 'bg-amber-100 text-amber-700',      'dot' => 'bg-amber-500'],
+        'eligible'     => ['pill' => 'bg-cyan-100 text-cyan-700',        'dot' => 'bg-cyan-500'],
+        'under_review' => ['pill' => 'bg-indigo-100 text-indigo-700',    'dot' => 'bg-indigo-500'],
+        'shortlisted'  => ['pill' => 'bg-purple-100 text-purple-700',    'dot' => 'bg-purple-500'],
+        'accepted'     => ['pill' => 'bg-emerald-100 text-emerald-700',  'dot' => 'bg-emerald-500'],
+        'waitlisted'   => ['pill' => 'bg-orange-100 text-orange-700',    'dot' => 'bg-orange-500'],
+        'rejected'     => ['pill' => 'bg-red-100 text-red-700',          'dot' => 'bg-red-500'],
+        'withdrawn'    => ['pill' => 'bg-gray-100 text-gray-600',        'dot' => 'bg-gray-400'],
+    ];
+    $sc = $app ? ($statusColors[$app->status->value] ?? $statusColors['draft']) : null;
+
+    $statusMsg = $app ? [
+        'draft'        => 'Votre brouillon n\'est pas encore soumis.',
+        'received'     => 'Dossier en cours d\'instruction administrative.',
+        'incomplete'   => 'Dossier incomplet — veuillez le compléter avant la date limite.',
+        'eligible'     => 'Dossier recevable — en cours d\'évaluation par le comité.',
+        'under_review' => 'En cours d\'évaluation par le comité de sélection.',
+        'shortlisted'  => 'Présélectionné(e) — décision finale sous 7 jours.',
+        'accepted'     => 'Vous êtes retenu(e) comme auditeur au Hub Import-Export 2026 !',
+        'waitlisted'   => 'Sur liste d\'attente — vous serez notifié(e) en cas de place.',
+    ][$app->status->value] ?? '' : '';
 @endphp
 
 {{-- Flash --}}
 @if(session('status_flash'))
-<div class="mb-6 rounded-xl bg-vert-soft-bg border border-vert-ivoire/30 px-5 py-3 flex items-center gap-3"
-     role="alert">
-    <svg class="w-5 h-5 flex-shrink-0" style="color:hsl(var(--vert-ivoire))" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="mb-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-3 flex items-center gap-3" role="alert">
+    <svg class="w-5 h-5 shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
     </svg>
-    <p class="text-sm font-medium text-vert-ivoire">{{ session('status_flash') }}</p>
+    <p class="text-sm font-medium text-emerald-700">{{ session('status_flash') }}</p>
 </div>
 @endif
 
-<div class="space-y-6">
+{{-- ═══════════════════════════════════════════════════════════ --}}
+{{-- HERO BANNER                                                 --}}
+{{-- ═══════════════════════════════════════════════════════════ --}}
+<div class="relative overflow-hidden rounded-3xl px-8 py-8
+    {{ $isAccepted
+        ? 'text-white'
+        : 'bg-white border border-gray-100 shadow-sm' }}"
+     style="{{ $isAccepted
+        ? 'background: linear-gradient(135deg, hsl(var(--noir-profond)) 0%, hsl(24 30% 18%) 60%, hsl(var(--noir-profond)) 100%);'
+        : '' }}">
 
-    {{-- ── Titre --}}
-    <div>
-        <p class="text-sm text-gris-500 mb-1">Bienvenue,</p>
-        <h1 class="font-serif font-bold text-3xl text-noir-profond">
-            {{ $user->first_name }} {{ $user->last_name }}
-        </h1>
+    @if($isAccepted)
+    {{-- Motif bogolan décoratif --}}
+    <div class="absolute inset-0 opacity-[0.04]" aria-hidden="true">
+        <svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#bogolan-pattern)"/></svg>
     </div>
+    {{-- Accent radial orange --}}
+    <div class="absolute -top-16 -right-16 h-56 w-56 rounded-full opacity-20 blur-3xl pointer-events-none"
+         style="background: hsl(var(--orange-ivoire));" aria-hidden="true"></div>
+    <div class="absolute -bottom-10 -left-10 h-40 w-40 rounded-full opacity-10 blur-2xl pointer-events-none"
+         style="background: hsl(var(--vert-ivoire));" aria-hidden="true"></div>
+    @endif
 
-    @if(! $app)
-    {{-- ── Pas encore de candidature --}}
-    <div class="rounded-2xl bg-white border-2 border-dashed border-sable p-8 text-center shadow-sm">
-        <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-4"
-             style="background:hsl(var(--orange-soft-bg))">
-            <svg class="w-7 h-7" style="color:hsl(var(--orange-ivoire))" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                      d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
-            </svg>
+    <div class="relative flex flex-col sm:flex-row sm:items-center gap-5">
+        {{-- Avatar initiales --}}
+        <div class="h-16 w-16 shrink-0 rounded-2xl flex items-center justify-center text-xl font-black shadow-lg"
+             style="{{ $isAccepted
+                 ? 'background: hsl(var(--orange-ivoire)); color: white;'
+                 : 'background: hsl(var(--orange-soft-bg)); color: hsl(var(--orange-brule));' }}">
+            {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
         </div>
-        <h2 class="font-serif font-bold text-xl text-noir-profond mb-2">Aucune candidature</h2>
-        <p class="text-sm mb-6" style="color:hsl(var(--gris-700))">
-            Vous n'avez pas encore soumis de candidature au Hub Import-Export 2026.
-        </p>
-        <a href="{{ route('candidature.index') }}" class="btn-fill px-7 py-2.5 text-sm inline-flex items-center gap-2">
-            Déposer ma candidature
-        </a>
-    </div>
 
-    @else
-    {{-- ── Zone 1 : Statut --}}
-    <div class="rounded-2xl bg-white shadow-card p-6">
-        <div class="flex items-start justify-between gap-4 flex-wrap">
-            <div>
-                <p class="text-xs font-medium text-gris-500 uppercase tracking-widest mb-2">Statut du dossier</p>
-                @php
-                    $statusColors = [
-                        'draft'        => ['bg' => 'bg-gray-100', 'text' => 'text-gray-600', 'dot' => 'bg-gray-400'],
-                        'received'     => ['bg' => 'bg-blue-100', 'text' => 'text-blue-700', 'dot' => 'bg-blue-500'],
-                        'incomplete'   => ['bg' => 'bg-amber-100', 'text' => 'text-amber-700', 'dot' => 'bg-amber-500'],
-                        'eligible'     => ['bg' => 'bg-cyan-100', 'text' => 'text-cyan-700', 'dot' => 'bg-cyan-500'],
-                        'under_review' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-700', 'dot' => 'bg-indigo-500'],
-                        'shortlisted'  => ['bg' => 'bg-purple-100', 'text' => 'text-purple-700', 'dot' => 'bg-purple-500'],
-                        'accepted'     => ['bg' => 'bg-green-100', 'text' => 'text-green-700', 'dot' => 'bg-green-500'],
-                        'waitlisted'   => ['bg' => 'bg-orange-100', 'text' => 'text-orange-700', 'dot' => 'bg-orange-500'],
-                        'rejected'     => ['bg' => 'bg-red-100', 'text' => 'text-red-700', 'dot' => 'bg-red-500'],
-                        'withdrawn'    => ['bg' => 'bg-gray-100', 'text' => 'text-gray-600', 'dot' => 'bg-gray-400'],
-                    ];
-                    $sc = $statusColors[$app->status->value] ?? $statusColors['draft'];
-                @endphp
-                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold {{ $sc['bg'] }} {{ $sc['text'] }}">
-                    <span class="w-2 h-2 rounded-full {{ $sc['dot'] }}"></span>
+        <div class="flex-1 min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-widest mb-1
+                {{ $isAccepted ? 'text-white/50' : 'text-gris-500' }}">
+                Bienvenue dans votre espace
+            </p>
+            <h1 class="font-serif font-bold text-2xl sm:text-3xl truncate
+                {{ $isAccepted ? 'text-white' : 'text-noir-profond' }}">
+                {{ $user->first_name }} {{ $user->last_name }}
+            </h1>
+            @if($app)
+            <div class="flex flex-wrap items-center gap-3 mt-2">
+                <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold {{ $sc['pill'] }}">
+                    <span class="h-1.5 w-1.5 rounded-full {{ $sc['dot'] }}
+                        {{ $isAccepted ? 'animate-pulse' : '' }}"></span>
                     {{ $app->status->label() }}
                 </span>
-            </div>
-            <div class="text-right">
-                <p class="text-xs text-gris-500">Référence</p>
-                <p class="font-mono font-bold text-lg text-noir-profond tracking-widest">{{ $app->reference_code }}</p>
-            </div>
-        </div>
-
-        @php
-            $statusMessages = [
-                'draft'        => 'Votre brouillon n\'a pas encore été soumis.',
-                'received'     => 'Votre dossier est en cours d\'instruction administrative.',
-                'incomplete'   => 'Votre dossier est incomplet. Veuillez le compléter avant la date limite.',
-                'eligible'     => 'Votre dossier est recevable — en cours d\'évaluation par le comité de sélection.',
-                'under_review' => 'Votre dossier est en cours d\'évaluation par le comité.',
-                'shortlisted'  => 'Félicitations ! Vous êtes présélectionné(e). La décision finale sera communiquée sous 7 jours.',
-                'accepted'     => 'Félicitations ! Vous avez été retenu(e) comme auditeur au Hub Import-Export 2026.',
-                'waitlisted'   => 'Vous êtes sur liste d\'attente. Vous serez informé(e) en cas de place disponible.',
-            ];
-        @endphp
-        @if(isset($statusMessages[$app->status->value]))
-        <p class="mt-3 text-sm leading-relaxed" style="color:hsl(var(--gris-700))">
-            {{ $statusMessages[$app->status->value] }}
-        </p>
-        @endif
-
-        <p class="text-xs mt-3 text-gris-500">
-            Dernière mise à jour : {{ $app->updated_at->diffForHumans() }}
-        </p>
-
-        {{-- CTA selon statut --}}
-        <div class="mt-4 flex flex-wrap gap-3">
-            @if($app->status->value === 'draft')
-            <a href="{{ route('candidature.index') }}" class="btn-fill px-6 py-2 text-sm">
-                Continuer ma candidature
-            </a>
-            @elseif($app->status->value === 'incomplete')
-            <a href="{{ route('candidature.index') }}" class="btn-fill px-6 py-2 text-sm">
-                Compléter mon dossier
-            </a>
-            @endif
-
-            @if($app->status->canWithdraw())
-            <form method="POST" action="{{ route('application.withdraw') }}"
-                  onsubmit="return confirm('Êtes-vous sûr(e) de vouloir retirer votre candidature ? Cette action est irréversible.')">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="px-5 py-2 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors">
-                    Retirer ma candidature
-                </button>
-            </form>
-            @endif
-        </div>
-    </div>
-
-    {{-- ── Zone 1b : Timeline progression --}}
-    @php
-        $timelineSteps = [
-            ['key' => ['received'],               'label' => 'Reçue'],
-            ['key' => ['eligible', 'incomplete'], 'label' => 'Instruction'],
-            ['key' => ['under_review', 'shortlisted'], 'label' => 'Comité'],
-            ['key' => ['accepted', 'waitlisted', 'rejected'], 'label' => 'Décision'],
-        ];
-        $currentStep = 0;
-        foreach ($timelineSteps as $i => $ts) {
-            if (in_array($app->status->value, $ts['key'])) { $currentStep = $i; break; }
-        }
-        $isTerminalPositive = in_array($app->status->value, ['accepted']);
-        $isTerminalNegative = in_array($app->status->value, ['rejected', 'withdrawn']);
-        $isWaitlisted       = $app->status->value === 'waitlisted';
-    @endphp
-    @if(! in_array($app->status->value, ['draft', 'withdrawn']))
-    <div class="rounded-2xl bg-white shadow-card px-6 py-5">
-        <p class="text-xs font-medium text-gris-500 uppercase tracking-widest mb-4">Avancement du dossier</p>
-        <div class="flex items-center gap-0">
-            @foreach($timelineSteps as $i => $ts)
-            @php
-                $done    = $i < $currentStep || ($i === $currentStep && $isTerminalPositive);
-                $active  = $i === $currentStep && ! $isTerminalNegative;
-                $isLast  = $i === count($timelineSteps) - 1;
-                $neg     = $i === $currentStep && $isTerminalNegative;
-                $wait    = $i === $currentStep && $isWaitlisted;
-            @endphp
-            <div class="flex items-center {{ $isLast ? '' : 'flex-1' }}">
-                <div class="flex flex-col items-center gap-1.5">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold transition-all
-                        @if($done) bg-vert-ivoire text-blanc-pur
-                        @elseif($neg) bg-red-500 text-white
-                        @elseif($wait) bg-orange-400 text-white
-                        @elseif($active) bg-orange-ivoire text-blanc-pur ring-4 ring-orange-ivoire/20
-                        @else bg-sable-doux text-gris-500
-                        @endif">
-                        @if($done)
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        @elseif($neg)
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                        @else
-                        {{ $i + 1 }}
-                        @endif
-                    </div>
-                    <span class="text-xs font-medium whitespace-nowrap
-                        @if($done || $active) text-noir-profond
-                        @else text-gris-500
-                        @endif">{{ $ts['label'] }}</span>
-                </div>
-                @if(! $isLast)
-                <div class="flex-1 h-0.5 mx-2 mt-[-1rem]
-                    {{ $i < $currentStep ? 'bg-vert-ivoire' : 'bg-sable-doux' }}"></div>
+                <span class="font-mono text-xs {{ $isAccepted ? 'text-white/60' : 'text-gris-500' }}">
+                    {{ $app->reference_code }}
+                </span>
+                @if($isAccepted && $app->group_label)
+                <span class="rounded-full px-3 py-1 text-xs font-bold"
+                      style="background: hsl(var(--orange-ivoire)/0.2); color: hsl(var(--orange-ivoire));">
+                    Groupe {{ $app->group_label }}
+                </span>
                 @endif
             </div>
-            @endforeach
+            @endif
         </div>
+
+        @if($isAccepted)
+        {{-- Badge mini statut --}}
+        <div class="shrink-0 text-center">
+            <div class="rounded-2xl px-5 py-3 text-center"
+                 style="background: hsl(var(--orange-ivoire)/0.15); border: 1px solid hsl(var(--orange-ivoire)/0.3);">
+                <p class="font-mono font-black text-2xl tracking-[0.3em] text-white">{{ $app->check_in_code }}</p>
+                <p class="text-[10px] text-white/40 uppercase tracking-widest mt-0.5">Code d'accès</p>
+            </div>
+        </div>
+        @endif
     </div>
+
+    @if($statusMsg)
+    <p class="relative mt-4 text-sm {{ $isAccepted ? 'text-white/70' : 'text-gris-500' }}">
+        {{ $statusMsg }}
+    </p>
     @endif
 
-    {{-- ── Zone 2 : Badge (si accepted) --}}
-    @if($app->status->value === 'accepted')
-    <div class="rounded-2xl shadow-card overflow-hidden"
-         style="background:linear-gradient(135deg,hsl(var(--noir-profond)),hsl(24 9% 22%))">
-        <div class="p-6 sm:p-8">
-            <div class="flex items-center gap-2 mb-5">
-                <span class="w-2 h-2 rounded-full bg-vert-ivoire animate-pulse-dot"></span>
-                <p class="text-xs text-blanc-pur/60 uppercase tracking-widest font-medium">Votre badge d'entrée</p>
+    @if(!$isAccepted && $app)
+    <div class="mt-4 flex flex-wrap gap-3">
+        @if(in_array($app->status->value, ['draft', 'incomplete']))
+        <a href="{{ route('candidature.index') }}" class="btn-fill px-5 py-2 text-sm inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            {{ $app->status->value === 'draft' ? 'Continuer ma candidature' : 'Compléter mon dossier' }}
+        </a>
+        @endif
+        @if($app->status->canWithdraw())
+        <form method="POST" action="{{ route('application.withdraw') }}"
+              onsubmit="return confirm('Êtes-vous sûr(e) ? Cette action est irréversible.')">
+            @csrf @method('DELETE')
+            <button type="submit" class="px-5 py-2 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors cursor-pointer">
+                Retirer ma candidature
+            </button>
+        </form>
+        @endif
+    </div>
+    @endif
+</div>
+
+@if(!$app)
+{{-- Pas de candidature --}}
+<div class="rounded-3xl bg-white border-2 border-dashed border-gray-200 p-12 text-center shadow-sm">
+    <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5"
+         style="background: hsl(var(--orange-soft-bg));">
+        <svg class="w-8 h-8" style="color: hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+    </div>
+    <h2 class="font-serif font-bold text-xl text-noir-profond mb-2">Déposez votre candidature</h2>
+    <p class="text-sm text-gris-500 mb-6 max-w-sm mx-auto">Rejoignez les acteurs du commerce extérieur ivoirien au Hub Import-Export 2026.</p>
+    <a href="{{ route('candidature.index') }}" class="btn-fill px-8 py-3 text-sm inline-flex items-center gap-2">
+        Déposer ma candidature
+    </a>
+</div>
+@else
+
+{{-- ═══════════════════════════════════════════════════════════ --}}
+{{-- PROGRESSION (hors draft/withdrawn)                          --}}
+{{-- ═══════════════════════════════════════════════════════════ --}}
+@if(!in_array($app->status->value, ['draft', 'withdrawn']))
+@php
+    $steps = [
+        ['label' => 'Reçue',      'keys' => ['received']],
+        ['label' => 'Instruction','keys' => ['eligible','incomplete']],
+        ['label' => 'Comité',     'keys' => ['under_review','shortlisted']],
+        ['label' => 'Décision',   'keys' => ['accepted','waitlisted','rejected']],
+    ];
+    $curStep = 0;
+    foreach ($steps as $i => $s) {
+        if (in_array($app->status->value, $s['keys'])) { $curStep = $i; break; }
+    }
+    $isPos = $app->status->value === 'accepted';
+    $isNeg = in_array($app->status->value, ['rejected','withdrawn']);
+@endphp
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-5">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gris-500 mb-4">Avancement du dossier</p>
+    <div class="flex items-center">
+        @foreach($steps as $i => $s)
+        @php
+            $done   = $i < $curStep || ($i === $curStep && $isPos);
+            $active = $i === $curStep && !$isNeg;
+            $neg    = $i === $curStep && $isNeg;
+            $isLast = $i === count($steps) - 1;
+        @endphp
+        <div class="flex items-center {{ $isLast ? '' : 'flex-1' }}">
+            <div class="flex flex-col items-center gap-1.5">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300
+                    @if($done) text-white @elseif($neg) bg-red-500 text-white @elseif($active) text-white ring-4 @else bg-gray-100 text-gray-400 @endif"
+                     style="@if($done) background:hsl(var(--vert-ivoire)); @elseif($active) background:hsl(var(--orange-ivoire)); ring-color:hsl(var(--orange-ivoire)/0.2); @endif">
+                    @if($done)
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    @elseif($neg)
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    @else {{ $i + 1 }}
+                    @endif
+                </div>
+                <span class="text-xs font-medium whitespace-nowrap {{ $done || $active ? 'text-noir-profond' : 'text-gray-400' }}">
+                    {{ $s['label'] }}
+                </span>
+            </div>
+            @if(!$isLast)
+            <div class="flex-1 h-0.5 mx-3 mt-[-1.25rem] rounded-full transition-all duration-500
+                {{ $i < $curStep ? '' : 'bg-gray-200' }}"
+                 style="{{ $i < $curStep ? 'background:hsl(var(--vert-ivoire));' : '' }}"></div>
+            @endif
+        </div>
+        @endforeach
+    </div>
+    <p class="text-xs text-right text-gris-500 mt-3">Dernière maj : {{ $app->updated_at->diffForHumans() }}</p>
+</div>
+@endif
+
+{{-- ═══════════════════════════════════════════════════════════ --}}
+{{-- BENTO GRID — contenu principal                             --}}
+{{-- ═══════════════════════════════════════════════════════════ --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
+
+    @if($isAccepted)
+
+    {{-- ── BADGE QR (2 cols) ─────────────────────────────────── --}}
+    <div class="sm:col-span-2 rounded-3xl overflow-hidden shadow-lg"
+         style="background: linear-gradient(135deg, hsl(var(--noir-profond)) 0%, hsl(24 20% 16%) 100%);">
+        <div class="px-8 py-8">
+            <div class="flex items-start gap-2 mb-6">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest"
+                      style="color: hsl(var(--orange-ivoire));">
+                    <span class="h-2 w-2 rounded-full animate-pulse" style="background:hsl(var(--orange-ivoire));"></span>
+                    Badge d'entrée
+                </span>
             </div>
             <div class="flex flex-col sm:flex-row items-center gap-8">
-                {{-- QR code placeholder --}}
-                <div class="w-40 h-40 bg-blanc-pur rounded-xl flex items-center justify-center flex-shrink-0 p-2">
+                {{-- QR --}}
+                <div class="bg-white rounded-2xl p-3 shadow-2xl shrink-0">
                     @if($app->qr_token)
-                    <img src="{{ route('application.qr', $app) }}"
-                         alt="QR code d'accès — {{ $app->reference_code }}"
-                         class="w-full h-full">
+                    <img src="{{ route('application.qr', $app) }}" alt="QR code — {{ $app->reference_code }}"
+                         class="w-36 h-36 sm:w-40 sm:h-40">
                     @else
-                    <div class="w-full h-full bg-sable-doux/30 rounded-lg flex items-center justify-center">
-                        <span class="text-xs text-gris-500 text-center px-2">QR code en cours de génération</span>
+                    <div class="w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center rounded-xl"
+                         style="background:hsl(var(--sable-doux)/0.3);">
+                        <span class="text-xs text-gris-500 text-center px-3">QR code en génération…</span>
                     </div>
                     @endif
                 </div>
-                <div class="text-center sm:text-left">
-                    @if($app->check_in_code)
-                    <p class="text-xs text-blanc-pur/50 uppercase tracking-widest mb-2">Code d'accès numérique</p>
-                    <p class="font-mono font-bold text-blanc-pur leading-none"
-                       style="font-size:3rem;letter-spacing:0.4em">{{ $app->check_in_code }}</p>
-                    @endif
+                {{-- Infos badge --}}
+                <div class="text-center sm:text-left space-y-4">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest mb-1" style="color:hsl(var(--blanc-pur)/0.4);">Code numérique</p>
+                        <p class="font-mono font-black text-blanc-pur tracking-[0.4em]" style="font-size: 2.5rem; line-height:1;">
+                            {{ $app->check_in_code }}
+                        </p>
+                    </div>
                     @if($app->group_label)
-                    <div class="mt-3 inline-block px-3 py-1 rounded-full text-sm font-bold"
-                         style="background:hsl(var(--orange-soft-bg));color:hsl(var(--orange-brule))">
-                        {{ $app->group_label }}
+                    <div class="inline-block rounded-2xl px-6 py-2 font-bold text-sm"
+                         style="background:hsl(var(--orange-ivoire)/0.15); color:hsl(var(--orange-ivoire)); border:1px solid hsl(var(--orange-ivoire)/0.3);">
+                        Groupe {{ $app->group_label }}
                     </div>
                     @endif
-                    <p class="text-xs text-blanc-pur/40 mt-3">À présenter à l'entrée chaque jour</p>
+                    <p class="text-xs" style="color:hsl(var(--blanc-pur)/0.35);">À présenter à l'entrée chaque jour</p>
+                    @if($app->badge_path)
+                    <div class="flex flex-wrap gap-3">
+                        <a href="{{ route('application.badge.download', $app) }}"
+                           class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold text-blanc-pur border transition-colors hover:bg-blanc-pur/10 cursor-pointer"
+                           style="border-color:hsl(var(--blanc-pur)/0.2);">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Mon badge
+                        </a>
+                        <a href="{{ route('application.convocation.download', $app) }}"
+                           class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold text-blanc-pur border transition-colors hover:bg-blanc-pur/10 cursor-pointer"
+                           style="border-color:hsl(var(--blanc-pur)/0.2);">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Convocation
+                        </a>
+                    </div>
+                    @else
+                    <p class="text-xs italic" style="color:hsl(var(--blanc-pur)/0.3);">Badge disponible sous 24h</p>
+                    @endif
                 </div>
-            </div>
-            <div class="flex flex-wrap gap-3 mt-6">
-                @if($app->badge_path)
-                <a href="{{ route('application.badge.download', $app) }}"
-                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-blanc-pur border border-blanc-pur/20 hover:bg-blanc-pur/10 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Télécharger mon badge
-                </a>
-                <a href="{{ route('application.convocation.download', $app) }}"
-                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-blanc-pur border border-blanc-pur/20 hover:bg-blanc-pur/10 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    Télécharger ma convocation
-                </a>
-                @else
-                <p class="text-xs text-blanc-pur/40 italic">Votre badge sera disponible au téléchargement sous 24h.</p>
-                @endif
             </div>
         </div>
     </div>
-    @endif
 
-    {{-- ── Zone 2b : Accès rapide (accepted only) --}}
-    @if(isset($app) && $app && $app->status->value === 'accepted')
-    @php
-        $unreadCount = \App\Models\Conversation::where('application_id', $app->id)
-            ->get()
-            ->sum(fn ($c) => \App\Models\ConversationMessage::where('conversation_id', $c->id)
-                ->where('sender_id', '!=', auth()->id())
-                ->whereNull('read_at')
-                ->count());
-
-        $workshopIds = $app->workshops()->pluck('workshops.id')->toArray();
-
-        $docCount = \App\Models\WorkshopCourseFile::where('is_published', true)
-            ->whereIn('workshop_id', $workshopIds)
-            ->count();
-
-        $newDocCount = \App\Models\WorkshopCourseFile::where('is_published', true)
-            ->whereIn('workshop_id', $workshopIds)
-            ->where('created_at', '>=', now()->subDays(7))
-            ->count();
-    @endphp
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-        {{-- Card Documents --}}
-        <a href="{{ route('participant.downloads') }}"
-           class="group relative flex items-center gap-4 rounded-2xl bg-white shadow-card px-5 py-4 transition hover:-translate-y-0.5 hover:shadow-lg">
-            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+    {{-- ── CARD DOCUMENTS ────────────────────────────────────── --}}
+    <a href="{{ route('participant.downloads') }}"
+       class="group relative flex flex-col justify-between rounded-3xl bg-white border border-gray-100 p-6 shadow-sm
+              transition-all duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
+        <div class="flex items-start justify-between mb-4">
+            <div class="h-12 w-12 rounded-2xl flex items-center justify-center"
                  style="background: hsl(var(--orange-soft-bg));">
-                <svg class="w-5 h-5" style="color: hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                <svg class="w-6 h-6" style="color:hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
             </div>
-            <div class="min-w-0 flex-1">
-                <p class="text-sm font-semibold text-noir-profond">Documents de cours</p>
-                <p class="text-xs text-gris-500 mt-0.5">
-                    {{ $docCount }} fichier{{ $docCount > 1 ? 's' : '' }}
-                    @if($newDocCount > 0)
-                        · <span style="color: hsl(var(--vert-ivoire));" class="font-medium">{{ $newDocCount }} nouveau{{ $newDocCount > 1 ? 'x' : '' }}</span>
-                    @endif
-                </p>
-            </div>
-            <svg class="w-4 h-4 text-gris-500 shrink-0 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            @if($newDocCount > 0)
+            <span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold"
+                  style="background:hsl(var(--vert-soft-bg));color:hsl(var(--vert-ivoire));">
+                +{{ $newDocCount }} nouveau{{ $newDocCount > 1 ? 'x' : '' }}
+            </span>
+            @endif
+        </div>
+        <div>
+            <p class="text-lg font-bold text-noir-profond mb-1">Documents de cours</p>
+            <p class="text-sm text-gris-500">{{ $docCount }} fichier{{ $docCount > 1 ? 's' : '' }} disponible{{ $docCount > 1 ? 's' : '' }}</p>
+        </div>
+        <div class="flex items-center gap-1 mt-4 text-xs font-semibold" style="color:hsl(var(--orange-ivoire));">
+            Accéder
+            <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
-        </a>
+        </div>
+    </a>
 
-        {{-- Card Messages --}}
-        <a href="{{ route('participant.messages') }}"
-           class="group relative flex items-center gap-4 rounded-2xl bg-white shadow-card px-5 py-4 transition hover:-translate-y-0.5 hover:shadow-lg">
-            <div class="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+    {{-- ── CARD MESSAGES ─────────────────────────────────────── --}}
+    <a href="{{ route('participant.messages') }}"
+       class="group relative flex flex-col justify-between rounded-3xl bg-white border border-gray-100 p-6 shadow-sm
+              transition-all duration-200 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
+        <div class="flex items-start justify-between mb-4">
+            <div class="h-12 w-12 rounded-2xl flex items-center justify-center relative"
                  style="background: hsl(var(--vert-soft-bg));">
-                <svg class="w-5 h-5" style="color: hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/>
+                <svg class="w-6 h-6" style="color:hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                 </svg>
                 @if($unreadCount > 0)
-                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-blanc-pur"
-                      style="background: hsl(var(--orange-ivoire));">
-                    {{ $unreadCount > 9 ? '9+' : $unreadCount }}
-                </span>
+                <span class="absolute -top-1 -right-1 h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold text-blanc-pur"
+                      style="background:hsl(var(--orange-ivoire));">{{ min($unreadCount, 9) }}</span>
                 @endif
             </div>
-            <div class="min-w-0 flex-1">
-                <p class="text-sm font-semibold text-noir-profond">Messages</p>
-                <p class="text-xs text-gris-500 mt-0.5">
-                    @if($unreadCount > 0)
-                        <span style="color: hsl(var(--orange-brule));" class="font-medium">
-                            {{ $unreadCount }} message{{ $unreadCount > 1 ? 's' : '' }} non lu{{ $unreadCount > 1 ? 's' : '' }}
-                        </span>
-                    @else
-                        Discuter avec votre formateur
-                    @endif
-                </p>
-            </div>
-            <svg class="w-4 h-4 text-gris-500 shrink-0 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        </div>
+        <div>
+            <p class="text-lg font-bold text-noir-profond mb-1">Messages</p>
+            <p class="text-sm {{ $unreadCount > 0 ? 'font-semibold' : 'text-gris-500' }}"
+               style="{{ $unreadCount > 0 ? 'color:hsl(var(--orange-brule));' : '' }}">
+                @if($unreadCount > 0)
+                    {{ $unreadCount }} message{{ $unreadCount > 1 ? 's' : '' }} non lu{{ $unreadCount > 1 ? 's' : '' }}
+                @else
+                    Discuter avec votre formateur
+                @endif
+            </p>
+        </div>
+        <div class="flex items-center gap-1 mt-4 text-xs font-semibold" style="color:hsl(var(--vert-ivoire));">
+            Ouvrir
+            <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
-        </a>
+        </div>
+    </a>
 
-    </div>
-
-    {{-- ── Zone 2c : Mon groupe --}}
+    {{-- ── MON GROUPE (3 cols) ───────────────────────────────── --}}
     @if($app->group_label)
-    @php
-        $groupMembers = \App\Models\User::select('users.first_name', 'users.last_name')
-            ->join('applications', 'applications.user_id', '=', 'users.id')
-            ->where('applications.group_label', $app->group_label)
-            ->where('applications.edition_id', $app->edition_id)
-            ->where('applications.status', 'accepted')
-            ->where('users.id', '!=', auth()->id())
-            ->orderBy('users.last_name')
-            ->orderBy('users.first_name')
-            ->get();
-    @endphp
-    <div class="rounded-2xl bg-white shadow-card p-6">
+    <div class="sm:col-span-2 lg:col-span-3 rounded-3xl bg-white border border-gray-100 shadow-sm p-6">
         <div class="flex items-center justify-between mb-5">
             <div>
-                <h2 class="font-serif font-bold text-lg text-noir-profond">Mon groupe</h2>
-                <p class="text-xs text-gris-500 mt-0.5">
-                    Groupe <strong class="text-noir-profond">{{ $app->group_label }}</strong>
-                    · {{ $groupMembers->count() + 1 }} participant{{ $groupMembers->count() + 1 > 1 ? 's' : '' }}
-                </p>
+                <h2 class="font-serif font-bold text-lg text-noir-profond">
+                    Mon groupe · <span style="color:hsl(var(--orange-ivoire));">{{ $app->group_label }}</span>
+                </h2>
+                <p class="text-sm text-gris-500 mt-0.5">{{ $groupMembers->count() + 1 }} participant{{ $groupMembers->count() + 1 > 1 ? 's' : '' }}</p>
             </div>
             <a href="{{ route('participant.messages') }}"
-               class="inline-flex items-center gap-1.5 text-xs font-medium link-underline transition-colors"
-               style="color: hsl(var(--orange-ivoire));">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+               class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-all hover:scale-105 cursor-pointer"
+               style="background:hsl(var(--orange-soft-bg));color:hsl(var(--orange-brule));">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                 </svg>
-                Envoyer un message
+                Message au formateur
             </a>
         </div>
 
-        {{-- Moi --}}
-        <div class="flex items-center gap-3 px-4 py-3 rounded-xl mb-2"
-             style="background: hsl(var(--orange-soft-bg));">
-            <div class="h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold text-blanc-pur"
-                 style="background: hsl(var(--orange-ivoire));">
-                {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
+        {{-- Avatar grid --}}
+        <div class="flex flex-wrap gap-3">
+            {{-- Moi --}}
+            <div class="flex flex-col items-center gap-1.5 cursor-default" title="{{ $user->first_name }} {{ $user->last_name }} (Vous)">
+                <div class="relative h-12 w-12 rounded-2xl flex items-center justify-center text-sm font-bold text-blanc-pur shadow-sm"
+                     style="background:hsl(var(--orange-ivoire));">
+                    {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
+                    <span class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 border-2 border-white"></span>
+                </div>
+                <span class="text-[10px] text-gris-500 text-center max-w-[60px] truncate">Vous</span>
             </div>
-            <span class="text-sm font-semibold text-noir-profond">
-                {{ $user->first_name }} {{ $user->last_name }}
-            </span>
-            <span class="ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full"
-                  style="background: hsl(var(--orange-ivoire)/0.15); color: hsl(var(--orange-brule));">
-                Vous
-            </span>
+
+            {{-- Autres membres --}}
+            @foreach($groupMembers as $member)
+            @php
+                $colors = ['#6366f1','#8b5cf6','#ec4899','#14b8a6','#f59e0b','#3b82f6','#10b981','#f97316'];
+                $color  = $colors[($loop->index) % count($colors)];
+                $initials = mb_strtoupper(mb_substr($member->first_name, 0, 1) . mb_substr($member->last_name, 0, 1));
+            @endphp
+            <div class="flex flex-col items-center gap-1.5 cursor-default"
+                 title="{{ $member->first_name }} {{ $member->last_name }}">
+                <div class="h-12 w-12 rounded-2xl flex items-center justify-center text-sm font-bold text-white shadow-sm"
+                     style="background: {{ $color }};">
+                    {{ $initials }}
+                </div>
+                <span class="text-[10px] text-gris-500 text-center max-w-[60px] truncate">
+                    {{ $member->first_name }}
+                </span>
+            </div>
+            @endforeach
         </div>
 
-        {{-- Autres membres --}}
-        @if($groupMembers->isEmpty())
-        <p class="py-4 text-center text-sm text-gris-500">
-            Les autres membres de votre groupe seront affichés ici après confirmation.
-        </p>
-        @else
-        <ul class="divide-y divide-sable-doux" role="list">
-            @foreach($groupMembers as $member)
-            <li class="flex items-center gap-3 px-4 py-3 hover:bg-sable-doux/30 rounded-xl transition-colors">
-                <div class="h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold"
-                     style="background: hsl(var(--sable-doux)); color: hsl(var(--noir-profond)/0.6);">
-                    {{ mb_strtoupper(mb_substr($member->first_name, 0, 1) . mb_substr($member->last_name, 0, 1)) }}
-                </div>
-                <span class="text-sm text-noir-profond">
-                    {{ $member->first_name }} {{ $member->last_name }}
-                </span>
-            </li>
-            @endforeach
-        </ul>
-        @endif
-
-        <p class="mt-4 border-t border-sable-doux pt-4 text-xs italic text-gris-500">
-            Pour des raisons de confidentialité, seuls les noms et prénoms sont visibles entre participants.
+        <p class="mt-5 pt-4 border-t border-gray-100 text-xs italic text-gris-500">
+            Seuls les prénoms et noms sont visibles entre participants pour des raisons de confidentialité.
         </p>
     </div>
     @endif
-    @endif {{-- /accepted --}}
 
-    {{-- ── Zone 3 : Récapitulatif --}}
-    <div class="rounded-2xl bg-white shadow-card p-6">
-        <div class="flex items-center justify-between mb-5">
+    @endif {{-- /isAccepted --}}
+
+    {{-- ── RÉCAPITULATIF (toujours visible) ─────────────────── --}}
+    <div x-data="{ open: false }"
+         class="sm:col-span-2 lg:col-span-{{ $isAccepted ? '3' : '2' }} rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+
+        <button @click="open = !open"
+                class="w-full flex items-center justify-between px-6 py-5 cursor-pointer hover:bg-gray-50 transition-colors"
+                :aria-expanded="open">
             <h2 class="font-serif font-bold text-lg text-noir-profond">Récapitulatif du dossier</h2>
-            @if($app->status->value === 'draft')
-            <a href="{{ route('candidature.index') }}"
-               class="text-sm text-orange-ivoire link-underline font-medium">
-                Modifier
-            </a>
-            @endif
+            <div class="h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+                 :class="open ? 'bg-noir-profond' : 'bg-gray-100'">
+                <svg class="w-4 h-4 transition-transform duration-200"
+                     :class="open ? 'rotate-180 text-blanc-pur' : 'text-gris-500'"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </div>
+        </button>
+
+        <div x-show="open" x-collapse x-cloak class="border-t border-gray-100">
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm px-6 py-6">
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Nom complet</dt>
+                    <dd class="font-medium text-noir-profond">{{ $user->first_name }} {{ $user->last_name }}</dd>
+                </div>
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Email</dt>
+                    <dd class="font-medium text-noir-profond break-all">{{ $user->email }}</dd>
+                </div>
+                @if($user->phone)
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Téléphone</dt>
+                    <dd class="font-medium text-noir-profond">{{ $user->phone }}</dd>
+                </div>
+                @endif
+                @if($user->city)
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Ville</dt>
+                    <dd class="font-medium text-noir-profond">{{ $user->city }}</dd>
+                </div>
+                @endif
+                @if($app->category)
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Catégorie</dt>
+                    <dd class="font-medium text-noir-profond">{{ $app->category->label() }}</dd>
+                </div>
+                @endif
+                @if($app->organization_name)
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Organisation</dt>
+                    <dd class="font-medium text-noir-profond">{{ $app->organization_name }}</dd>
+                </div>
+                @endif
+                @if($app->position)
+                <div>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-0.5">Fonction</dt>
+                    <dd class="font-medium text-noir-profond">{{ $app->position }}</dd>
+                </div>
+                @endif
+                @if($app->documents->isNotEmpty())
+                <div class="sm:col-span-2">
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-gris-500 mb-1.5">Pièces jointes</dt>
+                    <dd class="flex flex-wrap gap-2">
+                        @foreach($app->documents as $doc)
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                              style="background:hsl(var(--vert-soft-bg));color:hsl(var(--vert-ivoire));">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            {{ $doc->type->label() }}
+                        </span>
+                        @endforeach
+                    </dd>
+                </div>
+                @endif
+            </dl>
         </div>
-        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Nom complet</dt>
-                <dd class="font-medium text-noir-profond">{{ $user->first_name }} {{ $user->last_name }}</dd>
-            </div>
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Email</dt>
-                <dd class="font-medium text-noir-profond">{{ $user->email }}</dd>
-            </div>
-            @if($user->phone)
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Téléphone</dt>
-                <dd class="font-medium text-noir-profond">{{ $user->phone }}</dd>
-            </div>
-            @endif
-            @if($user->city)
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Ville</dt>
-                <dd class="font-medium text-noir-profond">{{ $user->city }}, {{ $user->country }}</dd>
-            </div>
-            @endif
-            @if($app->category)
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Catégorie</dt>
-                <dd class="font-medium text-noir-profond">{{ $app->category->label() }}</dd>
-            </div>
-            @endif
-            @if($app->organization_name)
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Organisation</dt>
-                <dd class="font-medium text-noir-profond">{{ $app->organization_name }}</dd>
-            </div>
-            @endif
-            @if($app->position)
-            <div>
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-0.5">Fonction</dt>
-                <dd class="font-medium text-noir-profond">{{ $app->position }}</dd>
-            </div>
-            @endif
-            @if($app->documents->isNotEmpty())
-            <div class="sm:col-span-2">
-                <dt class="text-xs font-medium text-gris-500 uppercase tracking-wide mb-1">Pièces jointes</dt>
-                <dd class="flex flex-wrap gap-2">
-                    @foreach($app->documents as $doc)
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-                          style="background:hsl(var(--vert-soft-bg));color:hsl(var(--vert-ivoire))">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        {{ $doc->type->label() }}
-                    </span>
-                    @endforeach
-                </dd>
-            </div>
-            @endif
-        </dl>
     </div>
 
-    @endif {{-- /app exists --}}
-</div>
+</div> {{-- /bento grid --}}
+@endif {{-- /app --}}
+
+</div> {{-- /outer wrapper --}}
 
 </x-layouts.candidate>
