@@ -7,9 +7,11 @@ use App\Models\Application;
 use App\Models\WorkshopCourseFile;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+#[Layout('components.layouts.candidate', ['title' => 'Mes documents'])]
 class Downloads extends Component
 {
     public ?Application $application = null;

@@ -1,109 +1,126 @@
-<div class="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+<div class="space-y-6">
+
     {{-- Header --}}
-    <div class="mb-8 flex items-center justify-between">
+    <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-white">Mes documents de cours</h1>
-            <p class="mt-1 text-sm text-white/60">Documents mis à disposition par vos formateurs</p>
+            <h1 class="font-serif font-bold text-2xl text-noir-profond">Mes documents de cours</h1>
+            <p class="mt-1 text-sm text-gris-500">Documents mis à disposition par vos formateurs</p>
         </div>
         @if($hasNewFiles)
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-sm font-medium text-emerald-400 ring-1 ring-emerald-500/30">
-                <span class="relative flex h-2 w-2">
-                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                </span>
-                {{ $newFilesCount }} nouveau{{ $newFilesCount > 1 ? 'x' : '' }}
+        <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold"
+              style="background: hsl(var(--vert-soft-bg)); color: hsl(var(--vert-ivoire));">
+            <span class="relative flex h-2 w-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                      style="background: hsl(var(--vert-ivoire));"></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full"
+                      style="background: hsl(var(--vert-ivoire));"></span>
             </span>
+            {{ $newFilesCount }} nouveau{{ $newFilesCount > 1 ? 'x' : '' }}
+        </span>
         @endif
     </div>
 
     @if(session('error'))
-        <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-            {{ session('error') }}
-        </div>
+    <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600" role="alert">
+        {{ session('error') }}
+    </div>
     @endif
 
     @if($workshops->isEmpty())
-        <div class="glass rounded-2xl p-10 text-center">
-            <x-heroicon-o-folder-open class="mx-auto mb-4 h-12 w-12 text-white/30" />
-            <p class="text-white/50">Aucun atelier associé à votre candidature.</p>
-        </div>
+    <div class="rounded-2xl bg-white shadow-card p-10 text-center">
+        <svg class="mx-auto mb-4 h-12 w-12 text-gris-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+        </svg>
+        <p class="text-gris-500">Aucun atelier associé à votre candidature.</p>
+    </div>
     @else
-        <div class="space-y-8">
-            @foreach($workshops as $workshop)
-                @php $files = $courseFiles->get($workshop->id, collect()); @endphp
+    <div class="space-y-6">
+        @foreach($workshops as $workshop)
+        @php $files = $courseFiles->get($workshop->id, collect()); @endphp
 
-                <div class="glass rounded-2xl overflow-hidden">
-                    {{-- Atelier header --}}
-                    <div class="flex items-center gap-3 border-b border-white/10 px-6 py-4">
-                        @if($workshop->icon_path)
-                            <img src="{{ asset($workshop->icon_path) }}" alt="" class="h-8 w-8 rounded-lg object-cover">
-                        @else
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--brand-hsl)/0.2)]">
-                                <x-heroicon-o-academic-cap class="h-4 w-4 text-[hsl(var(--brand-hsl))]" />
-                            </div>
-                        @endif
-                        <h2 class="font-semibold text-white">{{ $workshop->title }}</h2>
-                        <span class="ml-auto text-xs text-white/40">{{ $files->count() }} document{{ $files->count() > 1 ? 's' : '' }}</span>
-                    </div>
-
-                    <div class="p-6">
-                        @if($files->isEmpty())
-                            <p class="py-4 text-center text-sm text-white/40">
-                                Aucun document disponible pour cet atelier.
-                            </p>
-                        @else
-                            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                @foreach($files as $file)
-                                    @php
-                                        $isNew = $file->created_at->isAfter(now()->subDays(7));
-                                        $iconColor = match(true) {
-                                            str_contains($file->mime_type, 'pdf')   => 'text-red-400 bg-red-500/10',
-                                            str_contains($file->mime_type, 'powerpoint') || str_contains($file->mime_type, 'presentation') => 'text-orange-400 bg-orange-500/10',
-                                            str_contains($file->mime_type, 'word') || str_contains($file->mime_type, 'document') => 'text-blue-400 bg-blue-500/10',
-                                            str_contains($file->mime_type, 'video') => 'text-violet-400 bg-violet-500/10',
-                                            str_contains($file->mime_type, 'zip') || str_contains($file->mime_type, 'compressed') => 'text-slate-400 bg-slate-500/10',
-                                            default => 'text-white/60 bg-white/10',
-                                        };
-                                    @endphp
-                                    <div class="group relative flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4 transition hover:border-white/20 hover:bg-white/10">
-                                        @if($isNew)
-                                            <span class="absolute right-3 top-3 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-400">
-                                                Nouveau
-                                            </span>
-                                        @endif
-
-                                        <div class="flex items-start gap-3">
-                                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {{ $iconColor }}">
-                                                <x-heroicon-o-document class="h-5 w-5" />
-                                            </div>
-                                            <div class="min-w-0 flex-1">
-                                                <p class="truncate text-sm font-medium text-white">{{ $file->title }}</p>
-                                                <p class="text-xs text-white/40">{{ $file->file_size_human }}</p>
-                                            </div>
-                                        </div>
-
-                                        @if($file->description)
-                                            <p class="text-xs leading-relaxed text-white/50">{{ $file->description }}</p>
-                                        @endif
-
-                                        <div class="mt-auto flex items-center justify-between text-xs text-white/30">
-                                            <span>{{ $file->created_at->format('d/m/Y') }}</span>
-                                            <button
-                                                wire:click="download({{ $file->id }})"
-                                                wire:loading.attr="disabled"
-                                                class="btn-fill inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition"
-                                            >
-                                                <x-heroicon-o-arrow-down-tray class="h-3.5 w-3.5" />
-                                                Télécharger
-                                            </button>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
+        <div class="rounded-2xl bg-white shadow-card overflow-hidden">
+            {{-- Atelier header --}}
+            <div class="flex items-center gap-3 border-b border-sable px-6 py-4">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0"
+                     style="background: hsl(var(--orange-soft-bg));">
+                    <svg class="h-4 w-4" style="color: hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
                 </div>
-            @endforeach
+                <div>
+                    <h2 class="font-semibold text-noir-profond text-sm">{{ $workshop->title }}</h2>
+                </div>
+                <span class="ml-auto text-xs text-gris-500">
+                    {{ $files->count() }} document{{ $files->count() > 1 ? 's' : '' }}
+                </span>
+            </div>
+
+            <div class="p-6">
+                @if($files->isEmpty())
+                <p class="py-4 text-center text-sm text-gris-500">
+                    Aucun document disponible pour cet atelier pour le moment.
+                </p>
+                @else
+                <div class="grid gap-4 sm:grid-cols-2">
+                    @foreach($files as $file)
+                    @php
+                        $isNew = $file->created_at->isAfter(now()->subDays(7));
+                        [$iconBg, $iconColor] = match(true) {
+                            str_contains($file->mime_type, 'pdf')   => ['bg-red-50', 'text-red-500'],
+                            str_contains($file->mime_type, 'powerpoint') || str_contains($file->mime_type, 'presentation')
+                                => ['bg-orange-50', 'text-orange-500'],
+                            str_contains($file->mime_type, 'word') || str_contains($file->mime_type, 'document')
+                                => ['bg-blue-50', 'text-blue-500'],
+                            str_contains($file->mime_type, 'video') => ['bg-purple-50', 'text-purple-500'],
+                            str_contains($file->mime_type, 'zip')   => ['bg-gray-100', 'text-gray-500'],
+                            default => ['bg-gray-100', 'text-gray-400'],
+                        };
+                    @endphp
+                    <div class="relative flex flex-col gap-3 rounded-xl border border-sable bg-blanc-creme/60 p-4 transition hover:border-sable hover:shadow-sm">
+                        @if($isNew)
+                        <span class="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+                              style="background: hsl(var(--vert-soft-bg)); color: hsl(var(--vert-ivoire));">
+                            Nouveau
+                        </span>
+                        @endif
+
+                        <div class="flex items-start gap-3">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {{ $iconBg }}">
+                                <svg class="h-5 w-5 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate text-sm font-semibold text-noir-profond">{{ $file->title }}</p>
+                                <p class="text-xs text-gris-500">{{ $file->file_size_human }}</p>
+                            </div>
+                        </div>
+
+                        @if($file->description)
+                        <p class="text-xs leading-relaxed text-gris-500">{{ $file->description }}</p>
+                        @endif
+
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="text-xs text-gris-500">{{ $file->created_at->format('d/m/Y') }}</span>
+                            <button
+                                wire:click="download({{ $file->id }})"
+                                wire:loading.attr="disabled"
+                                class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold btn-fill transition"
+                            >
+                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Télécharger
+                            </button>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+            </div>
         </div>
+        @endforeach
+    </div>
     @endif
+
 </div>

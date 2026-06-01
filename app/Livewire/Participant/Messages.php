@@ -8,8 +8,10 @@ use App\Models\ConversationMessage;
 use App\Models\Workshop;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layouts.candidate', ['title' => 'Messages'])]
 class Messages extends Component
 {
     public Collection $conversations;
