@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PartnersSeeder::class,
             FaqSeeder::class,
             SettingsSeeder::class,
+            EditionSeeder::class,
             NewsSeeder::class,
             SpeakersSeeder::class,
         ]);

@@ -4,9 +4,17 @@ namespace App\Observers;
 
 use App\Models\Application;
 use App\Models\AuditLog;
+use App\Models\Edition;
 
 class ApplicationObserver
 {
+    public function creating(Application $application): void
+    {
+        if (is_null($application->edition_id)) {
+            $application->edition_id = Edition::current()->id;
+        }
+    }
+
     public function updated(Application $application): void
     {
         $dirty = $application->getDirty();

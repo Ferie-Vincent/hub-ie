@@ -51,7 +51,11 @@ class Messages extends Component
     {
         $this->activeConversation = $id;
 
-        $conversation = $this->conversations->firstWhere('id', $id);
+        // Server-side ownership check (defence-in-depth beyond in-memory collection)
+        $application = $this->getParticipantApplication();
+        $conversation = $application
+            ? Conversation::where('id', $id)->where('application_id', $application->id)->first()
+            : null;
 
         if (! $conversation) {
             return;
@@ -91,10 +95,19 @@ class Messages extends Component
             return;
         }
 
-        $conversation = Conversation::find($this->activeConversation);
+        $application = $this->getParticipantApplication();
+
+        if (! $application) {
+            return;
+        }
+
+        // IDOR fix: scope conversation to the participant's own application
+        $conversation = Conversation::where('id', $this->activeConversation)
+            ->where('application_id', $application->id)
+            ->first();
 
         if (! $conversation || $conversation->is_closed) {
-            $this->addError('newMessage', 'Cette conversation est fermée.');
+            $this->addError('newMessage', 'Cette conversation est fermée ou introuvable.');
 
             return;
         }
@@ -138,6 +151,13 @@ class Messages extends Component
 
         if (! $workshop) {
             session()->flash('error', 'Atelier introuvable.');
+
+            return;
+        }
+
+        // Enrollment check: participant must be enrolled in this workshop
+        if (! $application->workshops()->where('workshops.id', $workshopId)->exists()) {
+            session()->flash('error', 'Vous n\'êtes pas inscrit à cet atelier.');
 
             return;
         }
