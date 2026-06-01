@@ -131,11 +131,13 @@
         {{-- Nav principale --}}
         <nav class="hidden md:flex items-center gap-1" aria-label="Navigation principale">
             @foreach([
-                ['Programme',   route('programme'),      'programme'],
-                ['Ateliers',    route('ateliers.index'), 'ateliers.*'],
-                ['Partenaires', route('partenaires'),    'partenaires'],
-                ['FAQ',         route('faq'),            'faq'],
-                ['Contact',     route('contact'),        'contact'],
+                ['Accueil',     route('home'),             'home'],
+                ['Programme',   route('programme'),        'programme'],
+                ['Ateliers',    route('ateliers.index'),   'ateliers.*'],
+                ['Actualités',  route('actualites.index'), 'actualites.*'],
+                ['Portfolio',   route('portfolio'),        'portfolio'],
+                ['Partenaires', route('partenaires'),      'partenaires'],
+                ['Contact',     route('contact'),          'contact'],
             ] as [$label, $href, $routeName])
             @php $isActive = request()->routeIs($routeName); @endphp
             <a
@@ -210,11 +212,13 @@
     >
         <nav class="max-w-hub mx-auto px-6 py-4 flex flex-col gap-1" aria-label="Navigation mobile">
             @foreach([
-                ['Programme',   route('programme'),      'programme'],
-                ['Ateliers',    route('ateliers.index'), 'ateliers.*'],
-                ['Partenaires', route('partenaires'),    'partenaires'],
-                ['FAQ',         route('faq'),            'faq'],
-                ['Contact',     route('contact'),        'contact'],
+                ['Accueil',     route('home'),             'home'],
+                ['Programme',   route('programme'),        'programme'],
+                ['Ateliers',    route('ateliers.index'),   'ateliers.*'],
+                ['Actualités',  route('actualites.index'), 'actualites.*'],
+                ['Portfolio',   route('portfolio'),        'portfolio'],
+                ['Partenaires', route('partenaires'),      'partenaires'],
+                ['Contact',     route('contact'),          'contact'],
             ] as [$label, $href, $routeName])
             @php $isActive = request()->routeIs($routeName); @endphp
             <a href="{{ $href }}"

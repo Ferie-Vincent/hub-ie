@@ -7,6 +7,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
+use App\Livewire\Participant\Downloads as ParticipantDownloads;
+use App\Livewire\Participant\Messages as ParticipantMessages;
+use App\Livewire\Participant\Profile;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
@@ -17,6 +20,7 @@ Route::get('/ateliers/{slug}', [PublicController::class, 'atelier'])->name('atel
 Route::get('/partenaires', [PublicController::class, 'partenaires'])->name('partenaires');
 Route::get('/actualites', [PublicController::class, 'actualites'])->name('actualites.index');
 Route::get('/actualites/{slug}', [PublicController::class, 'actualite'])->name('actualites.show');
+Route::get('/portfolio', [PublicController::class, 'portfolio'])->name('portfolio');
 Route::get('/presse', fn () => view('public.presse'))->name('presse');
 Route::get('/faq', fn () => view('public.faq'))->name('faq');
 Route::get('/contact', fn () => view('public.contact'))->name('contact');
@@ -69,6 +73,12 @@ Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
         ->name('application.badge.download');
     Route::get('/mon-espace/convocation/{application}/download', [ApplicationController::class, 'downloadConvocation'])
         ->name('application.convocation.download');
+    Route::get('/mon-espace/documents', ParticipantDownloads::class)
+        ->name('participant.downloads');
+    Route::get('/mon-espace/messages', ParticipantMessages::class)
+        ->name('participant.messages');
+    Route::get('/mon-espace/profil', Profile::class)
+        ->name('participant.profile');
 });
 
 // ── QR scan confirmation (signed URL, BRIEF §III.6) ─────────────────────────

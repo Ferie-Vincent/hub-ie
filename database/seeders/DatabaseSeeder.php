@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PartnersSeeder::class,
             FaqSeeder::class,
             SettingsSeeder::class,
+            EditionSeeder::class,
             NewsSeeder::class,
             SpeakersSeeder::class,
         ]);
@@ -37,7 +38,10 @@ class DatabaseSeeder extends Seeder
 
         // Demo data en local uniquement
         if (app()->environment('local')) {
-            $this->call(DemoDataSeeder::class);
+            $this->call([
+                DemoDataSeeder::class,
+                DemoParticipantSeeder::class,
+            ]);
         }
     }
 }
