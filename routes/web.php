@@ -19,6 +19,7 @@ Route::get('/ateliers/{slug}', [PublicController::class, 'atelier'])->name('atel
 Route::get('/partenaires', [PublicController::class, 'partenaires'])->name('partenaires');
 Route::get('/actualites', [PublicController::class, 'actualites'])->name('actualites.index');
 Route::get('/actualites/{slug}', [PublicController::class, 'actualite'])->name('actualites.show');
+Route::get('/portfolio', [PublicController::class, 'portfolio'])->name('portfolio');
 Route::get('/presse', fn () => view('public.presse'))->name('presse');
 Route::get('/faq', fn () => view('public.faq'))->name('faq');
 Route::get('/contact', fn () => view('public.contact'))->name('contact');

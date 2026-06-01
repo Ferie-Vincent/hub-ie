@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Edition;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Workshop;
@@ -73,6 +74,21 @@ class PublicController extends Controller
             ->firstOrFail();
 
         return view('public.actualite-show', compact('article'));
+    }
+
+    public function portfolio()
+    {
+        $pastEditions = Edition::where('is_active', false)
+            ->orderByDesc('year')
+            ->withCount([
+                'applications',
+                'applications as accepted_count' => fn ($q) => $q->where('status', 'accepted'),
+            ])
+            ->get();
+
+        $currentEdition = Edition::current();
+
+        return view('public.portfolio', compact('pastEditions', 'currentEdition'));
     }
 
     private function workshopCard(Workshop $w): array
