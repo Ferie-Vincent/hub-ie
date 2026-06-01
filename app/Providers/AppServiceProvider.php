@@ -4,12 +4,16 @@ namespace App\Providers;
 
 use App\Models\Application;
 use App\Models\Attendance;
+use App\Models\ConversationMessage;
 use App\Models\Evaluation;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\User;
+use App\Models\WorkshopCourseFile;
 use App\Observers\ApplicationObserver;
+use App\Observers\ConversationMessageObserver;
 use App\Observers\EvaluationObserver;
+use App\Observers\WorkshopCourseFileObserver;
 use App\Policies\ApplicationPolicy;
 use App\Policies\AttendancePolicy;
 use App\Policies\EvaluationPolicy;
@@ -38,5 +42,7 @@ class AppServiceProvider extends ServiceProvider
 
         Application::observe(ApplicationObserver::class);
         Evaluation::observe(EvaluationObserver::class);
+        WorkshopCourseFile::observe(WorkshopCourseFileObserver::class);
+        ConversationMessage::observe(ConversationMessageObserver::class);
     }
 }

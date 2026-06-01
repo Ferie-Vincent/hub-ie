@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
+use App\Livewire\Participant\Downloads as ParticipantDownloads;
+use App\Livewire\Participant\Messages as ParticipantMessages;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
@@ -69,6 +71,10 @@ Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
         ->name('application.badge.download');
     Route::get('/mon-espace/convocation/{application}/download', [ApplicationController::class, 'downloadConvocation'])
         ->name('application.convocation.download');
+    Route::get('/mon-espace/documents', ParticipantDownloads::class)
+        ->name('participant.downloads');
+    Route::get('/mon-espace/messages', ParticipantMessages::class)
+        ->name('participant.messages');
 });
 
 // ── QR scan confirmation (signed URL, BRIEF §III.6) ─────────────────────────

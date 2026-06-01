@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Workshop extends Model
 {
@@ -37,5 +38,15 @@ class Workshop extends Model
     public function applications(): BelongsToMany
     {
         return $this->belongsToMany(Application::class, 'application_workshops');
+    }
+
+    public function courseFiles(): HasMany
+    {
+        return $this->hasMany(WorkshopCourseFile::class);
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
     }
 }
