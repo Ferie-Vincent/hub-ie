@@ -32,17 +32,40 @@
             </span>
         </a>
 
+        @php
+            $navUnread = 0;
+            if (auth()->check()) {
+                $navApp = auth()->user()->applications()
+                    ->where('status', 'accepted')->first();
+                if ($navApp) {
+                    $navConvIds = \App\Models\Conversation::where('application_id', $navApp->id)->pluck('id');
+                    $navUnread = \App\Models\ConversationMessage::whereIn('conversation_id', $navConvIds)
+                        ->where('sender_id', '!=', auth()->id())
+                        ->whereNull('read_at')
+                        ->count();
+                }
+            }
+        @endphp
+
         <nav class="hidden sm:flex items-center gap-1 text-sm">
-            <a href="{{ route('candidate.dashboard') }}"
-               class="px-3 py-1.5 rounded-lg font-medium transition-colors
-                      {{ request()->routeIs('candidate.dashboard') ? 'bg-noir-profond text-blanc-pur' : 'text-gris-500 hover:text-noir-profond' }}">
-                Tableau de bord
+            @foreach([
+                ['Tableau de bord', route('candidate.dashboard'),   'candidate.dashboard'],
+                ['Ma candidature',  route('candidature.index'),     'candidature.*'],
+                ['Documents',       route('participant.downloads'), 'participant.downloads'],
+                ['Messages',        route('participant.messages'),  'participant.messages'],
+            ] as [$label, $href, $routeName])
+            @php $navActive = request()->routeIs($routeName); @endphp
+            <a href="{{ $href }}"
+               class="relative px-3 py-1.5 rounded-lg font-medium transition-colors
+                      {{ $navActive ? 'bg-noir-profond text-blanc-pur' : 'text-gris-500 hover:text-noir-profond' }}">
+                {{ $label }}
+                @if($label === 'Messages' && $navUnread > 0)
+                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-ivoire text-[9px] font-bold text-blanc-pur">
+                    {{ $navUnread > 9 ? '9+' : $navUnread }}
+                </span>
+                @endif
             </a>
-            <a href="{{ route('candidature.index') }}"
-               class="px-3 py-1.5 rounded-lg font-medium transition-colors
-                      {{ request()->routeIs('candidature.*') ? 'bg-noir-profond text-blanc-pur' : 'text-gris-500 hover:text-noir-profond' }}">
-                Ma candidature
-            </a>
+            @endforeach
         </nav>
 
         <div class="flex items-center gap-3">

@@ -254,6 +254,163 @@
     </div>
     @endif
 
+    {{-- ── Zone 2b : Accès rapide (accepted only) --}}
+    @if(isset($app) && $app && $app->status->value === 'accepted')
+    @php
+        $unreadCount = \App\Models\Conversation::where('application_id', $app->id)
+            ->get()
+            ->sum(fn ($c) => \App\Models\ConversationMessage::where('conversation_id', $c->id)
+                ->where('sender_id', '!=', auth()->id())
+                ->whereNull('read_at')
+                ->count());
+
+        $workshopIds = $app->workshops()->pluck('workshops.id')->toArray();
+
+        $docCount = \App\Models\WorkshopCourseFile::where('is_published', true)
+            ->whereIn('workshop_id', $workshopIds)
+            ->count();
+
+        $newDocCount = \App\Models\WorkshopCourseFile::where('is_published', true)
+            ->whereIn('workshop_id', $workshopIds)
+            ->where('created_at', '>=', now()->subDays(7))
+            ->count();
+    @endphp
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        {{-- Card Documents --}}
+        <a href="{{ route('participant.downloads') }}"
+           class="group relative flex items-center gap-4 rounded-2xl bg-white shadow-card px-5 py-4 transition hover:-translate-y-0.5 hover:shadow-lg">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                 style="background: hsl(var(--orange-soft-bg));">
+                <svg class="w-5 h-5" style="color: hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-noir-profond">Documents de cours</p>
+                <p class="text-xs text-gris-500 mt-0.5">
+                    {{ $docCount }} fichier{{ $docCount > 1 ? 's' : '' }}
+                    @if($newDocCount > 0)
+                        · <span style="color: hsl(var(--vert-ivoire));" class="font-medium">{{ $newDocCount }} nouveau{{ $newDocCount > 1 ? 'x' : '' }}</span>
+                    @endif
+                </p>
+            </div>
+            <svg class="w-4 h-4 text-gris-500 shrink-0 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </a>
+
+        {{-- Card Messages --}}
+        <a href="{{ route('participant.messages') }}"
+           class="group relative flex items-center gap-4 rounded-2xl bg-white shadow-card px-5 py-4 transition hover:-translate-y-0.5 hover:shadow-lg">
+            <div class="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                 style="background: hsl(var(--vert-soft-bg));">
+                <svg class="w-5 h-5" style="color: hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/>
+                </svg>
+                @if($unreadCount > 0)
+                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold text-blanc-pur"
+                      style="background: hsl(var(--orange-ivoire));">
+                    {{ $unreadCount > 9 ? '9+' : $unreadCount }}
+                </span>
+                @endif
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-noir-profond">Messages</p>
+                <p class="text-xs text-gris-500 mt-0.5">
+                    @if($unreadCount > 0)
+                        <span style="color: hsl(var(--orange-brule));" class="font-medium">
+                            {{ $unreadCount }} message{{ $unreadCount > 1 ? 's' : '' }} non lu{{ $unreadCount > 1 ? 's' : '' }}
+                        </span>
+                    @else
+                        Discuter avec votre formateur
+                    @endif
+                </p>
+            </div>
+            <svg class="w-4 h-4 text-gris-500 shrink-0 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </a>
+
+    </div>
+
+    {{-- ── Zone 2c : Mon groupe --}}
+    @if($app->group_label)
+    @php
+        $groupMembers = \App\Models\User::select('users.first_name', 'users.last_name')
+            ->join('applications', 'applications.user_id', '=', 'users.id')
+            ->where('applications.group_label', $app->group_label)
+            ->where('applications.edition_id', $app->edition_id)
+            ->where('applications.status', 'accepted')
+            ->where('users.id', '!=', auth()->id())
+            ->orderBy('users.last_name')
+            ->orderBy('users.first_name')
+            ->get();
+    @endphp
+    <div class="rounded-2xl bg-white shadow-card p-6">
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <h2 class="font-serif font-bold text-lg text-noir-profond">Mon groupe</h2>
+                <p class="text-xs text-gris-500 mt-0.5">
+                    Groupe <strong class="text-noir-profond">{{ $app->group_label }}</strong>
+                    · {{ $groupMembers->count() + 1 }} participant{{ $groupMembers->count() + 1 > 1 ? 's' : '' }}
+                </p>
+            </div>
+            <a href="{{ route('participant.messages') }}"
+               class="inline-flex items-center gap-1.5 text-xs font-medium link-underline transition-colors"
+               style="color: hsl(var(--orange-ivoire));">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                </svg>
+                Envoyer un message
+            </a>
+        </div>
+
+        {{-- Moi --}}
+        <div class="flex items-center gap-3 px-4 py-3 rounded-xl mb-2"
+             style="background: hsl(var(--orange-soft-bg));">
+            <div class="h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold text-blanc-pur"
+                 style="background: hsl(var(--orange-ivoire));">
+                {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
+            </div>
+            <span class="text-sm font-semibold text-noir-profond">
+                {{ $user->first_name }} {{ $user->last_name }}
+            </span>
+            <span class="ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full"
+                  style="background: hsl(var(--orange-ivoire)/0.15); color: hsl(var(--orange-brule));">
+                Vous
+            </span>
+        </div>
+
+        {{-- Autres membres --}}
+        @if($groupMembers->isEmpty())
+        <p class="py-4 text-center text-sm text-gris-500">
+            Les autres membres de votre groupe seront affichés ici après confirmation.
+        </p>
+        @else
+        <ul class="divide-y divide-sable-doux" role="list">
+            @foreach($groupMembers as $member)
+            <li class="flex items-center gap-3 px-4 py-3 hover:bg-sable-doux/30 rounded-xl transition-colors">
+                <div class="h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-xs font-bold"
+                     style="background: hsl(var(--sable-doux)); color: hsl(var(--noir-profond)/0.6);">
+                    {{ mb_strtoupper(mb_substr($member->first_name, 0, 1) . mb_substr($member->last_name, 0, 1)) }}
+                </div>
+                <span class="text-sm text-noir-profond">
+                    {{ $member->first_name }} {{ $member->last_name }}
+                </span>
+            </li>
+            @endforeach
+        </ul>
+        @endif
+
+        <p class="mt-4 border-t border-sable-doux pt-4 text-xs italic text-gris-500">
+            Pour des raisons de confidentialité, seuls les noms et prénoms sont visibles entre participants.
+        </p>
+    </div>
+    @endif
+    @endif {{-- /accepted --}}
+
     {{-- ── Zone 3 : Récapitulatif --}}
     <div class="rounded-2xl bg-white shadow-card p-6">
         <div class="flex items-center justify-between mb-5">
