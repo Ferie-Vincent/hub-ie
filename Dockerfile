@@ -1,12 +1,13 @@
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libzip-dev libonig-dev libxml2-dev nodejs npm \
+    git curl zip unzip libpng-dev libzip-dev libonig-dev \
+    libxml2-dev libicu-dev libpq-dev nodejs npm \
     chromium fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 \
     libcups2 libdbus-1-3 libgbm1 libglib2.0-0 libgtk-3-0 \
     libnspr4 libnss3 libxcomposite1 libxdamage1 libxrandr2 libxss1 \
     --no-install-recommends \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip gd intl bcmath opcache \
+    && docker-php-ext-install pdo pdo_pgsql pgsql pdo_mysql mbstring zip gd intl bcmath opcache \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
