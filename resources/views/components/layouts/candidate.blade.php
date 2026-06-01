@@ -19,7 +19,7 @@
 
 {{-- Barre de navigation candidate --}}
 <header class="sticky top-0 z-40 glass-light shadow-sm border-b border-blanc-pur/60">
-    <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
 
         <a href="{{ route('home') }}" class="flex items-center gap-2.5 flex-shrink-0">
             <svg width="36" height="36" viewBox="0 0 44 44" fill="none" aria-hidden="true">
@@ -80,12 +80,12 @@
     </div>
 </header>
 
-<main class="max-w-4xl mx-auto px-6 py-10">
+<main class="max-w-6xl mx-auto px-6 py-10">
     {{ $slot }}
 </main>
 
 <footer class="border-t border-sable mt-16 py-6">
-    <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
         <p class="text-xs text-gris-500">
             © 2026 Hub Import-Export — Ministère du Commerce, de l'Industrie et de l'Artisanat
         </p>

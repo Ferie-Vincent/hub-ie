@@ -70,9 +70,11 @@
     ][$app->status->value] ?? '' : '';
 @endphp
 
+<div class="space-y-8">
+
 {{-- Flash --}}
 @if(session('status_flash'))
-<div class="mb-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-3 flex items-center gap-3" role="alert">
+<div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-3 flex items-center gap-3" role="alert">
     <svg class="w-5 h-5 shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
     </svg>
@@ -83,7 +85,7 @@
 {{-- ═══════════════════════════════════════════════════════════ --}}
 {{-- HERO BANNER                                                 --}}
 {{-- ═══════════════════════════════════════════════════════════ --}}
-<div class="relative overflow-hidden rounded-3xl px-8 py-8
+<div class="relative overflow-hidden rounded-3xl px-8 py-10
     {{ $isAccepted
         ? 'text-white'
         : 'bg-white border border-gray-100 shadow-sm' }}"
@@ -258,12 +260,12 @@
 {{-- ═══════════════════════════════════════════════════════════ --}}
 {{-- BENTO GRID — contenu principal                             --}}
 {{-- ═══════════════════════════════════════════════════════════ --}}
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
     @if($isAccepted)
 
     {{-- ── BADGE QR (2 cols) ─────────────────────────────────── --}}
-    <div class="sm:col-span-2 rounded-3xl overflow-hidden shadow-lg"
+    <div class="sm:col-span-2 lg:row-span-2 rounded-3xl overflow-hidden shadow-lg"
          style="background: linear-gradient(135deg, hsl(var(--noir-profond)) 0%, hsl(24 20% 16%) 100%);">
         <div class="px-8 py-8">
             <div class="flex items-start gap-2 mb-6">
@@ -530,6 +532,6 @@
 </div> {{-- /bento grid --}}
 @endif {{-- /app --}}
 
-</div> {{-- /outer wrapper --}}
+</div> {{-- /space-y-8 --}}
 
 </x-layouts.candidate>
