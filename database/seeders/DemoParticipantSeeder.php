@@ -40,9 +40,10 @@ class DemoParticipantSeeder extends Seeder
         $participant->assignRole('candidate');
 
         // ── 2. Ateliers (2 premiers disponibles) ────────────────────────────
+        // Un candidat ne participe qu'à 1 seul atelier
         $workshops = Workshop::where('is_published', true)
             ->orderBy('display_order')
-            ->limit(2)
+            ->limit(1)
             ->get();
 
         if ($workshops->isEmpty()) {
@@ -67,7 +68,7 @@ class DemoParticipantSeeder extends Seeder
                 'professional_email' => 'dg@konan-import-export.ci',
                 'professional_phone' => '+2250720456789',
                 'motivation' => "Je dirige une PME agroalimentaire spécialisée dans l'exportation de noix de cajou transformées vers les marchés européens et asiatiques. La participation au Hub Import-Export 2026 me permettra de consolider mes connaissances en réglementation douanière et d'accéder aux opportunités de financement offertes par les institutions partenaires. Je souhaite notamment renforcer ma capacité à négocier avec les acheteurs internationaux.",
-                'chosen_workshops' => $workshops->pluck('id')->toArray(),
+                'chosen_workshops' => $workshops->take(1)->pluck('id')->toArray(),
                 'expectations' => 'Renforcer mon réseau, comprendre les mécanismes de financement export, accéder aux marchés CEDEAO.',
                 'referral_source' => 'Ministère du Commerce',
                 'is_first_participation' => true,
@@ -84,9 +85,9 @@ class DemoParticipantSeeder extends Seeder
             ]
         );
 
-        // Rattachement ateliers
+        // Rattachement — 1 seul atelier par candidat
         if ($workshops->isNotEmpty()) {
-            $application->workshops()->syncWithoutDetaching($workshops->pluck('id')->toArray());
+            $application->workshops()->sync([$workshops->first()->id]);
         }
 
         // ── 4. Fichiers de cours par atelier ────────────────────────────────
