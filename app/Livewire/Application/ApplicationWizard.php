@@ -64,7 +64,7 @@ class ApplicationWizard extends Component
     // ── Étape 3 — Motivation et ateliers ─────────────────────────────────────
     public string $motivation = '';
 
-    public array $chosenWorkshops = [];
+    public ?int $chosenWorkshop = null;
 
     public string $expectations = '';
 
@@ -130,7 +130,7 @@ class ApplicationWizard extends Component
         $this->professionalEmail = $app->professional_email ?? '';
         $this->professionalPhone = $app->professional_phone ?? '';
         $this->motivation = $app->motivation ?? '';
-        $this->chosenWorkshops = $app->chosen_workshops ?? [];
+        $this->chosenWorkshop = isset($app->chosen_workshops[0]) ? (int) $app->chosen_workshops[0] : null;
         $this->expectations = $app->expectations ?? '';
         $this->referralSource = $app->referral_source ?? '';
         $this->isFirstParticipation = $app->is_first_participation ?? true;
@@ -241,8 +241,7 @@ class ApplicationWizard extends Component
             ], $this->requiresRccm ? ['rccmNumber' => 'required|string|max:50'] : []),
             3 => [
                 'motivation' => 'required|string|min:500|max:1500',
-                'chosenWorkshops' => 'required|array|min:1|max:2',
-                'chosenWorkshops.*' => 'integer|exists:workshops,id',
+                'chosenWorkshop' => 'required|integer|exists:workshops,id',
                 'referralSource' => 'required|string|max:50',
             ],
             4 => array_merge([
@@ -266,8 +265,8 @@ class ApplicationWizard extends Component
             'city.required' => 'La ville de résidence est obligatoire.',
             'motivation.min' => 'La lettre de motivation doit comporter au moins 500 caractères.',
             'motivation.max' => 'La lettre de motivation ne peut pas dépasser 1500 caractères.',
-            'chosenWorkshops.required' => 'Sélectionnez au moins 1 atelier.',
-            'chosenWorkshops.max' => 'Vous ne pouvez sélectionner que 2 ateliers au maximum.',
+            'chosenWorkshop.required' => 'Veuillez sélectionner un atelier.',
+            'chosenWorkshop.exists' => 'Cet atelier n\'existe pas.',
             'cvFile.required' => 'Le CV est obligatoire.',
             'cvFile.mimes' => 'Le CV doit être au format PDF, JPG ou PNG.',
             'cvFile.max' => 'Le CV ne peut pas dépasser 5 Mo.',
@@ -296,7 +295,7 @@ class ApplicationWizard extends Component
             'professional_email' => $this->professionalEmail ?: null,
             'professional_phone' => $this->professionalPhone ?: null,
             'motivation' => $this->motivation ?: null,
-            'chosen_workshops' => $this->chosenWorkshops ?: null,
+            'chosen_workshops' => $this->chosenWorkshop ? [$this->chosenWorkshop] : null,
             'expectations' => $this->expectations ?: null,
             'referral_source' => $this->referralSource ?: null,
             'is_first_participation' => $this->isFirstParticipation,

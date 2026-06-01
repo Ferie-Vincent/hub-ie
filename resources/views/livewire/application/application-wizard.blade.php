@@ -316,16 +316,16 @@
                     </div>
 
                     <div>
-                        <p class="form-label">Ateliers souhaités <span class="text-red-500">*</span>
-                            <span class="text-xs font-normal text-gris-500 ml-1">(2 maximum)</span>
+                        <p class="form-label">Atelier souhaité <span class="text-red-500">*</span>
+                            <span class="text-xs font-normal text-gris-500 ml-1">(1 seul atelier par candidat)</span>
                         </p>
-                        @error('chosenWorkshops')<p class="form-error mb-2">{{ $message }}</p>@enderror
+                        @error('chosenWorkshop')<p class="form-error mb-2">{{ $message }}</p>@enderror
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($workshops as $ws)
                             <label class="flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200
-                                {{ in_array($ws->id, $chosenWorkshops) ? 'border-orange-ivoire bg-orange-soft-bg/40' : 'border-sable-doux hover:border-sable-doux/80 bg-white' }}">
-                                <input type="checkbox" wire:model.live="chosenWorkshops" value="{{ $ws->id }}"
-                                       @if(count($chosenWorkshops) >= 2 && !in_array($ws->id, $chosenWorkshops)) disabled @endif
+                                {{ $chosenWorkshop == $ws->id ? 'border-orange-ivoire bg-orange-soft-bg/40' : 'border-sable-doux hover:border-sable-doux/80 bg-white' }}">
+                                <input type="radio" wire:model.live="chosenWorkshop" value="{{ $ws->id }}"
+                                       name="chosenWorkshop"
                                        class="mt-0.5 accent-orange-ivoire w-4 h-4 flex-shrink-0">
                                 <div>
                                     <p class="font-semibold text-sm text-noir-profond leading-tight">{{ $ws->title }}</p>
