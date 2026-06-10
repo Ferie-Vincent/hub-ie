@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Jobs\CheckExpiredWaitlistOffers;
 use App\Models\Application;
 use App\Models\Attendance;
 use App\Models\ConversationMessage;
@@ -19,6 +20,7 @@ use App\Policies\AttendancePolicy;
 use App\Policies\EvaluationPolicy;
 use App\Policies\NewsPolicy;
 use App\Policies\PartnerPolicy;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +30,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
+            $schedule->job(CheckExpiredWaitlistOffers::class)
+                ->dailyAt('08:00')
+                ->timezone('Africa/Abidjan')
+                ->withoutOverlapping();
+        });
         Gate::before(function (User $user, string $ability) {
             if ($user->hasRole('super_admin')) {
                 return true;

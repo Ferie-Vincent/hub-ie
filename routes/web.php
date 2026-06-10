@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PreInscriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
+use App\Livewire\Enrollment\SessionPicker;
+use App\Livewire\Participant\Badge as ParticipantBadge;
 use App\Livewire\Participant\Downloads as ParticipantDownloads;
 use App\Livewire\Participant\Messages as ParticipantMessages;
 use App\Livewire\Participant\Profile;
@@ -29,7 +32,9 @@ Route::get('/mentions-legales', fn () => view('public.mentions-legales'))->name(
 Route::get('/politique-de-confidentialite', fn () => view('public.politique-confidentialite'))->name('politique-confidentialite');
 Route::get('/conditions-utilisation', fn () => view('public.conditions-utilisation'))->name('conditions-utilisation');
 
-Route::get('/inscription', fn () => view('public.inscription'))->name('inscription');
+Route::get('/inscription', SessionPicker::class)
+    ->middleware(['auth', 'verified'])
+    ->name('inscription');
 
 // ── Newsletter (double opt-in, BRIEF §IV.6) ──────────────────────────────────
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->middleware('throttle:newsletter')->name('newsletter.subscribe');
@@ -66,13 +71,10 @@ Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
         ->name('candidate.dashboard');
     Route::delete('/mon-espace/retirer', [ApplicationController::class, 'withdraw'])
         ->name('application.withdraw');
-    // Phase 7 — badge/convocation download (placeholder until PDFs implemented)
-    Route::get('/mon-espace/badge/{application}/qr', [ApplicationController::class, 'qrCode'])
-        ->name('application.qr');
-    Route::get('/mon-espace/badge/{application}/download', [ApplicationController::class, 'downloadBadge'])
-        ->name('application.badge.download');
-    Route::get('/mon-espace/convocation/{application}/download', [ApplicationController::class, 'downloadConvocation'])
-        ->name('application.convocation.download');
+    Route::get('/mon-espace/badge', ParticipantBadge::class)
+        ->name('participant.badge');
+    Route::get('/mon-espace/badge/telecharger', [EnrollmentController::class, 'downloadBadge'])
+        ->name('participant.badge.download');
     Route::get('/mon-espace/documents', ParticipantDownloads::class)
         ->name('participant.downloads');
     Route::get('/mon-espace/messages', ParticipantMessages::class)
@@ -85,6 +87,19 @@ Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
 Route::get('/scan/qr/{token}', [QrScanController::class, 'handle'])
     ->middleware('signed')
     ->name('scan.qr');
+
+// ── Enrollments — désinscription + scan ─────────────────────────────────────
+Route::get('/inscription/annuler/{token}', [EnrollmentController::class, 'showCancelPage'])
+    ->middleware('signed')
+    ->name('enrollment.cancel');
+
+Route::post('/inscription/annuler/{token}', [EnrollmentController::class, 'confirmCancel'])
+    ->middleware('signed')
+    ->name('enrollment.cancel.confirm');
+
+Route::get('/scan/enrollment/{token}', [EnrollmentController::class, 'scan'])
+    ->middleware('signed')
+    ->name('enrollment.scan');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

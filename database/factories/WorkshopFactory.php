@@ -21,6 +21,7 @@ class WorkshopFactory extends Factory
             'objectives' => fake()->sentences(4),
             'themes' => fake()->sentences(3),
             'capacity' => 60,
+            'registered_count' => 0,
             'display_order' => 0,
             'is_published' => true,
         ];
