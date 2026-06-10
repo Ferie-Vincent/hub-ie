@@ -20,14 +20,14 @@
 
         <button type="submit"
                 class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all hover:opacity-90"
-                style="background:hsl(var(--orange-ivoire));">
+                style="background:hsl(var(--vert-ivoire));">
             Envoyer le lien de réinitialisation
         </button>
 
         <p class="text-center text-sm" style="color:hsl(var(--blanc-casse)/0.6);">
             <a href="{{ route('login') }}"
                class="hover:underline"
-               style="color:hsl(var(--orange-ivoire));">
+               style="color:hsl(var(--vert-ivoire));">
                 ← Retour à la connexion
             </a>
         </p>

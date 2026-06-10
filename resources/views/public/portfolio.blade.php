@@ -13,13 +13,13 @@
         {{-- ── Édition en cours ──────────────────────────────────────────────── --}}
         @if($currentEdition)
         <div class="mb-16 rounded-2xl overflow-hidden"
-             style="background: linear-gradient(135deg, hsl(var(--noir-profond)) 0%, hsl(var(--noir-profond)/0.92) 100%); border: 1px solid hsl(var(--orange-ivoire)/0.3);">
+             style="background: linear-gradient(135deg, hsl(var(--noir-profond)) 0%, hsl(var(--noir-profond)/0.92) 100%); border: 1px solid hsl(var(--vert-ivoire)/0.3);">
             <div class="px-8 py-10 flex flex-col md:flex-row md:items-center gap-6">
                 <div class="flex-1 space-y-3">
-                    <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-orange-ivoire">
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-vert-ivoire">
                         <span class="relative flex h-2 w-2">
-                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-ivoire opacity-60"></span>
-                            <span class="relative inline-flex h-2 w-2 rounded-full bg-orange-ivoire"></span>
+                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-vert-ivoire opacity-60"></span>
+                            <span class="relative inline-flex h-2 w-2 rounded-full bg-vert-ivoire"></span>
                         </span>
                         Édition en cours
                     </span>
@@ -81,7 +81,7 @@
             <div class="relative">
                 {{-- Ligne verticale timeline --}}
                 <div class="absolute left-0 top-0 bottom-0 w-px ml-4 hidden md:block"
-                     style="background: linear-gradient(to bottom, hsl(var(--orange-ivoire)/0.4), transparent);" aria-hidden="true"></div>
+                     style="background: linear-gradient(to bottom, hsl(var(--vert-ivoire)/0.4), transparent);" aria-hidden="true"></div>
 
                 <div class="space-y-8 md:pl-14">
                     @foreach($pastEditions as $edition)
@@ -89,9 +89,9 @@
 
                         {{-- Dot timeline --}}
                         <div class="absolute -left-14 top-6 hidden md:flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors"
-                             style="background: hsl(var(--blanc-creme)); border-color: hsl(var(--orange-ivoire)/0.4);"
+                             style="background: hsl(var(--blanc-creme)); border-color: hsl(var(--vert-ivoire)/0.4);"
                              aria-hidden="true">
-                            <span class="text-[10px] font-bold" style="color: hsl(var(--orange-ivoire));">
+                            <span class="text-[10px] font-bold" style="color: hsl(var(--vert-ivoire));">
                                 {{ substr($edition->year, 2) }}
                             </span>
                         </div>
@@ -104,7 +104,7 @@
 
                                 {{-- Bande gauche colorée --}}
                                 <div class="md:w-2 shrink-0"
-                                     style="background: hsl(var(--orange-ivoire));"></div>
+                                     style="background: hsl(var(--vert-ivoire));"></div>
 
                                 <div class="flex-1 p-6 md:p-8">
                                     <div class="flex flex-col md:flex-row md:items-start gap-6">
@@ -113,7 +113,7 @@
                                         <div class="flex-1 space-y-3">
                                             <div class="flex items-center gap-3">
                                                 <span class="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
-                                                      style="background: hsl(var(--orange-ivoire)/0.12); color: hsl(var(--orange-brule));">
+                                                      style="background: hsl(var(--vert-ivoire)/0.12); color: hsl(var(--vert-fonce));">
                                                     {{ $edition->year }}
                                                 </span>
                                                 <span class="text-xs text-gris-500">

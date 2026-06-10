@@ -4,7 +4,7 @@
     'title'       => '',
     'description' => '',
     'iconPath'    => '',
-    'accent'      => '--orange-ivoire',
+    'accent'      => '--vert-ivoire',
 ])
 <div class="v10-format-card group relative flex flex-col">
     <div class="v10-corner"></div>

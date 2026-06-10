@@ -50,7 +50,7 @@
 
         <button type="submit"
                 class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all hover:opacity-90 active:scale-[0.98] mt-2"
-                style="background:hsl(var(--orange-ivoire));">
+                style="background:hsl(var(--vert-ivoire));">
             Créer mon compte
         </button>
 
@@ -58,7 +58,7 @@
             Déjà inscrit ?
             <a href="{{ route('login') }}"
                class="font-medium hover:underline"
-               style="color:hsl(var(--orange-ivoire));">
+               style="color:hsl(var(--vert-ivoire));">
                 Se connecter
             </a>
         </p>

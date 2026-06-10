@@ -43,7 +43,7 @@
             <div class="flex items-center gap-3 border-b border-sable px-6 py-4">
                 <div class="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0"
                      style="background: hsl(var(--orange-soft-bg));">
-                    <svg class="h-4 w-4" style="color: hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg class="h-4 w-4" style="color: hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
                 </div>
@@ -68,7 +68,7 @@
                         [$iconBg, $iconColor] = match(true) {
                             str_contains($file->mime_type, 'pdf')   => ['bg-red-50', 'text-red-500'],
                             str_contains($file->mime_type, 'powerpoint') || str_contains($file->mime_type, 'presentation')
-                                => ['bg-orange-50', 'text-orange-500'],
+                                => ['bg-vert-soft-bg', 'text-orange-500'],
                             str_contains($file->mime_type, 'word') || str_contains($file->mime_type, 'document')
                                 => ['bg-blue-50', 'text-blue-500'],
                             str_contains($file->mime_type, 'video') => ['bg-purple-50', 'text-purple-500'],

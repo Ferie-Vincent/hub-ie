@@ -6,7 +6,7 @@
 
 <div class="pb-24 bg-blanc-creme">
     <div class="max-w-3xl mx-auto px-6 pt-14">
-        <a href="{{ route('ateliers.index') }}" class="inline-flex items-center gap-2 text-sm text-gris-500 hover:text-orange-ivoire transition-colors mb-10 link-underline">
+        <a href="{{ route('ateliers.index') }}" class="inline-flex items-center gap-2 text-sm text-gris-500 hover:text-vert-ivoire transition-colors mb-10 link-underline">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             Tous les ateliers
         </a>
@@ -58,8 +58,8 @@
             </div>
             @endif
 
-            <div class="bg-orange-soft-bg rounded-2xl p-6">
-                <p class="text-orange-brule font-semibold mb-3">Participer à cet atelier</p>
+            <div class="bg-vert-soft-bg rounded-2xl p-6">
+                <p class="text-vert-fonce font-semibold mb-3">Participer à cet atelier</p>
                 <p class="text-sm text-noir-profond/70 mb-4">L'accès à cet atelier est conditionné à la sélection de votre candidature. Candidatez dès maintenant pour rejoindre le Hub Import-Export 2026.</p>
                 <a href="{{ route('inscription') }}" class="btn-fill px-5 py-2.5 text-sm"><span>S'inscrire au Hub</span></a>
             </div>

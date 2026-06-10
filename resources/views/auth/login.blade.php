@@ -32,12 +32,12 @@
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; gap:1rem; flex-wrap:wrap;">
         <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-size:0.8125rem; color:rgba(15,12,8,0.50);">
             <input type="checkbox" name="remember"
-                   style="width:14px; height:14px; accent-color:hsl(var(--orange-ivoire));">
+                   style="width:14px; height:14px; accent-color:hsl(var(--vert-ivoire));">
             Se souvenir de moi
         </label>
         @if (Route::has('password.request'))
         <a href="{{ route('password.request') }}"
-           style="font-size:0.8125rem; font-weight:600; color:hsl(var(--orange-ivoire)); text-decoration:none;">
+           style="font-size:0.8125rem; font-weight:600; color:hsl(var(--vert-ivoire)); text-decoration:none;">
             Mot de passe oublié ?
         </a>
         @endif
@@ -50,7 +50,7 @@
     <p style="text-align:center; margin-top:1.75rem; font-size:0.8125rem; color:rgba(15,12,8,0.40);">
         Pas encore de compte ?
         <a href="{{ route('inscription') }}"
-           style="font-weight:600; color:hsl(var(--orange-ivoire)); text-decoration:none;">
+           style="font-weight:600; color:hsl(var(--vert-ivoire)); text-decoration:none;">
             S'inscrire
         </a>
     </p>

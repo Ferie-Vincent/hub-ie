@@ -25,6 +25,7 @@ export default {
                 'orange-soft':   'hsl(var(--orange-soft) / <alpha-value>)',
                 'orange-soft-bg':'hsl(var(--orange-soft-bg) / <alpha-value>)',
                 'vert-ivoire':   'hsl(var(--vert-ivoire) / <alpha-value>)',
+                'vert-fonce':    'hsl(var(--vert-fonce) / <alpha-value>)',
                 'vert-soft':     'hsl(var(--vert-soft) / <alpha-value>)',
                 'vert-soft-bg':  'hsl(var(--vert-soft-bg) / <alpha-value>)',
                 'sable':         'hsl(var(--sable) / <alpha-value>)',

@@ -11,9 +11,9 @@
     $media       = $grouped->get('media', collect());
 
     $tierAccents = [
-        'organizer' => '--orange-ivoire',
+        'organizer' => '--vert-ivoire',
         'strategic' => '--vert-ivoire',
-        'partner'   => '--orange-ivoire',
+        'partner'   => '--vert-ivoire',
         'media'     => '--gris-500',
     ];
 @endphp
@@ -36,7 +36,7 @@
         </div>
 
         <div class="relative overflow-hidden rounded-3xl bg-noir-profond text-blanc-pur shadow-card">
-            <div class="h-[3px]" style="background: linear-gradient(to right, hsl(var(--orange-ivoire)), hsl(var(--blanc-pur) / 0.45) 50%, hsl(var(--vert-ivoire)));"></div>
+            <div class="h-[3px]" style="background: linear-gradient(to right, hsl(var(--vert-ivoire)), hsl(var(--blanc-pur) / 0.45) 50%, hsl(var(--vert-ivoire)));"></div>
 
             <div class="relative grid lg:grid-cols-[0.9fr_1.1fr]">
                 <div class="p-7 sm:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-blanc-pur/10">
@@ -45,14 +45,14 @@
                     </p>
 
                     <div class="flex items-start gap-5">
-                        <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl font-mono text-sm font-bold" style="background: hsl(var(--orange-ivoire));">
+                        <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl font-mono text-sm font-bold" style="background: hsl(var(--vert-ivoire));">
                             MCIA
                         </div>
                         <div>
                             <h3 class="font-serif text-2xl font-bold leading-tight">
                                 Ministère du Commerce,<br>de l'Industrie et de l'Artisanat
                             </h3>
-                            <span class="mt-5 inline-flex rounded-full px-3 py-1.5 text-xs font-semibold" style="background: hsl(var(--orange-ivoire) / 0.12); color: hsl(var(--orange-soft)); border: 1px solid hsl(var(--orange-ivoire) / 0.24);">
+                            <span class="mt-5 inline-flex rounded-full px-3 py-1.5 text-xs font-semibold" style="background: hsl(var(--vert-ivoire) / 0.12); color: hsl(var(--orange-soft)); border: 1px solid hsl(var(--vert-ivoire) / 0.24);">
                                 République de Côte d'Ivoire
                             </span>
                         </div>
@@ -132,12 +132,12 @@
                             <span class="kicker-orange rounded-full">National</span>
                             <h2 class="mt-3 font-serif text-3xl font-bold tracking-[-0.02em]">Agences d'appui nationales</h2>
                         </div>
-                        <div class="hidden sm:block h-px flex-1 max-w-xs" style="background: linear-gradient(to right, hsl(var(--orange-ivoire) / 0.45), transparent);"></div>
+                        <div class="hidden sm:block h-px flex-1 max-w-xs" style="background: linear-gradient(to right, hsl(var(--vert-ivoire) / 0.45), transparent);"></div>
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                         @foreach($agencies as $agency)
-                        @php $accent = '--orange-ivoire'; @endphp
+                        @php $accent = '--vert-ivoire'; @endphp
                             <article class="group relative min-h-[150px] rounded-2xl bg-blanc-pur p-5 overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-card" style="border: 1px solid hsl(var(--noir-profond) / 0.08);">
                                 <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full transition-all duration-300 opacity-0 group-hover:opacity-100"
                                      style="height: 55%; background: hsl(var({{ $accent }}));"></div>

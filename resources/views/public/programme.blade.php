@@ -16,7 +16,7 @@
              hsl(var(--noir-profond) / 0.87) 100%);"></div>
     {{-- Filet tricolore en bas --}}
     <div class="absolute bottom-0 left-0 right-0 h-[3px] pointer-events-none" aria-hidden="true"
-         style="background: linear-gradient(to right, hsl(var(--orange-ivoire)), hsl(var(--blanc-pur)/0.4) 50%, hsl(var(--vert-ivoire)));"></div>
+         style="background: linear-gradient(to right, hsl(var(--vert-ivoire)), hsl(var(--blanc-pur)/0.4) 50%, hsl(var(--vert-ivoire)));"></div>
 
     <div class="relative z-10 max-w-hub mx-auto px-6">
         <div class="kicker-orange rounded-full mb-5">Programme officiel</div>
@@ -107,18 +107,18 @@ $jours = [
 ];
 
 $tagColors = [
-    'Accueil'     => 'bg-orange-soft-bg text-orange-brule',
+    'Accueil'     => 'bg-vert-soft-bg text-vert-fonce',
     'Plénière'    => 'bg-vert-soft-bg text-vert-ivoire',
     'Conférence'  => 'bg-vert-soft-bg text-vert-ivoire',
     'Atelier'     => 'bg-vert-soft-bg text-vert-ivoire',
-    'Networking'  => 'bg-orange-soft-bg text-orange-brule',
+    'Networking'  => 'bg-vert-soft-bg text-vert-fonce',
     'Pause'       => 'bg-sable/60 text-gris-500',
     'Panel'       => 'bg-vert-soft-bg text-vert-ivoire',
     'B2B'         => 'bg-purple-100 text-purple-700',
-    'Presse'      => 'bg-orange-soft-bg text-orange-brule',
+    'Presse'      => 'bg-vert-soft-bg text-vert-fonce',
     'Restitution' => 'bg-vert-soft-bg text-vert-ivoire',
     'Évaluation'  => 'bg-vert-soft-bg text-vert-ivoire',
-    'Cérémonie'   => 'bg-orange-soft-bg text-orange-brule',
+    'Cérémonie'   => 'bg-vert-soft-bg text-vert-fonce',
 ];
 @endphp
 
@@ -137,7 +137,7 @@ $tagColors = [
             >
                 <div class="flex-shrink-0">
                     <div class="font-mono font-bold leading-none"
-                         :class="jour === {{ $num }} ? 'text-orange-soft' : 'text-orange-ivoire'"
+                         :class="jour === {{ $num }} ? 'text-orange-soft' : 'text-vert-ivoire'"
                          style="font-size: 1.75rem; line-height: 1;">{{ $jour['day'] }}</div>
                     <div class="text-[0.58rem] font-bold uppercase tracking-widest mt-0.5"
                          :class="jour === {{ $num }} ? 'text-blanc-pur/40' : 'text-gris-500/50'">{{ $jour['month'] }}</div>
@@ -174,7 +174,7 @@ $tagColors = [
                      style="background: linear-gradient(to right, hsl(var(--noir-profond)) 20%, transparent 60%, hsl(var(--noir-profond)/0.3) 100%);"></div>
                 {{-- Filet orange en bas --}}
                 <div class="absolute bottom-0 left-10 right-10 lg:left-14 lg:right-14 h-[2px] rounded-full"
-                     style="background: linear-gradient(to right, hsl(var(--orange-ivoire)/0.6), transparent);"></div>
+                     style="background: linear-gradient(to right, hsl(var(--vert-ivoire)/0.6), transparent);"></div>
 
                 <div class="relative z-10 flex-shrink-0 text-center sm:text-left ml-2 sm:ml-6">
                     <div class="font-mono font-bold text-orange-soft leading-none" style="font-size: 3.5rem; line-height: 1;">{{ $jour['day'] }}</div>
@@ -211,15 +211,15 @@ $tagColors = [
             <div class="bg-blanc-pur rounded-3xl overflow-hidden border border-sable/60 shadow-sm mb-8">
                 @foreach($jour['sessions'] as $i => [$label, $tag, $desc])
                 <div class="relative flex items-start gap-5 px-6 py-6 border-b border-sable/40 last:border-b-0
-                            group hover:bg-orange-soft-bg/20 transition-colors duration-200
+                            group hover:bg-vert-soft-bg/20 transition-colors duration-200
                             {{ $tag === 'Pause' ? 'opacity-60' : '' }}">
                     {{-- Accent latéral --}}
-                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-orange-ivoire
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-vert-ivoire
                                 transition-all duration-300 opacity-0 group-hover:opacity-100"
                          style="height: 55%;"></div>
                     {{-- Numéro --}}
                     <span class="font-mono font-bold text-base w-8 flex-shrink-0 text-gris-500/25
-                                 group-hover:text-orange-ivoire transition-colors duration-200 select-none mt-0.5">
+                                 group-hover:text-vert-ivoire transition-colors duration-200 select-none mt-0.5">
                         {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
                     </span>
                     {{-- Contenu --}}
@@ -241,11 +241,11 @@ $tagColors = [
         @endforeach
 
         {{-- Note provisoire --}}
-        <div class="flex items-start gap-3 p-5 rounded-2xl bg-orange-soft-bg border border-orange-ivoire/20">
-            <svg class="w-5 h-5 text-orange-brule flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
+        <div class="flex items-start gap-3 p-5 rounded-2xl bg-vert-soft-bg border border-vert-ivoire/20">
+            <svg class="w-5 h-5 text-vert-fonce flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
             </svg>
-            <p class="text-sm text-orange-brule leading-relaxed">
+            <p class="text-sm text-vert-fonce leading-relaxed">
                 <strong>Programme provisoire.</strong> Les horaires précis, les intervenants et les affectations de salles seront communiqués au plus tard 10 jours avant l'événement aux auditeurs sélectionnés.
             </p>
         </div>

@@ -36,7 +36,7 @@
     {{-- Accent radial orange haut-droite --}}
     <div class="absolute inset-0 pointer-events-none z-[3]" aria-hidden="true">
         <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-20"
-             style="background: radial-gradient(circle, hsl(var(--orange-ivoire)), transparent 65%);"></div>
+             style="background: radial-gradient(circle, hsl(var(--vert-ivoire)), transparent 65%);"></div>
     </div>
 
     <div class="relative z-10 max-w-hub mx-auto px-6 w-full pt-32 pb-20">
@@ -57,12 +57,9 @@
 
                 {{-- Logo SVG animé + H1 --}}
                 <div class="space-y-4 reveal">
-                    {{-- Logo HIE animé --}}
+                    {{-- Logo --}}
                     <div class="flex items-center gap-4 mb-2">
-                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-label="Logo Hub Import-Export 2026">
-                            <rect width="64" height="64" rx="14" fill="hsl(var(--orange-ivoire))"/>
-                            <text x="32" y="44" font-family="Inter,sans-serif" font-size="22" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-1">HIE</text>
-                        </svg>
+                        <img src="{{ asset('images/logo.svg') }}" alt="Logo Hub Import-Export 2026" style="height:64px; width:auto; object-fit:contain;">
                         <div>
                             <p class="text-xs font-mono text-orange-soft uppercase tracking-widest">Ministère du Commerce · CI</p>
                             <p class="text-sm text-blanc-pur/60">Édition 2026</p>
@@ -114,7 +111,7 @@
                         ] as [$lieu, $sublabel, $date])
                         <li class="flex items-center gap-4 py-4">
                             <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                                 style="background: hsl(var(--orange-ivoire)/0.2);">
+                                 style="background: hsl(var(--vert-ivoire)/0.2);">
                                 <span class="w-2 h-2 rounded-full animate-v10-green-pulse"
                                       style="background: hsl(var(--vert-soft));"></span>
                             </div>
@@ -131,7 +128,7 @@
                 {{-- Countdown — flottement 3D ambiant décalé --}}
                 <div class="glass-dark rounded-2xl p-6 hub-float hub-float-d2">
                     <div class="flex items-center gap-2 mb-4">
-                        <span class="w-2 h-2 rounded-full animate-pulse-dot" style="background: hsl(var(--orange-ivoire));"></span>
+                        <span class="w-2 h-2 rounded-full animate-pulse-dot" style="background: hsl(var(--vert-ivoire));"></span>
                         <p class="text-xs text-blanc-pur/60 uppercase tracking-widest font-medium">Rendez-vous à Abidjan dans</p>
                     </div>
                     <div class="grid grid-cols-4 gap-3 text-center">
@@ -178,7 +175,7 @@
             <div class="glass rounded-3xl p-7 reveal hub-card-lift">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-                         style="background: hsl(var(--orange-ivoire) / 0.15); border: 1px solid hsl(var(--orange-ivoire) / 0.25);">
+                         style="background: hsl(var(--vert-ivoire) / 0.15); border: 1px solid hsl(var(--vert-ivoire) / 0.25);">
                         <svg class="w-6 h-6" fill="none" stroke="hsl(var(--orange-soft))" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/>
                         </svg>
@@ -194,7 +191,7 @@
                     </div>
                 </div>
                 <div class="mt-5 pt-5 border-t border-blanc-pur/10 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full animate-v10-pulse" style="background: hsl(var(--orange-ivoire));"></span>
+                    <span class="w-1.5 h-1.5 rounded-full animate-v10-pulse" style="background: hsl(var(--vert-ivoire));"></span>
                     <span class="text-[0.6rem] font-mono text-orange-soft/70 uppercase tracking-widest">MCIA — République de Côte d'Ivoire</span>
                 </div>
             </div>
@@ -244,7 +241,7 @@
                         <img src="{{ asset('images/ministre.png') }}"
                              alt="Monsieur le Ministre du Commerce, de l'Industrie et de l'Artisanat"
                              class="w-full h-full object-cover object-top">
-                        <div class="absolute bottom-0 inset-x-0 h-1.5 bg-orange-ivoire z-10"></div>
+                        <div class="absolute bottom-0 inset-x-0 h-1.5 bg-vert-ivoire z-10"></div>
                         <div class="absolute inset-0"
                              style="background: linear-gradient(to top, hsl(var(--noir-profond)/0.80) 0%, transparent 45%);"></div>
                         <div class="absolute bottom-6 inset-x-0 text-center z-10">
@@ -263,12 +260,12 @@
                     <h2 id="ministre-title"
                         class="font-serif font-bold text-noir-profond leading-tight"
                         style="font-size: clamp(1.75rem, 3.5vw, 2.8rem); letter-spacing: -0.02em; line-height: 1.1;">
-                        D'une <em class="font-fraunces italic text-orange-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">ambition</em> partagée<br>
-                        à des <em class="font-fraunces italic text-orange-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">résultats concrets.</em>
+                        D'une <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">ambition</em> partagée<br>
+                        à des <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">résultats concrets.</em>
                     </h2>
                 </div>
 
-                <blockquote class="border-l-2 border-orange-ivoire pl-5 space-y-4 text-noir-profond/80 leading-relaxed reveal">
+                <blockquote class="border-l-2 border-vert-ivoire pl-5 space-y-4 text-noir-profond/80 leading-relaxed reveal">
                     <p>L'économie mondiale traverse une période de mutation structurelle marquée par des reconfigurations géopolitiques et commerciales sans précédent. Dans ce contexte, la résilience du commerce extérieur ivoirien repose plus que jamais sur la capacité de nos acteurs économiques à comprendre, anticiper et capter les opportunités offertes par les marchés stratégiques.</p>
                     <p>L'édition 2026 du Hub Import-Export, placée sous le thème « Résilience et compétitivité du commerce extérieur ivoirien : s'outiller pour conquérir les marchés stratégiques dans un monde en pleine crise », traduit l'engagement résolu de mon Ministère à outiller concrètement nos commerçants, agro-transformateurs, PME et grandes entreprises pour qu'ils tirent pleinement parti des accords régionaux (CEDEAO, ZLECAf) et des marchés internationaux (Union européenne, Chine).</p>
                     <p>Je formule le souhait que cette édition consolide une dynamique pérenne d'accompagnement et de structuration de notre écosystème exportateur, et qu'elle contribue à hisser la Côte d'Ivoire au rang des nations africaines les plus compétitives en matière de commerce international.</p>
@@ -422,7 +419,7 @@
                         @foreach($tab['items'] as [$num, $title, $body])
                         <li class="group flex gap-6 py-7 hover:bg-blanc-pur/3 -mx-4 px-4 rounded-xl transition-colors duration-200">
                             <span class="font-mono text-sm font-bold flex-shrink-0 mt-0.5 w-7 text-right
-                                {{ $tab['color'] === 'orange' ? 'text-orange-ivoire/70' : 'text-vert-ivoire/70' }}">
+                                {{ $tab['color'] === 'orange' ? 'text-vert-ivoire/70' : 'text-vert-ivoire/70' }}">
                                 {{ $num }}
                             </span>
                             <div class="flex-1 min-w-0">
@@ -460,7 +457,7 @@
                     <h2 id="ateliers-title"
                         class="font-serif font-bold text-noir-profond leading-tight mb-5"
                         style="font-size: clamp(2.2rem, 4vw, 3.5rem); letter-spacing: -0.025em; line-height: 1.05;">
-                        Quatre <em class="font-fraunces italic text-orange-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">ateliers,</em><br>
+                        Quatre <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">ateliers,</em><br>
                         des panels et des forums.
                     </h2>
                     <p class="text-gris-500 text-base leading-relaxed max-w-sm">
@@ -474,7 +471,7 @@
                         <li class="flex items-center gap-4">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                                  style="background: hsl(var(--orange-soft-bg));">
-                                <svg class="w-5 h-5" fill="none" stroke="hsl(var(--orange-brule))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                                <svg class="w-5 h-5" fill="none" stroke="hsl(var(--vert-fonce))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
                                 </svg>
                             </div>
@@ -483,7 +480,7 @@
                         <li class="flex items-center gap-4">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                                  style="background: hsl(var(--orange-soft-bg));">
-                                <svg class="w-5 h-5" fill="none" stroke="hsl(var(--orange-brule))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                                <svg class="w-5 h-5" fill="none" stroke="hsl(var(--vert-fonce))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
                                 </svg>
@@ -493,7 +490,7 @@
                         <li class="flex items-center gap-4">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                                  style="background: hsl(var(--orange-soft-bg));">
-                                <svg class="w-5 h-5" fill="none" stroke="hsl(var(--orange-brule))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                                <svg class="w-5 h-5" fill="none" stroke="hsl(var(--vert-fonce))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
                                 </svg>
                             </div>
@@ -550,8 +547,8 @@
                 <div
                     @click="active = active === {{ $i }} ? -1 : {{ $i }}"
                     :class="active === {{ $i }}
-                        ? 'border-orange-ivoire shadow-md bg-blanc-pur'
-                        : 'border-sable/80 bg-blanc-pur hover:border-orange-ivoire/40 hover:shadow-sm'"
+                        ? 'border-vert-ivoire shadow-md bg-blanc-pur'
+                        : 'border-sable/80 bg-blanc-pur hover:border-vert-ivoire/40 hover:shadow-sm'"
                     class="rounded-2xl border-2 cursor-pointer transition-all duration-300 overflow-hidden"
                     role="button"
                     :aria-expanded="active === {{ $i }}"
@@ -560,7 +557,7 @@
                     <div class="flex items-center gap-5 px-6 py-5">
                         {{-- Numéro --}}
                         <span
-                            :class="active === {{ $i }} ? 'text-orange-ivoire' : 'text-gris-500/50'"
+                            :class="active === {{ $i }} ? 'text-vert-ivoire' : 'text-gris-500/50'"
                             class="font-mono font-bold text-3xl w-10 flex-shrink-0 transition-colors duration-300"
                             style="font-size: 2rem; line-height: 1; letter-spacing: -0.04em;"
                         >{{ $atelier['num'] }}</span>
@@ -580,8 +577,8 @@
                         {{-- Icône thématique --}}
                         <div
                             :class="active === {{ $i }}
-                                ? 'bg-orange-ivoire'
-                                : 'bg-blanc-creme group-hover:bg-orange-soft-bg'"
+                                ? 'bg-vert-ivoire'
+                                : 'bg-blanc-creme group-hover:bg-vert-soft-bg'"
                             class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
                         >
                             <svg
@@ -594,7 +591,7 @@
 
                         {{-- Chevron --}}
                         <svg
-                            :class="active === {{ $i }} ? 'rotate-180 text-orange-ivoire' : 'text-gris-500/40'"
+                            :class="active === {{ $i }} ? 'rotate-180 text-vert-ivoire' : 'text-gris-500/40'"
                             class="w-5 h-5 flex-shrink-0 transition-all duration-300"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -638,7 +635,7 @@
         </svg>
         {{-- Blob orange haut-droit --}}
         <div class="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full opacity-[0.10]"
-             style="background: radial-gradient(circle, hsl(var(--orange-ivoire)), transparent 60%);"></div>
+             style="background: radial-gradient(circle, hsl(var(--vert-ivoire)), transparent 60%);"></div>
         {{-- Blob vert bas-gauche --}}
         <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full opacity-[0.08]"
              style="background: radial-gradient(circle, hsl(var(--vert-ivoire)), transparent 60%);"></div>
@@ -671,7 +668,7 @@
                     'title'       => 'Cérémonie d\'ouverture',
                     'description' => 'Ouverture officielle sous le haut patronage du Ministre, avec allocutions institutionnelles et cadrage stratégique.',
                     'icon_path'   => 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6',
-                    'accent'      => '--orange-ivoire',
+                    'accent'      => '--vert-ivoire',
                 ],
                 [
                     'num'         => '02',
@@ -679,7 +676,7 @@
                     'title'       => 'Ateliers thématiques',
                     'description' => 'Sessions pratiques en groupes de 60 animées par des experts. ZLECAf, finance, digital, normes & certification.',
                     'icon_path'   => 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5',
-                    'accent'      => '--orange-brule',
+                    'accent'      => '--vert-fonce',
                 ],
                 [
                     'num'         => '03',
@@ -767,18 +764,18 @@ $programme = [
     ],
 ];
 $tagColors = [
-    'Accueil'     => 'bg-orange-soft-bg text-orange-brule',
+    'Accueil'     => 'bg-vert-soft-bg text-vert-fonce',
     'Plénière'    => 'bg-vert-soft-bg text-vert-ivoire',
     'Conférence'  => 'bg-vert-soft-bg text-vert-ivoire',
     'Atelier'     => 'bg-vert-soft-bg text-vert-ivoire',
-    'Networking'  => 'bg-orange-soft-bg text-orange-brule',
+    'Networking'  => 'bg-vert-soft-bg text-vert-fonce',
     'Pause'       => 'bg-sable/50 text-gris-500',
     'Panel'       => 'bg-vert-soft-bg text-vert-ivoire',
     'B2B'         => 'bg-purple-100 text-purple-700',
-    'Presse'      => 'bg-orange-soft-bg text-orange-brule',
+    'Presse'      => 'bg-vert-soft-bg text-vert-fonce',
     'Restitution' => 'bg-vert-soft-bg text-vert-ivoire',
     'Évaluation'  => 'bg-vert-soft-bg text-vert-ivoire',
-    'Cérémonie'   => 'bg-orange-soft-bg text-orange-brule',
+    'Cérémonie'   => 'bg-vert-soft-bg text-vert-fonce',
 ];
 @endphp
 
@@ -794,7 +791,7 @@ $tagColors = [
                     class="font-serif font-bold text-noir-profond"
                     style="font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.02em; line-height: 1.1;">
                     Quatre jours,<br>
-                    <em class="font-fraunces italic text-orange-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">une trajectoire d'outillage.</em>
+                    <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">une trajectoire d'outillage.</em>
                 </h2>
             </div>
             <p class="text-gris-500 text-base leading-relaxed lg:pb-1">
@@ -820,7 +817,7 @@ $tagColors = [
                 {{-- Date --}}
                 <div class="flex-shrink-0">
                     <div class="font-mono font-bold leading-none"
-                         :class="jour === {{ $num }} ? 'text-orange-soft' : 'text-orange-ivoire'"
+                         :class="jour === {{ $num }} ? 'text-orange-soft' : 'text-vert-ivoire'"
                          style="font-size: 1.75rem; line-height: 1;">{{ $day }}</div>
                     <div class="text-[0.58rem] font-bold uppercase tracking-widest mt-0.5"
                          :class="jour === {{ $num }} ? 'text-blanc-pur/40' : 'text-gris-500/50'">{{ $month }} 2026</div>
@@ -851,12 +848,12 @@ $tagColors = [
             <div class="bg-blanc-pur rounded-3xl overflow-hidden border border-sable/60 shadow-sm">
                 @foreach($items as $i => [$label, $tag])
                 <div class="relative flex items-center gap-4 px-6 py-5 border-b border-sable/40 last:border-b-0 group
-                            hover:bg-orange-soft-bg/20 transition-colors duration-200">
-                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-orange-ivoire
+                            hover:bg-vert-soft-bg/20 transition-colors duration-200">
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-vert-ivoire
                                 transition-all duration-300 opacity-0 group-hover:opacity-100"
                          style="height: 55%;"></div>
                     <span class="font-mono font-bold text-base w-8 flex-shrink-0 text-gris-500/25
-                                 group-hover:text-orange-ivoire transition-colors duration-200 select-none">
+                                 group-hover:text-vert-ivoire transition-colors duration-200 select-none">
                         {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
                     </span>
                     <span class="flex-1 text-noir-profond font-medium text-sm leading-snug">{{ $label }}</span>
@@ -914,7 +911,7 @@ $tagColors = [
                         required
                         autocomplete="email"
                         placeholder="votre@email.fr"
-                        class="flex-1 px-5 py-3.5 rounded-xl bg-blanc-pur/10 border border-blanc-pur/20 text-blanc-pur placeholder-blanc-pur/30 focus:outline-none focus:border-orange-ivoire focus:ring-1 focus:ring-orange-ivoire transition"
+                        class="flex-1 px-5 py-3.5 rounded-xl bg-blanc-pur/10 border border-blanc-pur/20 text-blanc-pur placeholder-blanc-pur/30 focus:outline-none focus:border-vert-ivoire focus:ring-1 focus:ring-vert-ivoire transition"
                     >
                     <button
                         type="submit"

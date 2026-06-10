@@ -44,14 +44,7 @@
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
 
         <a href="{{ route('home') }}" class="flex items-center gap-2.5 flex-shrink-0">
-            <svg width="36" height="36" viewBox="0 0 44 44" fill="none" aria-hidden="true">
-                <rect width="44" height="44" rx="10" fill="hsl(var(--orange-ivoire))"/>
-                <text x="22" y="30" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-0.5">HIE</text>
-            </svg>
-            <span class="font-manrope font-bold text-xs text-noir-profond leading-tight hidden sm:block">
-                Hub Import-Export<br>
-                <span class="font-normal opacity-60">Espace candidat</span>
-            </span>
+            <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" class="h-9 w-auto object-contain">
         </a>
 
         {{-- Nav desktop --}}
@@ -63,7 +56,7 @@
                       {{ $navActive ? 'bg-noir-profond text-blanc-pur' : 'text-gris-500 hover:text-noir-profond' }}">
                 {{ $label }}
                 @if($label === 'Messages' && $navUnread > 0)
-                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-ivoire text-[9px] font-bold text-blanc-pur">
+                <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vert-ivoire text-[9px] font-bold text-blanc-pur">
                     {{ $navUnread > 9 ? '9+' : $navUnread }}
                 </span>
                 @endif
@@ -80,7 +73,7 @@
                          class="h-8 w-8 rounded-xl object-cover ring-2 ring-transparent group-hover:ring-orange-300 transition-all">
                 @else
                     <div class="h-8 w-8 rounded-xl flex items-center justify-center text-xs font-bold text-blanc-pur transition-all group-hover:ring-2 group-hover:ring-orange-300"
-                         style="background:hsl(var(--orange-ivoire));">
+                         style="background:hsl(var(--vert-ivoire));">
                         {{ mb_strtoupper(mb_substr(auth()->user()?->first_name ?? 'U', 0, 1) . mb_substr(auth()->user()?->last_name ?? '', 0, 1)) }}
                     </div>
                 @endif
@@ -90,7 +83,7 @@
             </a>
             <form method="POST" action="{{ route('logout') }}" class="hidden sm:block">
                 @csrf
-                <button type="submit" class="text-xs text-gris-500 hover:text-orange-ivoire transition-colors link-underline">
+                <button type="submit" class="text-xs text-gris-500 hover:text-vert-ivoire transition-colors link-underline">
                     Déconnexion
                 </button>
             </form>
@@ -101,7 +94,7 @@
                     :aria-expanded="open"
                     aria-label="Menu navigation">
                 @if($navUnread > 0)
-                <span class="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-orange-ivoire"></span>
+                <span class="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-vert-ivoire"></span>
                 @endif
                 <svg x-show="!open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -133,7 +126,7 @@
                      class="h-10 w-10 rounded-xl object-cover flex-shrink-0">
             @else
                 <div class="h-10 w-10 rounded-xl flex-shrink-0 flex items-center justify-center text-sm font-bold text-blanc-pur"
-                     style="background:hsl(var(--orange-ivoire));">
+                     style="background:hsl(var(--vert-ivoire));">
                     {{ mb_strtoupper(mb_substr(auth()->user()?->first_name ?? 'U', 0, 1) . mb_substr(auth()->user()?->last_name ?? '', 0, 1)) }}
                 </div>
             @endif
@@ -155,7 +148,7 @@
                       {{ $navActive ? 'bg-noir-profond text-blanc-pur' : 'text-gris-500 hover:text-noir-profond hover:bg-sable/50' }}">
                 {{ $label }}
                 @if($label === 'Messages' && $navUnread > 0)
-                <span class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-orange-ivoire text-[9px] font-bold text-blanc-pur">
+                <span class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-vert-ivoire text-[9px] font-bold text-blanc-pur">
                     {{ $navUnread > 9 ? '9+' : $navUnread }}
                 </span>
                 @endif
@@ -168,7 +161,7 @@
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
-                        class="w-full text-center text-sm text-gris-500 hover:text-orange-ivoire transition-colors py-2">
+                        class="w-full text-center text-sm text-gris-500 hover:text-vert-ivoire transition-colors py-2">
                     Déconnexion
                 </button>
             </form>
@@ -185,7 +178,7 @@
         <p class="text-xs text-gris-500">
             © 2026 Hub Import-Export — Ministère du Commerce, de l'Industrie et de l'Artisanat
         </p>
-        <a href="{{ route('home') }}" class="text-xs text-orange-ivoire link-underline">← Retour au site</a>
+        <a href="{{ route('home') }}" class="text-xs text-vert-ivoire link-underline">← Retour au site</a>
     </div>
 </footer>
 

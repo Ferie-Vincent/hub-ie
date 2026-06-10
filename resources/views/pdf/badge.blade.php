@@ -122,7 +122,7 @@ body {
     <div>
         <div class="header">
             <div>
-                <div class="logo-text">Hub Import-Export</div>
+                <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export" style="height:8mm; width:auto; object-fit:contain; display:block;">
                 <div class="event-tag">22–25 juin 2026 · Abidjan</div>
             </div>
             @if($application->group_label)

@@ -8,7 +8,7 @@
             <h2 class="font-semibold text-sm text-noir-profond">Conversations</h2>
             @if($unreadTotal > 0)
             <span class="rounded-full px-2 py-0.5 text-[11px] font-bold text-blanc-pur"
-                  style="background: hsl(var(--orange-ivoire));">{{ $unreadTotal }}</span>
+                  style="background: hsl(var(--vert-ivoire));">{{ $unreadTotal }}</span>
             @endif
         </div>
 
@@ -16,7 +16,7 @@
         @if($participantWorkshops->isNotEmpty())
         <div class="px-3 py-2 border-b border-gray-100 bg-gray-50/60">
             <select wire:model="workshopId"
-                    class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-noir-profond focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200 cursor-pointer"
+                    class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-noir-profond focus:border-vert-ivoire focus:outline-none focus:ring-2 focus:ring-vert-soft-bg cursor-pointer"
                     aria-label="Démarrer une conversation avec un formateur">
                 <option value="">+ Nouvelle conversation…</option>
                 @foreach($participantWorkshops as $ws)
@@ -42,11 +42,11 @@
             @endphp
             <button wire:click="selectConversation({{ $conv->id }})"
                     class="w-full px-4 py-3 text-left transition-colors duration-150 cursor-pointer hover:bg-gray-50
-                           {{ $isActive ? 'bg-orange-50 border-l-[3px] border-orange-400' : '' }}"
+                           {{ $isActive ? 'bg-vert-soft-bg border-l-[3px] border-vert-ivoire' : '' }}"
                     aria-current="{{ $isActive ? 'true' : 'false' }}">
 
                 <div class="flex items-start justify-between gap-2">
-                    <span class="truncate text-sm font-semibold {{ $isActive ? 'text-orange-700' : 'text-slate-800' }}">
+                    <span class="truncate text-sm font-semibold {{ $isActive ? 'text-vert-ivoire' : 'text-slate-800' }}">
                         {{ $conv->workshop?->title ?? $conv->subject ?? 'Discussion' }}
                     </span>
                     <div class="flex shrink-0 flex-col items-end gap-1 ml-2">
@@ -57,7 +57,7 @@
                         @endif
                         @if($unread > 0)
                         <span class="rounded-full px-1.5 py-px text-[10px] font-bold text-blanc-pur"
-                              style="background: hsl(var(--orange-ivoire));">{{ $unread }}</span>
+                              style="background: hsl(var(--vert-ivoire));">{{ $unread }}</span>
                         @endif
                     </div>
                 </div>
@@ -99,7 +99,7 @@
         {{-- ── Header thread ──────────────────────────────────────── --}}
         <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4 bg-gray-50/50">
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-blanc-pur"
-                 style="background: hsl(var(--orange-ivoire));">
+                 style="background: hsl(var(--vert-ivoire));">
                 {{ mb_strtoupper(mb_substr($conv?->trainer?->first_name ?? 'H', 0, 1) . mb_substr($conv?->trainer?->last_name ?? 'I', 0, 1)) }}
             </div>
             <div class="min-w-0 flex-1">
@@ -168,7 +168,7 @@
                 <div class="flex flex-col {{ $isMine ? 'items-end' : 'items-start' }} max-w-[72%]">
                     {{-- Nom expéditeur --}}
                     <span class="text-[11px] font-medium mb-1 px-1
-                        {{ $isMine ? 'text-orange-600' : 'text-slate-500' }}">
+                        {{ $isMine ? 'text-vert-ivoire' : 'text-slate-500' }}">
                         {{ $senderName }}
                     </span>
 
@@ -177,7 +177,7 @@
                         {{ $isMine
                             ? 'rounded-br-sm text-blanc-pur'
                             : 'rounded-bl-sm bg-white text-slate-800 border border-gray-200' }}"
-                         style="{{ $isMine ? 'background: hsl(var(--orange-ivoire));' : '' }}">
+                         style="{{ $isMine ? 'background: hsl(var(--vert-ivoire));' : '' }}">
                         <p class="text-sm leading-relaxed whitespace-pre-wrap break-words" style="max-width: 52ch;">
                             {{ $msg['body'] }}
                         </p>
@@ -201,7 +201,7 @@
                 {{-- Avatar (droite = moi) --}}
                 @if($isMine)
                 <div class="shrink-0 h-8 w-8 rounded-full flex items-center justify-center text-[11px] font-bold text-blanc-pur mb-0.5"
-                     style="background: hsl(var(--orange-brule));"
+                     style="background: hsl(var(--vert-fonce));"
                      aria-hidden="true">
                     {{ $initials }}
                 </div>
@@ -230,7 +230,7 @@
                               rows="3"
                               maxlength="2000"
                               placeholder="Écrivez votre message… (Ctrl+Entrée pour envoyer)"
-                              class="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 leading-relaxed min-h-[80px] max-h-48"
+                              class="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg leading-relaxed min-h-[80px] max-h-48"
                               aria-label="Zone de saisie du message"
                               style="field-sizing: content;"></textarea>
                     @error('newMessage')

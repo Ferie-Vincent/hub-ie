@@ -52,7 +52,7 @@
         'under_review' => ['pill' => 'bg-indigo-100 text-indigo-700',    'dot' => 'bg-indigo-500'],
         'shortlisted'  => ['pill' => 'bg-purple-100 text-purple-700',    'dot' => 'bg-purple-500'],
         'accepted'     => ['pill' => 'bg-emerald-100 text-emerald-700',  'dot' => 'bg-emerald-500'],
-        'waitlisted'   => ['pill' => 'bg-orange-100 text-orange-700',    'dot' => 'bg-orange-500'],
+        'waitlisted'   => ['pill' => 'bg-orange-100 text-vert-ivoire',    'dot' => 'bg-vert-soft-bg0'],
         'rejected'     => ['pill' => 'bg-red-100 text-red-700',          'dot' => 'bg-red-500'],
         'withdrawn'    => ['pill' => 'bg-gray-100 text-gray-600',        'dot' => 'bg-gray-400'],
     ];
@@ -100,7 +100,7 @@
     </div>
     {{-- Accent radial orange --}}
     <div class="absolute -top-16 -right-16 h-56 w-56 rounded-full opacity-20 blur-3xl pointer-events-none"
-         style="background: hsl(var(--orange-ivoire));" aria-hidden="true"></div>
+         style="background: hsl(var(--vert-ivoire));" aria-hidden="true"></div>
     <div class="absolute -bottom-10 -left-10 h-40 w-40 rounded-full opacity-10 blur-2xl pointer-events-none"
          style="background: hsl(var(--vert-ivoire));" aria-hidden="true"></div>
     @endif
@@ -109,8 +109,8 @@
         {{-- Avatar initiales --}}
         <div class="h-16 w-16 shrink-0 rounded-2xl flex items-center justify-center text-xl font-black shadow-lg"
              style="{{ $isAccepted
-                 ? 'background: hsl(var(--orange-ivoire)); color: white;'
-                 : 'background: hsl(var(--orange-soft-bg)); color: hsl(var(--orange-brule));' }}">
+                 ? 'background: hsl(var(--vert-ivoire)); color: white;'
+                 : 'background: hsl(var(--orange-soft-bg)); color: hsl(var(--vert-fonce));' }}">
             {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
         </div>
 
@@ -135,7 +135,7 @@
                 </span>
                 @if($isAccepted && $app->group_label)
                 <span class="rounded-full px-3 py-1 text-xs font-bold"
-                      style="background: hsl(var(--orange-ivoire)/0.2); color: hsl(var(--orange-ivoire));">
+                      style="background: hsl(var(--vert-ivoire)/0.2); color: hsl(var(--vert-ivoire));">
                     Groupe {{ $app->group_label }}
                 </span>
                 @endif
@@ -147,7 +147,7 @@
         {{-- Badge mini statut --}}
         <div class="shrink-0 text-center">
             <div class="rounded-2xl px-5 py-3 text-center"
-                 style="background: hsl(var(--orange-ivoire)/0.15); border: 1px solid hsl(var(--orange-ivoire)/0.3);">
+                 style="background: hsl(var(--vert-ivoire)/0.15); border: 1px solid hsl(var(--vert-ivoire)/0.3);">
                 <p class="font-mono font-black text-2xl tracking-[0.3em] text-white">{{ $app->check_in_code }}</p>
                 <p class="text-[10px] text-white/40 uppercase tracking-widest mt-0.5">Code d'accès</p>
             </div>
@@ -189,7 +189,7 @@
 <div class="rounded-3xl bg-white border-2 border-dashed border-gray-200 p-12 text-center shadow-sm">
     <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5"
          style="background: hsl(var(--orange-soft-bg));">
-        <svg class="w-8 h-8" style="color: hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-8 h-8" style="color: hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
     </div>
@@ -233,7 +233,7 @@
             <div class="flex flex-col items-center gap-1.5">
                 <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300
                     @if($done) text-white @elseif($neg) bg-red-500 text-white @elseif($active) text-white ring-4 @else bg-gray-100 text-gray-400 @endif"
-                     style="@if($done) background:hsl(var(--vert-ivoire)); @elseif($active) background:hsl(var(--orange-ivoire)); ring-color:hsl(var(--orange-ivoire)/0.2); @endif">
+                     style="@if($done) background:hsl(var(--vert-ivoire)); @elseif($active) background:hsl(var(--vert-ivoire)); ring-color:hsl(var(--vert-ivoire)/0.2); @endif">
                     @if($done)
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                     @elseif($neg)
@@ -270,8 +270,8 @@
         <div class="px-8 py-8">
             <div class="flex items-start gap-2 mb-6">
                 <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest"
-                      style="color: hsl(var(--orange-ivoire));">
-                    <span class="h-2 w-2 rounded-full animate-pulse" style="background:hsl(var(--orange-ivoire));"></span>
+                      style="color: hsl(var(--vert-ivoire));">
+                    <span class="h-2 w-2 rounded-full animate-pulse" style="background:hsl(var(--vert-ivoire));"></span>
                     Badge d'entrée
                 </span>
             </div>
@@ -298,7 +298,7 @@
                     </div>
                     @if($app->group_label)
                     <div class="inline-block rounded-2xl px-6 py-2 font-bold text-sm"
-                         style="background:hsl(var(--orange-ivoire)/0.15); color:hsl(var(--orange-ivoire)); border:1px solid hsl(var(--orange-ivoire)/0.3);">
+                         style="background:hsl(var(--vert-ivoire)/0.15); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.3);">
                         Groupe {{ $app->group_label }}
                     </div>
                     @endif
@@ -321,12 +321,12 @@
         <div class="flex items-start justify-between">
             <div class="h-12 w-12 rounded-2xl flex items-center justify-center"
                  style="background: hsl(var(--orange-soft-bg));">
-                <svg class="w-6 h-6" style="color:hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="w-6 h-6" style="color:hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                 </svg>
             </div>
             <span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold"
-                  style="background:hsl(var(--orange-ivoire)/0.12);color:hsl(var(--orange-brule));">
+                  style="background:hsl(var(--vert-ivoire)/0.12);color:hsl(var(--vert-fonce));">
                 Mon atelier
             </span>
         </div>
@@ -338,7 +338,7 @@
         </div>
         <a href="{{ route('participant.downloads') }}"
            class="inline-flex items-center gap-1 text-xs font-semibold mt-auto cursor-pointer"
-           style="color:hsl(var(--orange-ivoire));">
+           style="color:hsl(var(--vert-ivoire));">
             Voir les documents
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -361,14 +361,14 @@
                 </svg>
                 @if($unreadCount > 0)
                 <span class="absolute -top-1 -right-1 h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold text-blanc-pur"
-                      style="background:hsl(var(--orange-ivoire));">{{ min($unreadCount, 9) }}</span>
+                      style="background:hsl(var(--vert-ivoire));">{{ min($unreadCount, 9) }}</span>
                 @endif
             </div>
         </div>
         <div>
             <p class="text-lg font-bold text-noir-profond mb-1">Messages</p>
             <p class="text-sm {{ $unreadCount > 0 ? 'font-semibold' : 'text-gris-500' }}"
-               style="{{ $unreadCount > 0 ? 'color:hsl(var(--orange-brule));' : '' }}">
+               style="{{ $unreadCount > 0 ? 'color:hsl(var(--vert-fonce));' : '' }}">
                 @if($unreadCount > 0)
                     {{ $unreadCount }} message{{ $unreadCount > 1 ? 's' : '' }} non lu{{ $unreadCount > 1 ? 's' : '' }}
                 @else
@@ -390,13 +390,13 @@
         <div class="flex items-center justify-between mb-5">
             <div>
                 <h2 class="font-serif font-bold text-lg text-noir-profond">
-                    Mon groupe · <span style="color:hsl(var(--orange-ivoire));">{{ $app->group_label }}</span>
+                    Mon groupe · <span style="color:hsl(var(--vert-ivoire));">{{ $app->group_label }}</span>
                 </h2>
                 <p class="text-sm text-gris-500 mt-0.5">{{ $groupMembers->count() + 1 }} participant{{ $groupMembers->count() + 1 > 1 ? 's' : '' }}</p>
             </div>
             <a href="{{ route('participant.messages') }}"
                class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-all hover:scale-105 cursor-pointer"
-               style="background:hsl(var(--orange-soft-bg));color:hsl(var(--orange-brule));">
+               style="background:hsl(var(--orange-soft-bg));color:hsl(var(--vert-fonce));">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                 </svg>
@@ -409,7 +409,7 @@
             {{-- Moi --}}
             <div class="flex flex-col items-center gap-1.5 cursor-default" title="{{ $user->first_name }} {{ $user->last_name }} (Vous)">
                 <div class="relative h-12 w-12 rounded-2xl flex items-center justify-center text-sm font-bold text-blanc-pur shadow-sm"
-                     style="background:hsl(var(--orange-ivoire));">
+                     style="background:hsl(var(--vert-ivoire));">
                     {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
                     <span class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 border-2 border-white"></span>
                 </div>
@@ -467,7 +467,7 @@
             {{-- ── Groupe Identité ──────────────────────────────── --}}
             <div class="px-6 py-5">
                 <p class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mb-4"
-                   style="color:hsl(var(--orange-ivoire));">
+                   style="color:hsl(var(--vert-ivoire));">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>

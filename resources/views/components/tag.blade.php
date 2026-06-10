@@ -1,7 +1,7 @@
 @props(['color' => 'orange'])
 @php
 $styles = [
-    'orange' => 'background:hsl(var(--orange-soft-bg));color:hsl(var(--orange-brule))',
+    'orange' => 'background:hsl(var(--orange-soft-bg));color:hsl(var(--vert-fonce))',
     'vert'   => 'background:hsl(var(--vert-soft-bg));color:hsl(141 100% 22%)',
     'sable'  => 'background:hsl(36 36% 88%);color:hsl(24 5% 33%)',
     'violet' => 'background:hsl(258 52% 93%);color:hsl(258 48% 32%)',

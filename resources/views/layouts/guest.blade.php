@@ -41,7 +41,7 @@
             outline: none;
             transition: border-color 0.18s;
         }
-        .auth-input:focus { border-bottom-color: hsl(var(--orange-ivoire)); outline: none !important; box-shadow: none !important; }
+        .auth-input:focus { border-bottom-color: hsl(var(--vert-ivoire)); outline: none !important; box-shadow: none !important; }
         .auth-input:focus-visible { outline: none !important; outline-offset: 0 !important; }
         .auth-input::placeholder { color: rgba(15,12,8,0.25); font-size: 0.875rem; }
 
@@ -58,7 +58,7 @@
         .auth-btn {
             width: 100%;
             padding: 0.9375rem;
-            background: hsl(var(--orange-ivoire));
+            background: hsl(var(--vert-ivoire));
             color: #fff;
             font-weight: 700;
             font-size: 0.875rem;
@@ -157,14 +157,7 @@
         {{-- En-tête brand --}}
         <div style="padding: 2.25rem 3rem 0;">
             <a href="{{ url('/') }}" style="display:inline-flex; align-items:center; gap:0.75rem; text-decoration:none;">
-                <svg width="40" height="40" viewBox="0 0 44 44" fill="none" aria-hidden="true">
-                    <rect width="44" height="44" rx="10" fill="hsl(var(--orange-ivoire))"/>
-                    <text x="22" y="30" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-0.5">HIE</text>
-                </svg>
-                <span style="font-family:'Manrope',sans-serif; font-weight:700; font-size:0.8125rem; line-height:1.3; color:#1A1208;">
-                    Hub Import-Export<br>
-                    <span style="font-weight:400; font-size:0.7rem; color:rgba(26,18,8,0.45);">2026 · Abidjan</span>
-                </span>
+                <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" style="height:40px; width:auto; object-fit:contain;">
             </a>
         </div>
 
@@ -173,7 +166,7 @@
 
             {{-- Titre --}}
             <div style="margin-bottom: 2.5rem;">
-                <p style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:hsl(var(--orange-ivoire)); margin-bottom:0.625rem;">
+                <p style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:hsl(var(--vert-ivoire)); margin-bottom:0.625rem;">
                     Espace sécurisé
                 </p>
                 <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.75rem,2.8vw,2.25rem); font-weight:900; letter-spacing:-0.025em; line-height:1.1; color:#1A1208; margin-bottom:0.625rem;">
@@ -193,7 +186,7 @@
         <div style="padding: 1.5rem 3rem; border-top: 1px solid rgba(15,12,8,0.07);">
             <a href="{{ url('/') }}"
                style="font-size:0.8rem; color:rgba(15,12,8,0.35); text-decoration:none; transition:color 0.15s;"
-               onmouseover="this.style.color='hsl(var(--orange-ivoire))'"
+               onmouseover="this.style.color='hsl(var(--vert-ivoire))'"
                onmouseout="this.style.color='rgba(15,12,8,0.35)'">
                 ← Retour à l'accueil
             </a>

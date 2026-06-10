@@ -32,7 +32,7 @@
 
         <button type="submit"
                 class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all hover:opacity-90"
-                style="background:hsl(var(--orange-ivoire));">
+                style="background:hsl(var(--vert-ivoire));">
             Réinitialiser le mot de passe
         </button>
     </form>

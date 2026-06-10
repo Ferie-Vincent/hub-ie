@@ -25,7 +25,7 @@
         <div class="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
             <div class="h-8 w-8 rounded-xl flex items-center justify-center"
                  style="background:hsl(var(--orange-soft-bg));">
-                <svg class="w-4 h-4" style="color:hsl(var(--orange-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4" style="color:hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
             </div>
@@ -43,7 +43,7 @@
                         <img src="{{ $photo->temporaryUrl() }}"
                              alt="Aperçu de votre photo"
                              class="h-24 w-24 rounded-2xl object-cover shadow-md ring-2 ring-orange-200">
-                        <span class="absolute -top-1.5 -right-1.5 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                        <span class="absolute -top-1.5 -right-1.5 rounded-full bg-vert-soft-bg0 px-2 py-0.5 text-[10px] font-bold text-white">
                             Nouveau
                         </span>
                     @elseif($user->photo_path)
@@ -52,7 +52,7 @@
                              class="h-24 w-24 rounded-2xl object-cover shadow-md">
                     @else
                         <div class="h-24 w-24 rounded-2xl flex items-center justify-center text-2xl font-black text-blanc-pur shadow-md"
-                             style="background:hsl(var(--orange-ivoire));">
+                             style="background:hsl(var(--vert-ivoire));">
                             {{ mb_strtoupper(mb_substr($user->first_name, 0, 1) . mb_substr($user->last_name, 0, 1)) }}
                         </div>
                     @endif
@@ -66,7 +66,7 @@
                     </div>
                     <div class="flex flex-wrap justify-center sm:justify-start gap-3">
                         <label class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold cursor-pointer transition-all hover:scale-105"
-                               style="background:hsl(var(--orange-soft-bg));color:hsl(var(--orange-brule));">
+                               style="background:hsl(var(--orange-soft-bg));color:hsl(var(--vert-fonce));">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
@@ -101,7 +101,7 @@
                         Prénom <span class="text-red-400">*</span>
                     </label>
                     <input id="firstName" type="text" wire:model="firstName"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors
                                   @error('firstName') border-red-300 bg-red-50 @enderror"
                            autocomplete="given-name">
                     @error('firstName')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
@@ -113,7 +113,7 @@
                         Nom <span class="text-red-400">*</span>
                     </label>
                     <input id="lastName" type="text" wire:model="lastName"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors
                                   @error('lastName') border-red-300 bg-red-50 @enderror"
                            autocomplete="family-name">
                     @error('lastName')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
@@ -125,7 +125,7 @@
                         Email <span class="text-red-400">*</span>
                     </label>
                     <input id="email" type="email" wire:model="email"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors
                                   @error('email') border-red-300 bg-red-50 @enderror"
                            autocomplete="email">
                     @error('email')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
@@ -138,7 +138,7 @@
                     </label>
                     <input id="phone" type="tel" wire:model="phone"
                            placeholder="+225 07 00 00 00 00"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors"
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors"
                            autocomplete="tel">
                     @error('phone')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
                 </div>
@@ -149,7 +149,7 @@
                         Date de naissance
                     </label>
                     <input id="birthDate" type="date" wire:model="birthDate"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors"
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors"
                            autocomplete="bday">
                     @error('birthDate')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
                 </div>
@@ -160,7 +160,7 @@
                         Genre
                     </label>
                     <select id="gender" wire:model="gender"
-                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors cursor-pointer">
+                            class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors cursor-pointer">
                         <option value="">— Sélectionner —</option>
                         <option value="M">Masculin</option>
                         <option value="F">Féminin</option>
@@ -175,7 +175,7 @@
                         Ville
                     </label>
                     <input id="city" type="text" wire:model="city"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors"
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors"
                            autocomplete="address-level2">
                     @error('city')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
                 </div>
@@ -186,7 +186,7 @@
                         Nationalité
                     </label>
                     <input id="nationality" type="text" wire:model="nationality"
-                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-orange-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-200 transition-colors">
+                           class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-slate-800 focus:border-vert-ivoire focus:bg-white focus:outline-none focus:ring-2 focus:ring-vert-soft-bg transition-colors">
                     @error('nationality')<p class="mt-1 text-xs text-red-500" role="alert">{{ $message }}</p>@enderror
                 </div>
 

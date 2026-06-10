@@ -72,7 +72,7 @@
             width: 24px;
             height: 2.5px;
             border-radius: 9999px;
-            background: hsl(var(--orange-ivoire));
+            background: hsl(var(--vert-ivoire));
         }
     </style>
 
@@ -115,10 +115,7 @@
 
         {{-- Logo --}}
         <a href="{{ route('home') }}" class="flex items-center gap-3 flex-shrink-0">
-            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true">
-                <rect width="44" height="44" rx="10" fill="hsl(var(--orange-ivoire))"/>
-                <text x="22" y="30" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-0.5">HIE</text>
-            </svg>
+            <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" class="h-11 w-auto object-contain">
             <span
                 :class="scrolled ? 'text-noir-profond' : 'text-blanc-pur'"
                 class="font-manrope font-bold text-sm leading-tight transition-colors duration-300 hidden sm:block"
@@ -144,7 +141,7 @@
                 href="{{ $href }}"
                 @if($isActive) aria-current="page" @endif
                 :class="scrolled
-                    ? '{{ $isActive ? 'text-orange-ivoire font-bold' : 'text-noir-profond hover:text-orange-ivoire' }}'
+                    ? '{{ $isActive ? 'text-vert-ivoire font-bold' : 'text-noir-profond hover:text-vert-ivoire' }}'
                     : '{{ $isActive ? 'text-blanc-pur font-bold' : 'text-blanc-pur/80 hover:text-blanc-pur' }}'"
                 class="hub-tab-hover px-4 py-2 text-sm transition-colors duration-200 relative {{ $isActive ? 'nav-active' : '' }}"
             >{{ $label }}
@@ -223,7 +220,7 @@
             @php $isActive = request()->routeIs($routeName); @endphp
             <a href="{{ $href }}"
                @click="open = false"
-               :class="scrolled ? '{{ $isActive ? 'text-orange-ivoire font-bold' : 'text-noir-profond' }}' : '{{ $isActive ? 'text-orange-ivoire font-bold' : 'text-blanc-pur/90' }}'"
+               :class="scrolled ? '{{ $isActive ? 'text-vert-ivoire font-bold' : 'text-noir-profond' }}' : '{{ $isActive ? 'text-vert-ivoire font-bold' : 'text-blanc-pur/90' }}'"
                class="px-3 py-3 text-sm rounded-lg hover:bg-blanc-pur/10 transition-colors">
                 {{ $label }}
             </a>
@@ -273,11 +270,7 @@
             {{-- Colonne Brand --}}
             <div class="lg:col-span-1">
                 <div class="flex items-center gap-3 mb-5">
-                    <svg width="36" height="36" viewBox="0 0 44 44" fill="none" aria-hidden="true">
-                        <rect width="44" height="44" rx="10" fill="hsl(var(--orange-ivoire))"/>
-                        <text x="22" y="30" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-0.5">HIE</text>
-                    </svg>
-                    <span class="font-manrope font-bold text-sm text-blanc-pur">Hub Import-Export 2026</span>
+                    <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" class="h-9 w-auto object-contain">
                 </div>
                 <p class="text-sm text-blanc-pur/60 leading-relaxed mb-4">
                     Le rendez-vous stratégique des acteurs du commerce extérieur ivoirien. Sous le haut patronage du Ministre du Commerce, de l'Industrie et de l'Artisanat.

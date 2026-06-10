@@ -3,9 +3,9 @@
 
     <div class="text-center mb-6">
         <div class="inline-flex items-center justify-center w-14 h-14 rounded-full mb-4"
-             style="background:hsl(var(--orange-ivoire)/0.15);">
+             style="background:hsl(var(--vert-ivoire)/0.15);">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 style="color:hsl(var(--orange-ivoire));">
+                 style="color:hsl(var(--vert-ivoire));">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
             </svg>
@@ -28,7 +28,7 @@
         @csrf
         <button type="submit"
                 class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-all hover:opacity-90"
-                style="background:hsl(var(--orange-ivoire));">
+                style="background:hsl(var(--vert-ivoire));">
             Renvoyer l'e-mail de vérification
         </button>
     </form>

@@ -28,7 +28,7 @@
     {{-- Filet de couleur en bas (orange → vert, couleurs du drapeau) --}}
     <div class="absolute bottom-0 left-0 right-0 h-[3px]" aria-hidden="true"
          style="background: linear-gradient(to right,
-             hsl(var(--orange-ivoire)),
+             hsl(var(--vert-ivoire)),
              hsl(var(--blanc-pur) / 0.4) 50%,
              hsl(var(--vert-ivoire)));"></div>
 
