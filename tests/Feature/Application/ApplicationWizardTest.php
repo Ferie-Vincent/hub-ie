@@ -16,6 +16,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->artisan('db:seed', ['--class' => 'RolesSeeder']);
     $this->artisan('db:seed', ['--class' => 'WorkshopsSeeder']);
+    $this->artisan('db:seed', ['--class' => 'EditionSeeder']);
 });
 
 // ── Critère 1 — soumission complète → statut received ──────────────────────
@@ -59,7 +60,7 @@ test('full 4-step submission transitions application to received', function () {
     // Étape 3
     $component
         ->set('motivation', str_repeat('Motivation valide. ', 28)) // ~500 chars
-        ->set('chosenWorkshops', [$workshop->id])
+        ->set('chosenWorkshop', $workshop->id)
         ->set('referralSource', 'Web')
         ->call('nextStep')
         ->assertHasNoErrors()
@@ -98,7 +99,7 @@ test('motivation shorter than 500 chars fails validation', function () {
         ->test(ApplicationWizard::class)
         ->set('step', 3)
         ->set('motivation', 'Trop court.')
-        ->set('chosenWorkshops', [1])
+        ->set('chosenWorkshop', 1)
         ->set('referralSource', 'Web')
         ->call('nextStep')
         ->assertHasErrors(['motivation']);
@@ -112,15 +113,15 @@ test('motivation longer than 1500 chars fails validation', function () {
         ->test(ApplicationWizard::class)
         ->set('step', 3)
         ->set('motivation', str_repeat('A', 1501))
-        ->set('chosenWorkshops', [1])
+        ->set('chosenWorkshop', 1)
         ->set('referralSource', 'Web')
         ->call('nextStep')
         ->assertHasErrors(['motivation']);
 });
 
-// ── Critère 4 — max 2 ateliers ──────────────────────────────────────────────
+// ── Critère 4 — atelier requis + doit exister ──────────────────────────────
 
-test('selecting 3 workshops fails step 3 validation', function () {
+test('non-existent workshop id fails step 3 validation', function () {
     $user = User::factory()->create(['is_active' => true, 'email_verified_at' => now()]);
     $user->assignRole('candidate');
 
@@ -128,10 +129,10 @@ test('selecting 3 workshops fails step 3 validation', function () {
         ->test(ApplicationWizard::class)
         ->set('step', 3)
         ->set('motivation', str_repeat('Motivation valide. ', 28))
-        ->set('chosenWorkshops', [1, 2, 3])
+        ->set('chosenWorkshop', 999999)
         ->set('referralSource', 'Web')
         ->call('nextStep')
-        ->assertHasErrors(['chosenWorkshops']);
+        ->assertHasErrors(['chosenWorkshop']);
 });
 
 // ── Critère 5 — RGPD consent requis ────────────────────────────────────────

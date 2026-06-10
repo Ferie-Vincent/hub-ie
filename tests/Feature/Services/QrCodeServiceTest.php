@@ -1,8 +1,11 @@
 <?php
 
-use App\Models\Application;
+use App\Models\Enrollment;
+use App\Models\User;
+use App\Models\Workshop;
 use App\Services\QrCodeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
 
@@ -16,13 +19,23 @@ test('generateUniqueQrToken returns 48-char hex string', function () {
         ->and(ctype_xdigit($token))->toBeTrue();
 });
 
-test('generateUniqueQrToken never collides across 100 applications', function () {
+test('generateUniqueQrToken never collides across 100 enrollments', function () {
     $service = new QrCodeService;
+    $user = User::factory()->create();
+    $workshop = Workshop::factory()->create();
     $tokens = [];
 
     for ($i = 0; $i < 100; $i++) {
         $token = $service->generateUniqueQrToken();
-        Application::factory()->create(['qr_token' => $token]);
+        Enrollment::create([
+            'user_id' => $user->id,
+            'workshop_id' => $workshop->id,
+            'status' => 'enrolled',
+            'badge_status' => 'valid',
+            'qr_token' => $token,
+            'cancellation_token' => Str::random(64).'_'.$i,
+            'enrolled_at' => now(),
+        ]);
         $tokens[] = $token;
     }
 
@@ -45,15 +58,4 @@ test('generateUniqueCheckInCode never starts with zero', function () {
     $code = $service->generateUniqueCheckInCode();
 
     expect((string) $code)->not->toStartWith('0');
-});
-
-// ── Signed URL ───────────────────────────────────────────────────────────────
-
-test('generateSignedUrl returns a valid URL containing the token', function () {
-    $service = new QrCodeService;
-    $token = $service->generateUniqueQrToken();
-    $url = $service->generateSignedUrl($token);
-
-    expect($url)->toContain($token)
-        ->and(filter_var($url, FILTER_VALIDATE_URL))->not->toBeFalse();
 });
