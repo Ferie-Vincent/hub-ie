@@ -8,7 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\SitemapController;
-use App\Livewire\Enrollment\SessionPicker;
 use App\Livewire\Participant\Badge as ParticipantBadge;
 use App\Livewire\Participant\Downloads as ParticipantDownloads;
 use App\Livewire\Participant\Messages as ParticipantMessages;
@@ -32,9 +31,7 @@ Route::get('/mentions-legales', fn () => view('public.mentions-legales'))->name(
 Route::get('/politique-de-confidentialite', fn () => view('public.politique-confidentialite'))->name('politique-confidentialite');
 Route::get('/conditions-utilisation', fn () => view('public.conditions-utilisation'))->name('conditions-utilisation');
 
-Route::get('/inscription', SessionPicker::class)
-    ->middleware(['auth', 'verified'])
-    ->name('inscription');
+Route::get('/inscription', fn () => view('public.inscription'))->name('inscription');
 
 // ── Newsletter (double opt-in, BRIEF §IV.6) ──────────────────────────────────
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->middleware('throttle:newsletter')->name('newsletter.subscribe');
