@@ -23,8 +23,8 @@ class AttendanceWidget extends ChartWidget
 
         foreach ($dates as $date) {
             $counts[] = Attendance::whereDate('event_date', $date)
-                ->distinct('application_id')
-                ->count('application_id');
+                ->distinct('enrollment_id')
+                ->count('enrollment_id');
         }
 
         return [
