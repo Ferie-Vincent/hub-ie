@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PreInscription extends Model
 {
     protected $fillable = [
+        'user_id',
         'nom',
         'prenom',
         'email',
@@ -17,5 +19,17 @@ class PreInscription extends Model
         'atelier',
         'motivation_projet',
         'motivation_objectifs',
+        'invitation_token',
+        'invitation_sent_at',
     ];
+
+    protected function casts(): array
+    {
+        return ['invitation_sent_at' => 'datetime'];
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
