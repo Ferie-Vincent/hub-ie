@@ -14,6 +14,7 @@
         --orange-soft:    26 62% 62%;
         --orange-soft-bg: 26 60% 95%;
         --vert-ivoire:    147 100% 30%;
+        --vert-fonce:     141 100% 22%;
         --vert-soft:      147 55% 55%;
         --vert-soft-bg:   147 50% 94%;
         --sable:          33 35% 87%;
@@ -91,7 +92,7 @@
     /* ── Bouton CTA (BRIEF §II.5.13 — btn-fill) ────────────────────────── */
     .btn-fill {
         @apply relative inline-flex items-center justify-center overflow-hidden px-6 py-3 font-semibold text-white rounded-xl;
-        background: hsl(var(--orange-ivoire));
+        background: hsl(var(--vert-ivoire));
         transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
                     transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                     box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -99,18 +100,18 @@
 
     .btn-fill:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 28px hsl(var(--orange-ivoire) / 0.4);
+        box-shadow: 0 12px 28px hsl(var(--vert-ivoire) / 0.4);
     }
 
     .btn-fill:active {
         transform: translateY(-1px);
-        box-shadow: 0 6px 14px hsl(var(--orange-ivoire) / 0.3);
+        box-shadow: 0 6px 14px hsl(var(--vert-ivoire) / 0.3);
     }
 
     .btn-fill::before {
         content: '';
         @apply absolute inset-0;
-        background: hsl(var(--orange-brule));
+        background: hsl(var(--vert-fonce));
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -328,7 +329,7 @@
     .hub-stat-lift:hover {
         transform: translateY(-6px) scale(1.03);
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-        border-color: hsl(var(--orange-ivoire) / 0.25);
+        border-color: hsl(var(--vert-ivoire) / 0.25);
     }
 
     /* Items marquee partenaires */
@@ -360,7 +361,7 @@
     }
     .hub-footer-link:hover {
         padding-left: 8px;
-        color: hsl(var(--orange-soft));
+        color: hsl(var(--vert-soft));
         opacity: 1;
     }
 
@@ -424,7 +425,7 @@
         border: 2px solid hsl(var(--sable-doux));
     }
     .form-input:focus {
-        border-color: hsl(var(--orange-ivoire));
+        border-color: hsl(var(--vert-ivoire));
     }
     .form-error {
         @apply text-red-600 text-xs mt-1;

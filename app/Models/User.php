@@ -74,6 +74,17 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
         return $this->first_name.' '.$this->last_name;
     }
 
+    public function enrollment(): HasOne
+    {
+        return $this->hasOne(Enrollment::class)
+            ->whereIn('status', ['enrolled', 'waitlisted']);
+    }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
     public function application(): HasOne
     {
         return $this->hasOne(Application::class);

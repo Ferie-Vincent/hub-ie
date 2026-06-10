@@ -4,7 +4,7 @@
     'title'       => '',
     'description' => '',
     'iconPath'    => '',
-    'accent'      => '--orange-ivoire',
+    'accent'      => '--vert-ivoire',
     'href'        => null,
 ])
 <div class="v10-format-card group">

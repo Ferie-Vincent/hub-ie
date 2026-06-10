@@ -49,9 +49,9 @@
             line-height: 0.88;
             letter-spacing: -0.04em;
             background: linear-gradient(160deg,
-                hsl(var(--orange-ivoire)) 0%,
-                hsl(var(--orange-brule)) 60%,
-                hsl(var(--orange-ivoire) / 0.20) 100%);
+                hsl(var(--vert-ivoire)) 0%,
+                hsl(var(--vert-fonce)) 60%,
+                hsl(var(--vert-ivoire) / 0.20) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -72,8 +72,8 @@
             transition: color 0.2s, border-color 0.2s;
         }
         .stab.active {
-            border-bottom-color: hsl(var(--orange-ivoire));
-            color: hsl(var(--orange-ivoire));
+            border-bottom-color: hsl(var(--vert-ivoire));
+            color: hsl(var(--vert-ivoire));
             font-weight: 800;
         }
         .stab.done {
@@ -98,7 +98,7 @@
             appearance: none;
         }
         .f-input:focus,
-        .f-input:focus-visible { outline: none; outline: 0; box-shadow: none; border-bottom-color: hsl(var(--orange-ivoire)); }
+        .f-input:focus-visible { outline: none; outline: 0; box-shadow: none; border-bottom-color: hsl(var(--vert-ivoire)); }
         .f-input:focus-within  { outline: none; }
         .f-input.err    { border-bottom-color: #ef4444; }
         .f-input::placeholder { color: rgba(15,12,8,0.25); font-size: 0.875rem; }
@@ -120,7 +120,7 @@
             font-weight: 800;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: hsl(var(--orange-ivoire));
+            color: hsl(var(--vert-ivoire));
             margin-bottom: 0.25rem;
         }
 
@@ -136,7 +136,7 @@
             padding: 1rem 1.125rem 0.875rem;
             background: #fff;
             border: 1.5px solid rgba(15,12,8,0.08);
-            border-top: 2px solid color-mix(in srgb, var(--accent, hsl(var(--orange-ivoire))) 55%, #fff);
+            border-top: 2px solid color-mix(in srgb, var(--accent, hsl(var(--vert-ivoire))) 55%, #fff);
             border-radius: 1.125rem;
             cursor: pointer;
             overflow: hidden;
@@ -162,7 +162,7 @@
             border-radius: 0.5rem;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
-            background: color-mix(in srgb, var(--accent, hsl(var(--orange-ivoire))) 12%, #fff);
+            background: color-mix(in srgb, var(--accent, hsl(var(--vert-ivoire))) 12%, #fff);
         }
         /* tag chips */
         .a-tag {
@@ -191,17 +191,17 @@
             transition: gap 0.15s, color 0.15s;
         }
         .a-card:hover .a-cta, .a-card.sel .a-cta {
-            color: var(--accent, hsl(var(--orange-ivoire)));
+            color: var(--accent, hsl(var(--vert-ivoire)));
             gap: 0.5rem;
         }
 
         .a-card:hover {
-            border-color: var(--accent, hsl(var(--orange-ivoire)));
+            border-color: var(--accent, hsl(var(--vert-ivoire)));
             box-shadow: 0 12px 40px rgba(15,12,8,0.10), 0 3px 10px rgba(15,12,8,0.06);
             transform: translateY(-5px);
         }
         .a-card.sel {
-            border-color: color-mix(in srgb, var(--accent, hsl(var(--orange-ivoire))) 50%, #ddd);
+            border-color: color-mix(in srgb, var(--accent, hsl(var(--vert-ivoire))) 50%, #ddd);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 8%, transparent), 0 10px 32px rgba(15,12,8,0.09);
             animation: card-float 3s ease-in-out infinite;
         }
@@ -234,8 +234,8 @@
 
         /* ── Info-box ───────────────────────────── */
         .info-box {
-            border-left: 3px solid hsl(var(--orange-ivoire));
-            background: hsl(var(--orange-ivoire) / 0.05);
+            border-left: 3px solid hsl(var(--vert-ivoire));
+            background: hsl(var(--vert-ivoire) / 0.05);
             border-radius: 0 0.625rem 0.625rem 0;
             padding: 0.875rem 1.125rem;
         }
@@ -268,7 +268,7 @@
 
         .btn-next {
             display: inline-flex; align-items: center; gap: 0.5rem;
-            background: hsl(var(--orange-ivoire));
+            background: hsl(var(--vert-ivoire));
             color: #fff;
             font-size: 0.8125rem; font-weight: 700;
             letter-spacing: 0.06em; text-transform: uppercase;
@@ -431,16 +431,12 @@ $ateliers = [
         {{-- En-tête brand + retour --}}
         <div class="flex items-center justify-between px-10 py-7" style="border-bottom: 1px solid rgba(50,35,20,0.10);">
             <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                     style="background: hsl(var(--orange-ivoire));">
-                    <span class="text-white font-mono font-bold" style="font-size: 10px; letter-spacing: -0.02em;">HIE</span>
-                </div>
-                <span class="text-[10px] font-bold uppercase tracking-[0.16em] leading-none" style="color: rgba(50,35,20,0.45);">Hub Import-Export</span>
+                <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" style="height:32px; width:auto; object-fit:contain; flex-shrink:0;">
             </a>
             <a href="{{ route('home') }}"
                class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors"
                style="color: rgba(50,35,20,0.35);"
-               onmouseover="this.style.color='hsl(var(--orange-ivoire))'"
+               onmouseover="this.style.color='hsl(var(--vert-ivoire))'"
                onmouseout="this.style.color='rgba(50,35,20,0.35)'">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
                 Retour au site
@@ -451,7 +447,7 @@ $ateliers = [
         <div class="flex-1 flex flex-col px-10 py-10">
 
             <p class="text-[9px] font-mono font-bold uppercase tracking-[0.26em] mb-6"
-               style="color: hsl(var(--orange-ivoire));">Préinscription officielle</p>
+               style="color: hsl(var(--vert-ivoire));">Préinscription officielle</p>
 
             {{-- Grand numéro --}}
             <div class="step-giant" x-text="String(step).padStart(2,'0')">01</div>
@@ -470,12 +466,12 @@ $ateliers = [
             {{-- Badge atelier sélectionné (étapes 2+) --}}
             <div class="mt-7" x-show="step > 1 && form.atelier" x-cloak>
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
-                     style="background: hsl(var(--orange-ivoire)/0.10); border: 1px solid hsl(var(--orange-ivoire)/0.22);">
-                    <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="hsl(var(--orange-ivoire))" viewBox="0 0 24 24" stroke-width="2.5">
+                     style="background: hsl(var(--vert-ivoire)/0.10); border: 1px solid hsl(var(--vert-ivoire)/0.22);">
+                    <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="hsl(var(--vert-ivoire))" viewBox="0 0 24 24" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
                     <span class="text-[10px] font-bold uppercase tracking-[0.12em]"
-                          style="color: hsl(var(--orange-ivoire));"
+                          style="color: hsl(var(--vert-ivoire));"
                           x-text="form.atelier.replace(/-/g,' ')"></span>
                 </div>
             </div>
@@ -490,7 +486,7 @@ $ateliers = [
                  class="lg:hidden mt-auto pt-10 flex flex-col items-center gap-2"
                  aria-hidden="true">
                 <span style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:rgba(50,35,20,0.72); white-space:nowrap;">Faites défiler pour commencer</span>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--orange-brule))" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: bounce-down 1.3s ease-in-out infinite;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--vert-fonce))" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: bounce-down 1.3s ease-in-out infinite;">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
                 </svg>
             </div>
@@ -520,7 +516,7 @@ $ateliers = [
 
             <div class="h-0.5 rounded-full overflow-hidden" style="background: rgba(50,35,20,0.10);">
                 <div class="h-full rounded-full transition-all duration-500 ease-out"
-                     style="background: linear-gradient(to right, hsl(var(--orange-ivoire)), hsl(var(--orange-brule)));"
+                     style="background: linear-gradient(to right, hsl(var(--vert-ivoire)), hsl(var(--vert-fonce)));"
                      :style="'width:' + pct() + '%'"></div>
             </div>
         </div>
@@ -580,7 +576,7 @@ $ateliers = [
                 animation: done-rise 0.55s cubic-bezier(.22,1,.36,1) 0.42s both;
             ">
                 Félicitations&nbsp;!<br>
-                <span style="color: hsl(var(--orange-ivoire));">Votre dossier</span> est déposé.
+                <span style="color: hsl(var(--vert-ivoire));">Votre dossier</span> est déposé.
             </h1>
 
             {{-- Description --}}
@@ -653,20 +649,20 @@ $ateliers = [
                 {{-- ─── Étape 1 : Atelier ─────────── --}}
                 <div x-show="step === 1" class="flex flex-col flex-1">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="h-px w-7" style="background:hsl(var(--orange-ivoire));"></div>
+                        <div class="h-px w-7" style="background:hsl(var(--vert-ivoire));"></div>
                         <p class="text-[10px] font-mono font-bold uppercase tracking-[0.22em]"
-                           style="color:hsl(var(--orange-ivoire));">Étape 01 — Atelier</p>
+                           style="color:hsl(var(--vert-ivoire));">Étape 01 — Atelier</p>
                     </div>
                     <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.5rem,2.6vw,2.2rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08; color:#1A1208;" class="mb-0.5">
                         Quel atelier souhaitez-vous
                     </h1>
                     <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.5rem,2.6vw,2.2rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08;" class="mb-4">
-                        <em style="font-style:italic; color:hsl(var(--orange-ivoire)); font-variation-settings:'opsz' 144,'SOFT' 100;">intégrer ?</em>
+                        <em style="font-style:italic; color:hsl(var(--vert-ivoire)); font-variation-settings:'opsz' 144,'SOFT' 100;">intégrer ?</em>
                     </h1>
 
                     <div class="info-box mb-4 text-sm leading-relaxed" style="color:rgba(15,12,8,0.68);">
                         Sélectionnez <strong>un seul atelier</strong>. Ce choix conditionne le programme qui vous sera attribué si votre candidature est retenue.
-                        <span class="font-semibold" style="color:hsl(var(--orange-ivoire));"> Cochez celui auquel vous souhaitez participer.</span>
+                        <span class="font-semibold" style="color:hsl(var(--vert-ivoire));"> Cochez celui auquel vous souhaitez participer.</span>
                     </div>
 
                     <div class="ateliers-grid flex-1 grid grid-cols-1 md:grid-cols-2 gap-3" style="min-height: 0;">
@@ -738,12 +734,12 @@ $ateliers = [
                 <div x-show="step === 2" x-cloak class="flex flex-col flex-1">
                     <div>
                         <div class="flex items-center gap-3 mb-5">
-                            <div class="h-px w-7" style="background:hsl(var(--orange-ivoire));"></div>
+                            <div class="h-px w-7" style="background:hsl(var(--vert-ivoire));"></div>
                             <p class="text-[10px] font-mono font-bold uppercase tracking-[0.22em]"
-                               style="color:hsl(var(--orange-ivoire));">Étape 02 — Identité</p>
+                               style="color:hsl(var(--vert-ivoire));">Étape 02 — Identité</p>
                         </div>
                         <h1 style="font-family:'Fraunces',serif; font-size:clamp(2rem,3.5vw,3rem); font-weight:900; letter-spacing:-0.03em; line-height:1.05;" class="mb-4">
-                            Faisons <span style="color:hsl(var(--orange-ivoire));">connaissance.</span>
+                            Faisons <span style="color:hsl(var(--vert-ivoire));">connaissance.</span>
                         </h1>
                         <p class="text-base leading-relaxed mb-8" style="color:rgba(15,12,8,0.45); max-width:36rem;">
                             Quelques informations pour personnaliser votre accueil et votre badge officiel.
@@ -799,8 +795,8 @@ $ateliers = [
 
                             {{-- Header badge --}}
                             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; position:relative;">
-                                <p style="font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:hsl(var(--orange-ivoire));">Votre badge · Hub Import-Export 2026</p>
-                                <div style="width:1.875rem; height:1.875rem; border-radius:7px; background:hsl(var(--orange-ivoire)); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <p style="font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:hsl(var(--vert-ivoire));">Votre badge · Hub Import-Export 2026</p>
+                                <div style="width:1.875rem; height:1.875rem; border-radius:7px; background:hsl(var(--vert-ivoire)); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                                     <span style="font-family:'JetBrains Mono',monospace; font-size:7.5px; font-weight:700; color:#fff; letter-spacing:-0.02em;">HIE</span>
                                 </div>
                             </div>
@@ -826,7 +822,7 @@ $ateliers = [
 
                             {{-- Pied badge --}}
                             <div style="margin-top:1.375rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.07); display:flex; align-items:center; gap:0.5rem; position:relative;">
-                                <div style="width:5px; height:5px; border-radius:50%; background:hsl(var(--orange-ivoire)); flex-shrink:0;"></div>
+                                <div style="width:5px; height:5px; border-radius:50%; background:hsl(var(--vert-ivoire)); flex-shrink:0;"></div>
                                 <p style="font-family:'JetBrains Mono',monospace; font-size:0.625rem; color:rgba(255,255,255,0.22); letter-spacing:0.07em;">Ministère du Commerce · Côte d'Ivoire</p>
                             </div>
                         </div>
@@ -837,12 +833,12 @@ $ateliers = [
                 <div x-show="step === 3" x-cloak class="flex flex-col flex-1">
                     <div>
                         <div class="flex items-center gap-3 mb-5">
-                            <div class="h-px w-7" style="background:hsl(var(--orange-ivoire));"></div>
+                            <div class="h-px w-7" style="background:hsl(var(--vert-ivoire));"></div>
                             <p class="text-[10px] font-mono font-bold uppercase tracking-[0.22em]"
-                               style="color:hsl(var(--orange-ivoire));">Étape 03 — Profil professionnel</p>
+                               style="color:hsl(var(--vert-ivoire));">Étape 03 — Profil professionnel</p>
                         </div>
                         <h1 style="font-family:'Fraunces',serif; font-size:clamp(2rem,3.5vw,3rem); font-weight:900; letter-spacing:-0.03em; line-height:1.05;" class="mb-4">
-                            Votre <span style="color:hsl(var(--orange-ivoire));">entreprise.</span>
+                            Votre <span style="color:hsl(var(--vert-ivoire));">entreprise.</span>
                         </h1>
                         <p class="text-base leading-relaxed mb-8" style="color:rgba(15,12,8,0.45); max-width:36rem;">
                             Ces informations permettent au comité de cibler les ateliers les plus pertinents pour votre profil.
@@ -883,12 +879,12 @@ $ateliers = [
                 <div x-show="step === 4" x-cloak class="flex flex-col flex-1">
                     <div>
                         <div class="flex items-center gap-3 mb-5">
-                            <div class="h-px w-7" style="background:hsl(var(--orange-ivoire));"></div>
+                            <div class="h-px w-7" style="background:hsl(var(--vert-ivoire));"></div>
                             <p class="text-[10px] font-mono font-bold uppercase tracking-[0.22em]"
-                               style="color:hsl(var(--orange-ivoire));">Étape 04 — Motivations</p>
+                               style="color:hsl(var(--vert-ivoire));">Étape 04 — Motivations</p>
                         </div>
                         <h1 style="font-family:'Fraunces',serif; font-size:clamp(2rem,3.5vw,3rem); font-weight:900; letter-spacing:-0.03em; line-height:1.05;" class="mb-4">
-                            Votre projet <span style="color:hsl(var(--orange-ivoire));">d'exportation.</span>
+                            Votre projet <span style="color:hsl(var(--vert-ivoire));">d'exportation.</span>
                         </h1>
                         <p class="text-base leading-relaxed mb-8" style="color:rgba(15,12,8,0.45); max-width:36rem;">
                             Facultatif — ces réponses aident le comité à évaluer votre dossier avec précision.
@@ -914,13 +910,13 @@ $ateliers = [
                 {{-- ─── Étape 5 : Récapitulatif ────── --}}
                 <div x-show="step === 5" x-cloak>
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="h-px w-7" style="background:hsl(var(--orange-ivoire));"></div>
+                        <div class="h-px w-7" style="background:hsl(var(--vert-ivoire));"></div>
                         <p class="text-[10px] font-mono font-bold uppercase tracking-[0.22em]"
-                           style="color:hsl(var(--orange-ivoire));">Étape 05 — Récapitulatif</p>
+                           style="color:hsl(var(--vert-ivoire));">Étape 05 — Récapitulatif</p>
                     </div>
                     <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.8rem,3.2vw,2.625rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08; color:#1A1208;" class="mb-2">Vérifiez votre</h1>
                     <h1 style="font-family:'Fraunces',serif; font-size:clamp(1.8rem,3.2vw,2.625rem); font-weight:900; letter-spacing:-0.025em; line-height:1.08;" class="mb-8">
-                        <span style="color:hsl(var(--orange-ivoire));">candidature.</span>
+                        <span style="color:hsl(var(--vert-ivoire));">candidature.</span>
                     </h1>
 
                     <div class="space-y-3">

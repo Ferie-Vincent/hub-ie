@@ -46,18 +46,18 @@
                     @php $idx = $i++; @endphp
                     <div class="relative bg-blanc-pur rounded-2xl overflow-hidden shadow-card group">
                         {{-- Barre latérale orange — effet programme --}}
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-orange-ivoire
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-vert-ivoire
                                     transition-all duration-300 opacity-0 group-hover:opacity-100"
                              style="height: 55%;"></div>
                         <button
                             @click="open === {{ $idx }} ? open = null : open = {{ $idx }}"
                             class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left font-semibold text-noir-profond transition-colors"
-                            :class="open === {{ $idx }} ? 'text-orange-ivoire' : 'hover:text-orange-ivoire'"
+                            :class="open === {{ $idx }} ? 'text-vert-ivoire' : 'hover:text-vert-ivoire'"
                             :aria-expanded="open === {{ $idx }}"
                         >
                             <span>{{ $q[0] }}</span>
                             <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300"
-                                 :class="open === {{ $idx }} ? 'rotate-45 text-orange-ivoire' : 'text-gris-500'"
+                                 :class="open === {{ $idx }} ? 'rotate-45 text-vert-ivoire' : 'text-gris-500'"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/>
                             </svg>

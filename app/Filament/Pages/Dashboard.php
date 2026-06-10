@@ -75,7 +75,7 @@ class Dashboard extends BaseDashboard
         $this->delta24h = Application::where('submitted_at', '>=', $now->copy()->subDay())->count();
         $this->accepted = Application::where('status', ApplicationStatus::Accepted->value)->count();
         $this->presentToday = Attendance::whereDate('event_date', Carbon::today())
-            ->distinct('application_id')->count('application_id');
+            ->distinct('enrollment_id')->count('enrollment_id');
         $this->toEvaluate = Application::whereIn('status', [
             ApplicationStatus::Eligible->value,
             ApplicationStatus::UnderReview->value,
@@ -169,7 +169,7 @@ class Dashboard extends BaseDashboard
         $this->attendanceData = [];
         foreach (['2026-06-22', '2026-06-23', '2026-06-24', '2026-06-25'] as $date) {
             $this->attendanceData[] = Attendance::whereDate('event_date', $date)
-                ->distinct('application_id')->count('application_id');
+                ->distinct('enrollment_id')->count('enrollment_id');
         }
 
         // --- Geography ---

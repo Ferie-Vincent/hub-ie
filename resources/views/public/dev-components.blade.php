@@ -32,7 +32,7 @@
             </h2>
             <div class="space-y-10">
                 <x-section-title kicker="Kicker orange" kickerColor="orange" sub="Sous-titre descriptif de la section">
-                    Titre <em class="font-fraunces italic text-orange-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">principal</em>
+                    Titre <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">principal</em>
                 </x-section-title>
                 <x-section-title kicker="Kicker vert" kickerColor="vert" sub="Un autre sous-titre">
                     Variante <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">verte</em>
@@ -219,7 +219,7 @@
                     <li class="flex items-start gap-2">
                         <span class="mt-0.5 flex-shrink-0 w-2 h-2 rounded-full bg-vert-ivoire"></span>
                         <span>
-                            <code class="text-xs font-mono text-orange-brule">{{ $name }}</code>
+                            <code class="text-xs font-mono text-vert-fonce">{{ $name }}</code>
                             <span class="block text-xs" style="color:hsl(var(--gris-700))">{{ $desc }}</span>
                         </span>
                     </li>
@@ -244,7 +244,7 @@
                 </div>
                 <div>
                     <p class="text-xs font-mono mb-1" style="color:hsl(var(--gris-700))">font-fraunces (Fraunces)</p>
-                    <p class="font-fraunces text-2xl italic text-orange-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">Quatre <em>ateliers,</em> une stratégie.</p>
+                    <p class="font-fraunces text-2xl italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">Quatre <em>ateliers,</em> une stratégie.</p>
                 </div>
                 <div>
                     <p class="text-xs font-mono mb-1" style="color:hsl(var(--gris-700))">font-manrope (Manrope)</p>
@@ -252,7 +252,7 @@
                 </div>
                 <div>
                     <p class="text-xs font-mono mb-1" style="color:hsl(var(--gris-700))">font-mono (JetBrains Mono)</p>
-                    <p class="font-mono text-xl text-orange-brule">22–25 juin 2026 · Abidjan · Côte d'Ivoire</p>
+                    <p class="font-mono text-xl text-vert-fonce">22–25 juin 2026 · Abidjan · Côte d'Ivoire</p>
                 </div>
             </div>
         </section>
@@ -268,7 +268,7 @@
                     ['bg-noir-doux',    'text-blanc-pur',    'noir-doux',      'Noir doux',      '#1A1D1A'],
                     ['bg-blanc-pur',    'text-noir-profond', 'blanc-pur',      'Blanc pur',      '#FAFAF8'],
                     ['bg-blanc-creme',  'text-noir-profond', 'blanc-creme',    'Blanc crème',    '#F5F2ED'],
-                    ['bg-orange-ivoire','text-blanc-pur',    'orange-ivoire',  'Orange ivoire',  '#E8741C'],
+                    ['bg-vert-ivoire','text-blanc-pur',    'orange-ivoire',  'Orange ivoire',  '#E8741C'],
                     ['bg-orange-brule', 'text-blanc-pur',    'orange-brule',   'Orange brûlé',   '#C45A0A'],
                     ['bg-orange-soft',  'text-blanc-pur',    'orange-soft',    'Orange soft',    '#F09E62'],
                     ['bg-vert-ivoire',  'text-blanc-pur',    'vert-ivoire',    'Vert ivoire',    '#009A44'],
@@ -296,7 +296,7 @@
             </h2>
             <div class="flex flex-wrap gap-8 items-center bg-blanc-pur rounded-2xl p-8">
                 <a href="#" class="link-underline text-noir-profond font-medium">Lien avec soulignement animé</a>
-                <a href="#" class="link-underline text-orange-ivoire font-medium">Lien orange</a>
+                <a href="#" class="link-underline text-vert-ivoire font-medium">Lien orange</a>
                 <a href="#" class="hub-tab-hover px-4 py-2 text-sm text-noir-profond font-medium rounded-lg relative">Tab nav</a>
                 <a href="#" class="hub-footer-link text-sm text-blanc-pur/60 bg-noir-profond px-3 py-1 rounded">Footer link</a>
             </div>
@@ -308,7 +308,7 @@
                 Intersection Observer — .reveal / .is-visible
             </h2>
             <div class="bg-blanc-pur rounded-2xl p-8 space-y-4">
-                <div class="reveal bg-orange-soft-bg rounded-xl p-6">
+                <div class="reveal bg-vert-soft-bg rounded-xl p-6">
                     <p class="text-sm text-noir-profond font-medium">Élément 1 — apparaît au scroll (fade-up 0.8s)</p>
                 </div>
                 <div class="reveal bg-vert-soft-bg rounded-xl p-6" style="transition-delay: 0.1s">

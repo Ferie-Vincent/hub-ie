@@ -86,7 +86,7 @@
         }"
     >
         {{-- Filet tricolore --}}
-        <div class="h-[3px] rounded-t-3xl" style="background: linear-gradient(to right, hsl(var(--orange-ivoire)), hsl(var(--blanc-pur) / 0.4) 50%, hsl(var(--vert-ivoire)));"></div>
+        <div class="h-[3px] rounded-t-3xl" style="background: linear-gradient(to right, hsl(var(--vert-ivoire)), hsl(var(--blanc-pur) / 0.4) 50%, hsl(var(--vert-ivoire)));"></div>
 
         {{-- ══ ÉTAT SUCCÈS ══ --}}
         <div x-show="success" class="p-10 text-center" x-cloak>
@@ -129,9 +129,9 @@
                 {{-- Indicateur d'étapes --}}
                 <div class="flex items-center gap-2 mt-5">
                     <div class="h-1 flex-1 rounded-full transition-all duration-300"
-                         :style="step >= 1 ? 'background: hsl(var(--orange-ivoire))' : 'background: hsl(var(--noir-profond) / 0.12)'"></div>
+                         :style="step >= 1 ? 'background: hsl(var(--vert-ivoire))' : 'background: hsl(var(--noir-profond) / 0.12)'"></div>
                     <div class="h-1 flex-1 rounded-full transition-all duration-300"
-                         :style="step >= 2 ? 'background: hsl(var(--orange-ivoire))' : 'background: hsl(var(--noir-profond) / 0.12)'"></div>
+                         :style="step >= 2 ? 'background: hsl(var(--vert-ivoire))' : 'background: hsl(var(--noir-profond) / 0.12)'"></div>
                     <span class="text-xs text-noir-profond/40 font-mono ml-1" x-text="'Étape ' + step + '/2'"></span>
                 </div>
             </div>
@@ -145,14 +145,14 @@
                     <div>
                         <label class="block text-xs font-semibold text-noir-profond/60 mb-1.5 uppercase tracking-wide">Nom *</label>
                         <input x-model="form.nom" type="text" placeholder="KOUASSI"
-                               class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-orange-ivoire"
+                               class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-vert-ivoire"
                                :class="errors.nom ? 'border-red-400 bg-red-50' : 'border-noir-profond/15 bg-blanc-creme focus:bg-blanc-pur'">
                         <p x-show="errors.nom" class="text-xs text-red-500 mt-1" x-text="errors.nom"></p>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-noir-profond/60 mb-1.5 uppercase tracking-wide">Prénom(s) *</label>
                         <input x-model="form.prenom" type="text" placeholder="Amara"
-                               class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-orange-ivoire"
+                               class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-vert-ivoire"
                                :class="errors.prenom ? 'border-red-400 bg-red-50' : 'border-noir-profond/15 bg-blanc-creme focus:bg-blanc-pur'">
                         <p x-show="errors.prenom" class="text-xs text-red-500 mt-1" x-text="errors.prenom"></p>
                     </div>
@@ -161,7 +161,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-noir-profond/60 mb-1.5 uppercase tracking-wide">Adresse e-mail *</label>
                     <input x-model="form.email" type="email" placeholder="amara@entreprise.ci"
-                           class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-orange-ivoire"
+                           class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-vert-ivoire"
                            :class="errors.email ? 'border-red-400 bg-red-50' : 'border-noir-profond/15 bg-blanc-creme focus:bg-blanc-pur'">
                     <p x-show="errors.email" class="text-xs text-red-500 mt-1" x-text="errors.email"></p>
                 </div>
@@ -169,13 +169,13 @@
                 <div>
                     <label class="block text-xs font-semibold text-noir-profond/60 mb-1.5 uppercase tracking-wide">Téléphone</label>
                     <input x-model="form.telephone" type="tel" placeholder="+225 07 00 00 00 00"
-                           class="w-full rounded-xl border border-noir-profond/15 bg-blanc-creme px-4 py-2.5 text-sm outline-none transition-colors focus:border-orange-ivoire focus:bg-blanc-pur">
+                           class="w-full rounded-xl border border-noir-profond/15 bg-blanc-creme px-4 py-2.5 text-sm outline-none transition-colors focus:border-vert-ivoire focus:bg-blanc-pur">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-noir-profond/60 mb-1.5 uppercase tracking-wide">Entreprise *</label>
                     <input x-model="form.entreprise" type="text" placeholder="Nom de votre entreprise"
-                           class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-orange-ivoire"
+                           class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-vert-ivoire"
                            :class="errors.entreprise ? 'border-red-400 bg-red-50' : 'border-noir-profond/15 bg-blanc-creme focus:bg-blanc-pur'">
                     <p x-show="errors.entreprise" class="text-xs text-red-500 mt-1" x-text="errors.entreprise"></p>
                 </div>
@@ -183,7 +183,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-noir-profond/60 mb-1.5 uppercase tracking-wide">Secteur d'activité *</label>
                     <select x-model="form.secteur"
-                            class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-orange-ivoire appearance-none"
+                            class="w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:border-vert-ivoire appearance-none"
                             :class="errors.secteur ? 'border-red-400 bg-red-50' : 'border-noir-profond/15 bg-blanc-creme focus:bg-blanc-pur'">
                         <option value="">Sélectionnez votre secteur</option>
                         <option>Agriculture & agroalimentaire</option>
@@ -211,14 +211,14 @@
 
                 <div class="space-y-3">
                     @foreach([
-                        ['zlecaf-cedeao',        '01', 'ZLECAf & CEDEAO',                 'Conquérir les marchés régionaux',   '--orange-ivoire'],
-                        ['financement-garanties','02', 'Financement & garanties',          'Sécuriser ses opérations',          '--orange-brule'],
+                        ['zlecaf-cedeao',        '01', 'ZLECAf & CEDEAO',                 'Conquérir les marchés régionaux',   '--vert-ivoire'],
+                        ['financement-garanties','02', 'Financement & garanties',          'Sécuriser ses opérations',          '--vert-fonce'],
                         ['commerce-electronique','03', 'Commerce électronique',             'Digitaliser ses échanges',          '--vert-ivoire'],
-                        ['conformite-qualite',   '04', 'Conformité & qualité',             'Maîtriser les normes',              '--orange-ivoire'],
+                        ['conformite-qualite',   '04', 'Conformité & qualité',             'Maîtriser les normes',              '--vert-ivoire'],
                     ] as [$slug, $num, $titre, $tagline, $color])
                     <label class="flex items-start gap-4 p-4 rounded-2xl cursor-pointer border transition-all duration-150"
                            :class="form.atelier === '{{ $slug }}'
-                               ? 'border-orange-ivoire bg-orange-soft-bg'
+                               ? 'border-vert-ivoire bg-vert-soft-bg'
                                : 'border-noir-profond/10 bg-blanc-creme hover:border-noir-profond/25'">
                         <input type="radio" name="atelier" value="{{ $slug }}" x-model="form.atelier" class="sr-only">
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold flex-shrink-0 mt-0.5"
@@ -231,7 +231,7 @@
                         </div>
                         <div class="w-4 h-4 rounded-full border-2 flex-shrink-0 mt-1 transition-all duration-150"
                              :class="form.atelier === '{{ $slug }}'
-                                 ? 'border-orange-ivoire bg-orange-ivoire'
+                                 ? 'border-vert-ivoire bg-vert-ivoire'
                                  : 'border-noir-profond/25'"
                              aria-hidden="true"></div>
                     </label>

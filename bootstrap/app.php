@@ -25,15 +25,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->booted(function () {
-        RateLimiter::for('login', fn (Request $r) => Limit::perMinute(5)->by($r->ip())
-        );
-        RateLimiter::for('candidature', fn (Request $r) => Limit::perHour(3)->by($r->user()?->id ?: $r->ip())
-        );
-        RateLimiter::for('contact', fn (Request $r) => Limit::perHour(5)->by($r->ip())
-        );
-        RateLimiter::for('newsletter', fn (Request $r) => Limit::perHour(3)->by($r->ip())
-        );
+        RateLimiter::for('login', fn (Request $r) => Limit::perMinute(5)->by($r->ip()));
+        RateLimiter::for('candidature', fn (Request $r) => Limit::perHour(3)->by($r->user()?->id ?: $r->ip()));
+        RateLimiter::for('contact', fn (Request $r) => Limit::perHour(5)->by($r->ip()));
+        RateLimiter::for('newsletter', fn (Request $r) => Limit::perHour(3)->by($r->ip()));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\AttendanceLocation;
+use App\Enums\AttendanceScanMethod;
 use App\Filament\Resources\AttendanceResource\Pages;
 use App\Models\Attendance;
+use App\Models\Workshop;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class AttendanceResource extends Resource
 {
@@ -26,7 +30,11 @@ class AttendanceResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->hasPermissionTo('scan-attendance') ?? false;
+        $user = auth()->user();
+
+        return $user?->hasRole('super_admin')
+            || $user?->hasPermissionTo('scan-attendance')
+            || false;
     }
 
     public static function canCreate(): bool
@@ -44,24 +52,62 @@ class AttendanceResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['enrollment.user', 'enrollment.workshop', 'scannedBy']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('event_date')
-                    ->label('Jour')->date('d/m/Y')->sortable(),
-                Tables\Columns\TextColumn::make('application.user.full_name')
-                    ->label('Candidat(e)')->searchable(),
-                Tables\Columns\TextColumn::make('application.group_label')
-                    ->label('Groupe')->badge(),
+                    ->label('Jour')
+                    ->date('d/m/Y')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('enrollment.user.full_name')
+                    ->label('Participant(e)')
+                    ->searchable(query: fn (Builder $q, string $s) => $q->whereHas(
+                        'enrollment.user',
+                        fn ($q) => $q->whereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%{$s}%"])
+                    )),
+
+                Tables\Columns\TextColumn::make('enrollment.user.email')
+                    ->label('Email')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('enrollment.workshop.title')
+                    ->label('Atelier')
+                    ->badge()
+                    ->color('info'),
+
                 Tables\Columns\TextColumn::make('scanned_at')
-                    ->label('Scanné à')->dateTime('H:i:s')->sortable(),
+                    ->label('Heure scan')
+                    ->dateTime('H:i:s')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('scan_method')
-                    ->label('Méthode')->badge()
-                    ->color(fn ($state) => $state === 'qr' ? 'success' : 'info')
+                    ->label('Méthode')
+                    ->badge()
+                    ->formatStateUsing(fn (AttendanceScanMethod $state) => $state->label())
+                    ->color(fn (AttendanceScanMethod $state) => $state->color()),
+
+                Tables\Columns\TextColumn::make('location')
+                    ->label('Salle')
+                    ->badge()
+                    ->formatStateUsing(fn (AttendanceLocation $state) => $state->label())
+                    ->color(fn (AttendanceLocation $state) => $state->color())
                     ->toggleable(),
+
+                Tables\Columns\TextColumn::make('scannedBy.full_name')
+                    ->label('Opérateur')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('scanner_ip')
-                    ->label('IP')->toggleable(isToggledHiddenByDefault: true),
+                    ->label('IP')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('event_date')
@@ -71,14 +117,31 @@ class AttendanceResource extends Resource
                         '2026-06-23' => '23 juin 2026',
                         '2026-06-24' => '24 juin 2026',
                         '2026-06-25' => '25 juin 2026',
-                    ]),
-                Tables\Filters\SelectFilter::make('group_label')
-                    ->label('Groupe')
-                    ->options(['G1' => 'G1', 'G2' => 'G2', 'G3' => 'G3'])
-                    ->query(fn ($query, $data) => blank($data['value'])
-                        ? $query
-                        : $query->whereHas('application', fn ($q) => $q->where('group_label', $data['value']))
+                    ])
+                    ->query(fn (Builder $q, array $data) => blank($data['value'])
+                        ? $q
+                        : $q->whereDate('event_date', $data['value'])
                     ),
+
+                Tables\Filters\SelectFilter::make('workshop_id')
+                    ->label('Atelier')
+                    ->options(fn () => Workshop::pluck('title', 'id'))
+                    ->query(fn (Builder $q, array $data) => blank($data['value'])
+                        ? $q
+                        : $q->whereHas('enrollment', fn ($q) => $q->where('workshop_id', $data['value']))
+                    ),
+
+                Tables\Filters\SelectFilter::make('location')
+                    ->label('Salle')
+                    ->options(collect(AttendanceLocation::cases())->mapWithKeys(
+                        fn (AttendanceLocation $l) => [$l->value => $l->label()]
+                    )),
+
+                Tables\Filters\SelectFilter::make('scan_method')
+                    ->label('Méthode')
+                    ->options(collect(AttendanceScanMethod::cases())->mapWithKeys(
+                        fn (AttendanceScanMethod $m) => [$m->value => $m->label()]
+                    )),
             ])
             ->defaultSort('scanned_at', 'desc')
             ->striped()

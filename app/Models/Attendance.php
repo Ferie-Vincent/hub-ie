@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Attendance extends Model
 {
     protected $fillable = [
-        'application_id',
+        'enrollment_id',
         'event_date',
         'scanned_at',
         'scanned_by_user_id',
@@ -29,9 +29,9 @@ class Attendance extends Model
         ];
     }
 
-    public function application(): BelongsTo
+    public function enrollment(): BelongsTo
     {
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Enrollment::class);
     }
 
     public function scannedBy(): BelongsTo

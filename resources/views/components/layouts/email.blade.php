@@ -42,7 +42,7 @@
                             <table cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td>
-                                        <div style="display:inline-block;width:40px;height:40px;background:#E8741C;border-radius:10px;text-align:center;line-height:40px;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700;color:white;letter-spacing:-0.5px;">HIE</div>
+                                        <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" style="display:block;height:40px;width:auto;object-fit:contain;">
                                     </td>
                                     <td style="padding-left: 12px;">
                                         <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#FFFFFF;">Hub Import-Export 2026</p>

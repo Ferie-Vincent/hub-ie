@@ -34,7 +34,7 @@
                         <span class="kicker-orange rounded-full mb-3 inline-block">À la une</span>
                         @endif
 
-                        <h2 class="font-serif font-bold text-noir-profond text-lg leading-snug mb-2 group-hover:text-orange-brule transition-colors">
+                        <h2 class="font-serif font-bold text-noir-profond text-lg leading-snug mb-2 group-hover:text-vert-fonce transition-colors">
                             {{ $article->title }}
                         </h2>
 

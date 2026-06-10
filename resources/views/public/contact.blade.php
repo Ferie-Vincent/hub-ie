@@ -32,7 +32,7 @@
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(to right, hsl(var(--orange-ivoire)), transparent);
+    background: linear-gradient(to right, hsl(var(--vert-ivoire)), transparent);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
@@ -77,7 +77,7 @@
 
                 {{-- Titre avec barre orange gauche (identique à la référence) --}}
                 <h2 class="font-serif text-2xl font-bold pl-4"
-                    style="border-left: 3.5px solid hsl(var(--orange-ivoire));">
+                    style="border-left: 3.5px solid hsl(var(--vert-ivoire));">
                     Lieu de l'évènement
                 </h2>
 
@@ -88,8 +88,8 @@
                     {{-- Adresse --}}
                     <div class="flex gap-4">
                         <div class="contact-icon flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                             style="background: hsl(var(--orange-ivoire)/0.10);">
-                            <svg class="w-4 h-4" fill="none" stroke="hsl(var(--orange-ivoire))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                             style="background: hsl(var(--vert-ivoire)/0.10);">
+                            <svg class="w-4 h-4" fill="none" stroke="hsl(var(--vert-ivoire))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
@@ -108,8 +108,8 @@
                     {{-- Téléphone --}}
                     <div class="flex gap-4">
                         <div class="contact-icon flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                             style="background: hsl(var(--orange-ivoire)/0.10);">
-                            <svg class="w-4 h-4" fill="none" stroke="hsl(var(--orange-ivoire))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                             style="background: hsl(var(--vert-ivoire)/0.10);">
+                            <svg class="w-4 h-4" fill="none" stroke="hsl(var(--vert-ivoire))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                             </svg>
                         </div>
@@ -125,8 +125,8 @@
                     {{-- Email --}}
                     <div class="flex gap-4">
                         <div class="contact-icon flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                             style="background: hsl(var(--orange-ivoire)/0.10);">
-                            <svg class="w-4 h-4" fill="none" stroke="hsl(var(--orange-ivoire))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                             style="background: hsl(var(--vert-ivoire)/0.10);">
+                            <svg class="w-4 h-4" fill="none" stroke="hsl(var(--vert-ivoire))" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                         </div>
@@ -134,7 +134,7 @@
                             <p class="text-sm font-bold" style="color: #1A1208;">Courrier électronique</p>
                             <a href="mailto:hub-import-export@commerce.gouv.ci"
                                class="mt-0.5 block text-sm link-underline break-all"
-                               style="color: hsl(var(--orange-ivoire));">
+                               style="color: hsl(var(--vert-ivoire));">
                                 hub-import-export@commerce.gouv.ci
                             </a>
                             <p class="mt-1 text-xs" style="color: rgba(15,12,8,0.38);">Réponse sous 48h ouvrables</p>
@@ -144,7 +144,7 @@
 
                 {{-- Card orange "Besoin de contacter l'organisation ?" --}}
                 <div class="contact-card contact-card-orange rounded-2xl p-6 text-blanc-pur"
-                     style="background: linear-gradient(135deg, hsl(var(--orange-brule)) 0%, hsl(var(--orange-ivoire)) 100%);">
+                     style="background: linear-gradient(135deg, hsl(var(--vert-fonce)) 0%, hsl(var(--vert-ivoire)) 100%);">
                     <h3 class="font-serif text-xl font-bold leading-snug">
                         Besoin de contacter<br>l'organisation ?
                     </h3>
@@ -195,7 +195,7 @@
                                    placeholder="Votre nom complet"
                                    class="w-full rounded-xl px-4 py-3 text-sm text-noir-profond outline-none transition"
                                    style="border: 1px solid rgba(15,12,8,0.14); background: hsl(var(--blanc-creme));"
-                                   onfocus="this.style.borderColor='hsl(var(--orange-ivoire))'; this.style.background='#fff';"
+                                   onfocus="this.style.borderColor='hsl(var(--vert-ivoire))'; this.style.background='#fff';"
                                    onblur="this.style.borderColor='rgba(15,12,8,0.14)'; this.style.background='hsl(var(--blanc-creme))';">
                         </div>
                         <div>
@@ -207,7 +207,7 @@
                                    placeholder="exemple@organisation.com"
                                    class="w-full rounded-xl px-4 py-3 text-sm text-noir-profond outline-none transition"
                                    style="border: 1px solid rgba(15,12,8,0.14); background: hsl(var(--blanc-creme));"
-                                   onfocus="this.style.borderColor='hsl(var(--orange-ivoire))'; this.style.background='#fff';"
+                                   onfocus="this.style.borderColor='hsl(var(--vert-ivoire))'; this.style.background='#fff';"
                                    onblur="this.style.borderColor='rgba(15,12,8,0.14)'; this.style.background='hsl(var(--blanc-creme))';">
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                             <select id="c-sujet" required
                                     class="w-full appearance-none rounded-xl px-4 py-3 pr-10 text-sm text-noir-profond outline-none transition"
                                     style="border: 1px solid rgba(15,12,8,0.14); background: hsl(var(--blanc-creme));"
-                                    onfocus="this.style.borderColor='hsl(var(--orange-ivoire))'; this.style.background='#fff';"
+                                    onfocus="this.style.borderColor='hsl(var(--vert-ivoire))'; this.style.background='#fff';"
                                     onblur="this.style.borderColor='rgba(15,12,8,0.14)'; this.style.background='hsl(var(--blanc-creme))';">
                                 <option value="">Sélectionnez un sujet…</option>
                                 <option value="candidature">Candidature & inscription</option>
@@ -251,7 +251,7 @@
                                   placeholder="Comment pouvons-nous vous aider ?"
                                   class="w-full resize-none rounded-xl px-4 py-3 text-sm text-noir-profond outline-none transition"
                                   style="border: 1px solid rgba(15,12,8,0.14); background: hsl(var(--blanc-creme));"
-                                  onfocus="this.style.borderColor='hsl(var(--orange-ivoire))'; this.style.background='#fff';"
+                                  onfocus="this.style.borderColor='hsl(var(--vert-ivoire))'; this.style.background='#fff';"
                                   onblur="this.style.borderColor='rgba(15,12,8,0.14)'; this.style.background='hsl(var(--blanc-creme))';">
                         </textarea>
                     </div>
@@ -298,7 +298,7 @@
                 <a href="https://maps.google.com/?q=Plateau,+Abidjan,+Côte+d'Ivoire"
                    target="_blank" rel="noopener noreferrer"
                    class="flex items-center gap-1.5 text-sm font-semibold transition-opacity hover:opacity-70"
-                   style="color: hsl(var(--orange-ivoire));">
+                   style="color: hsl(var(--vert-ivoire));">
                     Ouvrir dans Google Maps
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>

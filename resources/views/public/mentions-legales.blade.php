@@ -13,7 +13,7 @@
                 <p>Ministère du Commerce, de l'Industrie et de l'Artisanat de la République de Côte d'Ivoire<br>
                 Direction Générale du Commerce Extérieur (DGCE)<br>
                 Plateau, Abidjan — République de Côte d'Ivoire<br>
-                Email : <a href="mailto:hub-import-export@commerce.gouv.ci" class="text-orange-ivoire link-underline">hub-import-export@commerce.gouv.ci</a></p>
+                Email : <a href="mailto:hub-import-export@commerce.gouv.ci" class="text-vert-ivoire link-underline">hub-import-export@commerce.gouv.ci</a></p>
             </div>
             <div>
                 <h2 class="font-serif font-bold text-noir-profond text-xl mb-3">Directeur de la publication</h2>

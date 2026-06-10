@@ -10,7 +10,7 @@
             <div class="bg-blanc-pur rounded-2xl p-6 shadow-card">
                 <h2 class="font-serif font-bold text-noir-profond text-xl mb-3">Contact presse</h2>
                 <p class="text-gris-500 text-sm mb-4">Pour toute demande d'accréditation ou d'information, contactez le service communication du Ministère.</p>
-                <a href="mailto:hub-import-export@commerce.gouv.ci" class="text-orange-ivoire font-semibold link-underline text-sm">
+                <a href="mailto:hub-import-export@commerce.gouv.ci" class="text-vert-ivoire font-semibold link-underline text-sm">
                     hub-import-export@commerce.gouv.ci
                 </a>
             </div>

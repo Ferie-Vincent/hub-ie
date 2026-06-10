@@ -32,7 +32,7 @@ p { margin-bottom: 4mm; }
 <div class="page">
     <div class="header">
         <div class="header-left">
-            <div class="logo-block">Hub Import-Export 2026</div>
+            <img src="{{ asset('images/logo.svg') }}" alt="Hub Import-Export 2026" style="height:10mm; width:auto; object-fit:contain; display:block; margin-bottom:2mm;">
             <div>DGCE — Ministère du Commerce, de l'Industrie et de l'Artisanat</div>
             <div>Abidjan, Côte d'Ivoire</div>
         </div>

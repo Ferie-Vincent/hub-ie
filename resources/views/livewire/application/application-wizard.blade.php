@@ -7,7 +7,7 @@
             <div class="w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-4"
                  style="background:hsl(var(--orange-soft-bg))">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                     style="color:hsl(var(--orange-ivoire))" stroke="currentColor">
+                     style="color:hsl(var(--vert-ivoire))" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                 </svg>
@@ -43,10 +43,10 @@
                 >
                     <div class="relative flex items-center w-full">
                         @if($i > 1)
-                        <div class="flex-1 h-0.5 {{ $i <= $step ? 'bg-orange-ivoire' : 'bg-sable-doux' }} transition-colors duration-300"></div>
+                        <div class="flex-1 h-0.5 {{ $i <= $step ? 'bg-vert-ivoire' : 'bg-sable-doux' }} transition-colors duration-300"></div>
                         @endif
                         <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 font-bold text-sm
-                            {{ $i < $step ? 'bg-vert-ivoire text-blanc-pur' : ($i === $step ? 'bg-orange-ivoire text-blanc-pur shadow-md scale-110' : 'bg-white border-2 border-sable-doux text-gris-500') }}">
+                            {{ $i < $step ? 'bg-vert-ivoire text-blanc-pur' : ($i === $step ? 'bg-vert-ivoire text-blanc-pur shadow-md scale-110' : 'bg-white border-2 border-sable-doux text-gris-500') }}">
                             @if($i < $step)
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                             @else
@@ -54,10 +54,10 @@
                             @endif
                         </div>
                         @if($i < 4)
-                        <div class="flex-1 h-0.5 {{ $i < $step ? 'bg-orange-ivoire' : 'bg-sable-doux' }} transition-colors duration-300"></div>
+                        <div class="flex-1 h-0.5 {{ $i < $step ? 'bg-vert-ivoire' : 'bg-sable-doux' }} transition-colors duration-300"></div>
                         @endif
                     </div>
-                    <span class="mt-2 text-xs font-medium {{ $i === $step ? 'text-orange-brule' : 'text-gris-500' }} hidden sm:block">{{ $label }}</span>
+                    <span class="mt-2 text-xs font-medium {{ $i === $step ? 'text-vert-fonce' : 'text-gris-500' }} hidden sm:block">{{ $label }}</span>
                 </button>
                 @endforeach
             </div>
@@ -117,7 +117,7 @@
                             @foreach(['F' => 'Femme', 'M' => 'Homme', 'X' => 'Préfère ne pas préciser'] as $val => $lbl)
                             <label class="flex items-center gap-2 cursor-pointer text-sm">
                                 <input wire:model="gender" type="radio" value="{{ $val }}"
-                                       class="accent-orange-ivoire w-4 h-4">
+                                       class="accent-vert-ivoire w-4 h-4">
                                 {{ $lbl }}
                             </label>
                             @endforeach
@@ -175,7 +175,7 @@
                     <div>
                         <label class="form-label" for="photo">Photo d'identité <span class="text-xs font-normal text-gris-500">(facultatif, JPG/PNG max 3 Mo)</span></label>
                         <input id="photo" wire:model="photo" type="file" accept="image/jpeg,image/png"
-                               class="form-input @error('photo') border-red-400 @enderror file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-soft-bg file:text-orange-brule">
+                               class="form-input @error('photo') border-red-400 @enderror file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-vert-soft-bg file:text-vert-fonce">
                         @error('photo')<p class="form-error">{{ $message }}</p>@enderror
                     </div>
 
@@ -316,17 +316,17 @@
                     </div>
 
                     <div>
-                        <p class="form-label">Ateliers souhaités <span class="text-red-500">*</span>
-                            <span class="text-xs font-normal text-gris-500 ml-1">(2 maximum)</span>
+                        <p class="form-label">Atelier souhaité <span class="text-red-500">*</span>
+                            <span class="text-xs font-normal text-gris-500 ml-1">(1 seul atelier par candidat)</span>
                         </p>
-                        @error('chosenWorkshops')<p class="form-error mb-2">{{ $message }}</p>@enderror
+                        @error('chosenWorkshop')<p class="form-error mb-2">{{ $message }}</p>@enderror
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($workshops as $ws)
                             <label class="flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200
-                                {{ in_array($ws->id, $chosenWorkshops) ? 'border-orange-ivoire bg-orange-soft-bg/40' : 'border-sable-doux hover:border-sable-doux/80 bg-white' }}">
-                                <input type="checkbox" wire:model.live="chosenWorkshops" value="{{ $ws->id }}"
-                                       @if(count($chosenWorkshops) >= 2 && !in_array($ws->id, $chosenWorkshops)) disabled @endif
-                                       class="mt-0.5 accent-orange-ivoire w-4 h-4 flex-shrink-0">
+                                {{ $chosenWorkshop == $ws->id ? 'border-vert-ivoire bg-vert-soft-bg/40' : 'border-sable-doux hover:border-sable-doux/80 bg-white' }}">
+                                <input type="radio" wire:model.live="chosenWorkshop" value="{{ $ws->id }}"
+                                       name="chosenWorkshop"
+                                       class="mt-0.5 accent-vert-ivoire w-4 h-4 flex-shrink-0">
                                 <div>
                                     <p class="font-semibold text-sm text-noir-profond leading-tight">{{ $ws->title }}</p>
                                     @if($ws->short_description)
@@ -355,11 +355,11 @@
                         <div class="flex gap-5 mt-1">
                             <label class="flex items-center gap-2 cursor-pointer text-sm">
                                 <input wire:model="isFirstParticipation" type="radio" :value="true"
-                                       class="accent-orange-ivoire w-4 h-4"> Oui
+                                       class="accent-vert-ivoire w-4 h-4"> Oui
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer text-sm">
                                 <input wire:model="isFirstParticipation" type="radio" :value="false"
-                                       class="accent-orange-ivoire w-4 h-4"> Non
+                                       class="accent-vert-ivoire w-4 h-4"> Non
                             </label>
                         </div>
                     </div>
@@ -403,7 +403,7 @@
                             </label>
                             <input id="cvFile" wire:model="cvFile" type="file"
                                    accept=".pdf,.jpg,.jpeg,.png"
-                                   class="form-input @error('cvFile') border-red-400 @enderror file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-soft-bg file:text-orange-brule">
+                                   class="form-input @error('cvFile') border-red-400 @enderror file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-vert-soft-bg file:text-vert-fonce">
                             @error('cvFile')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
 
@@ -415,7 +415,7 @@
                             </label>
                             <input id="rccmFile" wire:model="rccmFile" type="file"
                                    accept=".pdf,.jpg,.jpeg,.png"
-                                   class="form-input @error('rccmFile') border-red-400 @enderror file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-soft-bg file:text-orange-brule">
+                                   class="form-input @error('rccmFile') border-red-400 @enderror file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-vert-soft-bg file:text-vert-fonce">
                             @error('rccmFile')<p class="form-error">{{ $message }}</p>@enderror
                         </div>
                         @endif
@@ -427,7 +427,7 @@
                             </label>
                             <input id="idCardFile" wire:model="idCardFile" type="file"
                                    accept=".pdf,.jpg,.jpeg,.png"
-                                   class="form-input file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-soft-bg file:text-orange-brule">
+                                   class="form-input file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-vert-soft-bg file:text-vert-fonce">
                         </div>
                     </div>
 
@@ -465,7 +465,7 @@
                     <div class="space-y-3">
                         <label class="flex items-start gap-3 cursor-pointer">
                             <input wire:model="rgpdConsent" type="checkbox" id="rgpdConsent"
-                                   class="mt-0.5 accent-orange-ivoire w-4 h-4 flex-shrink-0">
+                                   class="mt-0.5 accent-vert-ivoire w-4 h-4 flex-shrink-0">
                             <span class="text-sm leading-relaxed" style="color:hsl(var(--gris-700))">
                                 <span class="font-semibold text-noir-profond">Obligatoire — </span>
                                 Je consens au traitement de mes données personnelles aux fins de l'organisation du Hub Import-Export 2026,
@@ -477,7 +477,7 @@
 
                         <label class="flex items-start gap-3 cursor-pointer">
                             <input wire:model="communicationConsent" type="checkbox" id="commConsent"
-                                   class="mt-0.5 accent-orange-ivoire w-4 h-4 flex-shrink-0">
+                                   class="mt-0.5 accent-vert-ivoire w-4 h-4 flex-shrink-0">
                             <span class="text-sm leading-relaxed" style="color:hsl(var(--gris-700))">
                                 J'accepte de recevoir les communications officielles relatives au Hub Import-Export 2026.
                             </span>

@@ -6,7 +6,7 @@
 ])
 <div {{ $attributes->merge(['class' => 'rounded-2xl bg-blanc-creme px-6 py-5 shadow-card hub-stat-lift']) }}>
     <p class="font-serif font-bold leading-none mb-2"
-       style="font-size: 2.5rem; color: hsl(var(--{{ $color === 'vert' ? 'vert-ivoire' : 'orange-ivoire' }}));">
+       style="font-size: 2.5rem; color: hsl(var(--{{ $color === 'vert' ? 'vert-ivoire' : 'vert-ivoire' }}));">
         {{ $value }}
     </p>
     <p class="font-semibold text-noir-profond text-sm leading-snug">{{ $label }}</p>

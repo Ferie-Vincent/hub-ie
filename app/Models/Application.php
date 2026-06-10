@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ApplicationCategory;
 use App\Enums\ApplicationStatus;
 use App\Services\QrCodeService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,7 @@ class Application extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'edition_id',
         'reference_code',
         'user_id',
         'status',
@@ -72,9 +74,30 @@ class Application extends Model
         ];
     }
 
+    public function edition(): BelongsTo
+    {
+        return $this->belongsTo(Edition::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeForEdition(Builder $query, ?Edition $edition = null): Builder
+    {
+        $edition ??= Edition::current();
+
+        return $edition ? $query->where('edition_id', $edition->id) : $query;
+    }
+
+    public function scopeArchived(Builder $query): Builder
+    {
+        $current = Edition::current();
+
+        return $current
+            ? $query->where('edition_id', '!=', $current->id)
+            : $query->whereNotNull('edition_id');
     }
 
     public function workshops(): BelongsToMany
