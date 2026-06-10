@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PreInscription extends Model
 {
     protected $fillable = [
-        'user_id',
         'nom',
         'prenom',
         'email',

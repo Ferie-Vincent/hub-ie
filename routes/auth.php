@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\InvitationController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\PreInscriptionActivationController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,12 @@ Route::middleware('guest')->group(function () {
 
     Route::post('invitation/{token}', [InvitationController::class, 'store'])
         ->name('invitation.store');
+
+    Route::get('activation/{token}', [PreInscriptionActivationController::class, 'show'])
+        ->name('pre-inscription.activate.show');
+
+    Route::post('activation/{token}', [PreInscriptionActivationController::class, 'store'])
+        ->name('pre-inscription.activate.store');
 });
 
 Route::middleware('auth')->group(function () {
