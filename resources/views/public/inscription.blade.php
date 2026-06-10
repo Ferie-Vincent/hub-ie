@@ -587,9 +587,9 @@ $ateliers = [
                 margin-bottom: 2.5rem;
                 animation: done-rise 0.55s cubic-bezier(.22,1,.36,1) 0.54s both;
             ">
-                Un e-mail de confirmation vous sera envoyé sous peu. Le comité de sélection du
+                Un e-mail vient de vous être envoyé avec un lien pour créer votre mot de passe et accéder à votre espace candidat. Le comité de sélection du
                 <strong style="color: rgba(15,12,8,0.70); font-weight: 600;">Hub Import-Export 2026</strong>
-                examinera votre candidature dans les meilleurs délais.
+                examinera ensuite votre dossier.
             </p>
 
             {{-- Stats chiffrées --}}
@@ -617,8 +617,8 @@ $ateliers = [
 
             {{-- CTAs --}}
             <div style="animation: done-rise 0.55s cubic-bezier(.22,1,.36,1) 0.78s both; display:flex; flex-wrap:wrap; gap:1rem; justify-content:center;">
-                <a :href="`{{ route('register') }}?email=${encodeURIComponent(form.email)}`" class="btn-next">
-                    <span>Déposer ma candidature complète</span>
+                <a href="{{ route('login') }}" class="btn-next">
+                    <span>Accéder à mon espace</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
                     </svg>
