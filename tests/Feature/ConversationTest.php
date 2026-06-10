@@ -20,7 +20,7 @@ beforeEach(function () {
 
     $this->workshop = Workshop::factory()->create(['title' => 'Atelier Export']);
 
-    $this->trainer = User::factory()->create(['name' => 'Formateur Test', 'email_verified_at' => now()]);
+    $this->trainer = User::factory()->create(['first_name' => 'Formateur', 'last_name' => 'Test', 'email_verified_at' => now()]);
     $this->trainer->assignRole('super_admin');
 
     $this->participant = User::factory()->create(['email_verified_at' => now()]);

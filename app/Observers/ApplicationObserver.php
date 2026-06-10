@@ -11,7 +11,10 @@ class ApplicationObserver
     public function creating(Application $application): void
     {
         if (is_null($application->edition_id)) {
-            $application->edition_id = Edition::current()->id;
+            $edition = Edition::current();
+            if ($edition) {
+                $application->edition_id = $edition->id;
+            }
         }
     }
 

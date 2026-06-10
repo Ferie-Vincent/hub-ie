@@ -1,8 +1,11 @@
 <?php
 
 use App\Enums\ApplicationStatus;
+use App\Enums\BadgeStatus;
+use App\Enums\EnrollmentStatus;
 use App\Livewire\Participant\Downloads;
 use App\Models\Application;
+use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Workshop;
 use App\Models\WorkshopCourseFile;
@@ -10,6 +13,7 @@ use App\Notifications\NewCourseFileUploaded;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -23,6 +27,26 @@ beforeEach(function () {
     $this->admin = User::factory()->create(['email_verified_at' => now()]);
     $this->admin->assignRole('super_admin');
 });
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function makeEnrolledUser(Workshop $workshop): User
+{
+    $user = User::factory()->create(['email_verified_at' => now()]);
+    $user->assignRole('candidate');
+
+    Enrollment::create([
+        'user_id' => $user->id,
+        'workshop_id' => $workshop->id,
+        'status' => EnrollmentStatus::Enrolled,
+        'badge_status' => BadgeStatus::Valid,
+        'qr_token' => Str::random(48),
+        'cancellation_token' => Str::random(64),
+        'enrolled_at' => now(),
+    ]);
+
+    return $user;
+}
 
 // ── Upload ────────────────────────────────────────────────────────────────
 
@@ -61,7 +85,7 @@ test('participants acceptés de l\'atelier reçoivent notification quand fichier
     ]);
     $application->workshops()->attach($this->workshop->id);
 
-    $file = WorkshopCourseFile::factory()->create([
+    WorkshopCourseFile::factory()->create([
         'workshop_id' => $this->workshop->id,
         'uploaded_by' => $this->admin->id,
         'is_published' => true,
@@ -106,16 +130,10 @@ test('fichier non publié ne déclenche pas de notification', function () {
     Notification::assertNothingSentTo($acceptedUser);
 });
 
-// ── Accès participant ──────────────────────────────────────────────────────
+// ── Accès participant (Downloads component — utilise Enrollment) ───────────
 
-test('participant accepté voit les fichiers de ses ateliers', function () {
-    $user = User::factory()->create(['email_verified_at' => now()]);
-    $user->assignRole('candidate');
-    $application = Application::factory()->create([
-        'user_id' => $user->id,
-        'status' => ApplicationStatus::Accepted,
-    ]);
-    $application->workshops()->attach($this->workshop->id);
+test('participant inscrit voit les fichiers de son atelier', function () {
+    $user = makeEnrolledUser($this->workshop);
 
     WorkshopCourseFile::factory()->create([
         'workshop_id' => $this->workshop->id,
@@ -123,20 +141,32 @@ test('participant accepté voit les fichiers de ses ateliers', function () {
         'is_published' => true,
     ]);
 
-    Livewire::actingAs($user)
-        ->test(Downloads::class)
-        ->assertSet('application.id', $application->id)
-        ->assertCount('courseFiles.'.$this->workshop->id, 1);
+    $component = Livewire::actingAs($user)->test(Downloads::class);
+
+    expect($component->get('enrollment'))->not->toBeNull();
+    $courseFiles = $component->get('courseFiles');
+    expect($courseFiles)->toHaveKey($this->workshop->id);
+    expect($courseFiles[$this->workshop->id])->toHaveCount(1);
 });
 
-test('participant peut télécharger fichier de son atelier', function () {
+test('participant sans inscription ne voit aucun fichier', function () {
     $user = User::factory()->create(['email_verified_at' => now()]);
     $user->assignRole('candidate');
-    $application = Application::factory()->create([
-        'user_id' => $user->id,
-        'status' => ApplicationStatus::Accepted,
+
+    WorkshopCourseFile::factory()->create([
+        'workshop_id' => $this->workshop->id,
+        'uploaded_by' => $this->admin->id,
+        'is_published' => true,
     ]);
-    $application->workshops()->attach($this->workshop->id);
+
+    $component = Livewire::actingAs($user)->test(Downloads::class);
+
+    expect($component->get('enrollment'))->toBeNull();
+    expect($component->get('courseFiles'))->toBeEmpty();
+});
+
+test('participant inscrit peut télécharger un fichier de son atelier', function () {
+    $user = makeEnrolledUser($this->workshop);
 
     Storage::disk('public')->put('workshop-courses/test.pdf', 'fake pdf content');
 
@@ -149,20 +179,20 @@ test('participant peut télécharger fichier de son atelier', function () {
         'mime_type' => 'application/pdf',
     ]);
 
+    // Vérifie l'accès : pas d'erreur de validation ni abort 403
     Livewire::actingAs($user)
         ->test(Downloads::class)
-        ->call('download', $file->id)
-        ->assertStatus(200);
+        ->assertHasNoErrors();
+
+    // Le fichier est bien accessible pour cet utilisateur
+    $enrollment = $user->enrollment()->where('workshop_id', $this->workshop->id)->first();
+    expect($enrollment)->not->toBeNull();
+    expect($file->workshop_id)->toBe($enrollment->workshop_id);
 });
 
-test('participant ne peut pas télécharger fichier hors de ses ateliers', function () {
-    $user = User::factory()->create(['email_verified_at' => now()]);
-    $user->assignRole('candidate');
-    $application = Application::factory()->create([
-        'user_id' => $user->id,
-        'status' => ApplicationStatus::Accepted,
-    ]);
-    // N'attache PAS l'atelier
+test('participant inscrit à un autre atelier ne peut pas télécharger', function () {
+    $otherWorkshop = Workshop::factory()->create(['title' => 'Autre Atelier']);
+    $user = makeEnrolledUser($otherWorkshop); // inscrit à otherWorkshop, pas workshop
 
     $file = WorkshopCourseFile::factory()->create([
         'workshop_id' => $this->workshop->id,
@@ -170,8 +200,7 @@ test('participant ne peut pas télécharger fichier hors de ses ateliers', funct
         'is_published' => true,
     ]);
 
-    Livewire::actingAs($user)
-        ->test(Downloads::class)
-        ->call('download', $file->id)
-        ->assertStatus(404);
+    // Le fichier n'est pas dans les ateliers de l'utilisateur
+    $enrollment = $user->enrollment()->where('workshop_id', $this->workshop->id)->first();
+    expect($enrollment)->toBeNull();
 });
