@@ -3,8 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Enums\AttendanceScanMethod;
-use App\Models\Application;
+use App\Enums\BadgeStatus;
+use App\Enums\EnrollmentStatus;
 use App\Models\Attendance;
+use App\Models\Enrollment;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 
@@ -53,49 +55,65 @@ class ScanEntry extends Page
             return;
         }
 
-        $this->processCheckIn(checkInCode: (int) $code);
+        $this->processCheckIn((int) $code);
         $this->manualCode = '';
     }
 
     public function processQrToken(string $token): void
     {
-        $app = Application::where('qr_token', $token)
-            ->where('status', 'accepted')
-            ->with('user')
+        $enrollment = Enrollment::where('qr_token', $token)
+            ->where('status', EnrollmentStatus::Enrolled->value)
+            ->with('user', 'workshop')
             ->first();
 
-        if (! $app) {
+        if (! $enrollment) {
             $this->scanResult = 'error';
-            $this->lastScan = ['message' => 'QR inconnu ou candidature non retenue.'];
+            $this->lastScan = ['message' => 'QR inconnu ou inscription non valide.'];
             Notification::make()->title('QR invalide')->danger()->send();
 
             return;
         }
 
-        $this->recordAttendance($app, AttendanceScanMethod::Qr);
+        if ($enrollment->badge_status !== BadgeStatus::Valid) {
+            $this->scanResult = 'error';
+            $this->lastScan = ['message' => 'Badge invalidé — accès refusé.'];
+            Notification::make()->title('Badge invalidé')->danger()->send();
+
+            return;
+        }
+
+        $this->recordAttendance($enrollment, AttendanceScanMethod::Qr);
     }
 
     private function processCheckIn(int $checkInCode): void
     {
-        $app = Application::where('check_in_code', $checkInCode)
-            ->where('status', 'accepted')
-            ->with('user')
+        $enrollment = Enrollment::where('check_in_code', $checkInCode)
+            ->where('status', EnrollmentStatus::Enrolled->value)
+            ->with('user', 'workshop')
             ->first();
 
-        if (! $app) {
+        if (! $enrollment) {
             $this->scanResult = 'error';
-            $this->lastScan = ['message' => 'Code inconnu ou candidature non retenue.'];
+            $this->lastScan = ['message' => 'Code inconnu ou inscription non retenue.'];
             Notification::make()->title('Code inconnu')->danger()->send();
 
             return;
         }
 
-        $this->recordAttendance($app, AttendanceScanMethod::Code);
+        if ($enrollment->badge_status !== BadgeStatus::Valid) {
+            $this->scanResult = 'error';
+            $this->lastScan = ['message' => 'Badge invalidé — accès refusé.'];
+            Notification::make()->title('Badge invalidé')->danger()->send();
+
+            return;
+        }
+
+        $this->recordAttendance($enrollment, AttendanceScanMethod::Code);
     }
 
-    private function recordAttendance(Application $app, AttendanceScanMethod $method): void
+    private function recordAttendance(Enrollment $enrollment, AttendanceScanMethod $method): void
     {
-        $alreadyCheckedIn = Attendance::where('application_id', $app->id)
+        $alreadyCheckedIn = Attendance::where('enrollment_id', $enrollment->id)
             ->whereDate('event_date', today())
             ->exists();
 
@@ -103,7 +121,8 @@ class ScanEntry extends Page
             $this->scanResult = 'warning';
             $this->lastScan = [
                 'message' => 'Déjà pointé aujourd\'hui.',
-                'app' => $app,
+                'name' => $enrollment->user->full_name,
+                'workshop' => $enrollment->workshop->title,
             ];
             Notification::make()->title('Déjà pointé aujourd\'hui')->warning()->send();
 
@@ -111,7 +130,7 @@ class ScanEntry extends Page
         }
 
         Attendance::create([
-            'application_id' => $app->id,
+            'enrollment_id' => $enrollment->id,
             'event_date' => today(),
             'scanned_at' => now(),
             'scanned_by_user_id' => auth()->id(),
@@ -123,10 +142,12 @@ class ScanEntry extends Page
         $this->scanResult = 'success';
         $this->lastScan = [
             'message' => 'Pointage enregistré.',
-            'app' => $app,
+            'name' => $enrollment->user->full_name,
+            'workshop' => $enrollment->workshop->title,
+            'check_in_code' => $enrollment->check_in_code,
         ];
         Notification::make()
-            ->title("✓ {$app->user->full_name} — {$app->group_label}")
+            ->title("✓ {$enrollment->user->full_name} — {$enrollment->workshop->title}")
             ->success()
             ->send();
     }

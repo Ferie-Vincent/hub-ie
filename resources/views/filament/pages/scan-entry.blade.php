@@ -107,10 +107,12 @@
             @endif
             <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">{{ $lastScan['message'] }}</span>
           </div>
-          @if(isset($lastScan['app']))
-          <div class="se-result-name">{{ $lastScan['app']->user->full_name }}</div>
-          <div class="se-detail" style="margin-top:.25rem;">{{ $lastScan['app']->organization_name }}</div>
-          <div class="se-detail" style="margin-top:.2rem;">Groupe : {{ $lastScan['app']->group_label }} · <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;">{{ $lastScan['app']->reference_code }}</span></div>
+          @if(isset($lastScan['name']))
+          <div class="se-result-name">{{ $lastScan['name'] }}</div>
+          <div class="se-detail" style="margin-top:.25rem;">{{ $lastScan['workshop'] }}</div>
+          @if(isset($lastScan['check_in_code']))
+          <div class="se-detail" style="margin-top:.2rem;">Code : <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;">{{ $lastScan['check_in_code'] }}</span></div>
+          @endif
           @endif
         </div>
         @endif
