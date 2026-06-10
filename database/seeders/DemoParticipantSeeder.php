@@ -3,10 +3,13 @@
 namespace Database\Seeders;
 
 use App\Enums\ApplicationStatus;
+use App\Enums\BadgeStatus;
+use App\Enums\EnrollmentStatus;
 use App\Models\Application;
 use App\Models\Conversation;
 use App\Models\ConversationMessage;
 use App\Models\Edition;
+use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Workshop;
 use App\Models\WorkshopCourseFile;
@@ -88,6 +91,23 @@ class DemoParticipantSeeder extends Seeder
         // Rattachement — 1 seul atelier par candidat
         if ($workshops->isNotEmpty()) {
             $application->workshops()->sync([$workshops->first()->id]);
+        }
+
+        // ── 4b. Enrollment (pour le système de scan / pointage) ─────────────
+        $enrollment = null;
+        if ($workshops->isNotEmpty()) {
+            $enrollment = Enrollment::firstOrCreate(
+                ['user_id' => $participant->id],
+                [
+                    'workshop_id' => $workshops->first()->id,
+                    'status' => EnrollmentStatus::Enrolled,
+                    'badge_status' => BadgeStatus::Valid,
+                    'qr_token' => $application->qr_token,
+                    'check_in_code' => (int) $application->check_in_code,
+                    'cancellation_token' => Str::random(64),
+                    'enrolled_at' => now()->subDays(20),
+                ]
+            );
         }
 
         // ── 4. Fichiers de cours par atelier ────────────────────────────────
@@ -243,6 +263,7 @@ class DemoParticipantSeeder extends Seeder
 
         $this->command->info('✓ Participant demo : participant@demo.ci / password');
         $this->command->info('  Application : HIE2026-DEMO01 · Code : 847291 · Groupe G1');
+        $this->command->info('  Enrollment ID : '.($enrollment?->id ?? 'n/a').' · statut : enrolled · badge : valid');
         $this->command->info('  '.($workshops->count()).' atelier(s) · '.($workshops->count() * 2).' fichiers · 1 conversation · 3 messages · 2 notifs');
     }
 }
