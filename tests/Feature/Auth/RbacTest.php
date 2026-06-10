@@ -85,18 +85,12 @@ test('staff member is redirected away from candidature', function () {
         ->assertRedirect();
 });
 
-test('registration creates candidate role and redirects to verification', function () {
+test('direct POST to /register returns 404', function () {
     $this->post('/register', [
         'first_name' => 'Konan',
         'last_name' => 'Yao',
         'email' => 'konan@example.com',
         'password' => 'Password123!',
         'password_confirmation' => 'Password123!',
-    ])->assertRedirect(route('verification.notice'));
-
-    $user = User::where('email', 'konan@example.com')->first();
-    expect($user)->not->toBeNull()
-        ->and($user->hasRole('candidate'))->toBeTrue()
-        ->and($user->first_name)->toBe('Konan')
-        ->and($user->last_name)->toBe('Yao');
+    ])->assertNotFound();
 });
