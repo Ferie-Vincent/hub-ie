@@ -62,7 +62,7 @@ class PreInscriptionActivationController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('candidature');
+        return redirect()->route('candidate.dashboard');
     }
 
     private function isExpired(PreInscription $preInscription): bool
