@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Mail\PreInscriptionInvitation;
 use App\Models\PreInscription;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -36,28 +35,14 @@ class PreInscriptionController extends Controller
             'secteur.required' => "Le secteur d'activité est obligatoire.",
         ]);
 
-        $user = User::create([
-            'first_name' => $validated['prenom'],
-            'last_name' => $validated['nom'],
-            'email' => $validated['email'],
-            'phone' => $validated['telephone'] ?? null,
-            'password' => '',
-            'email_verified_at' => now(),
-        ]);
-
-        $user->assignRole('candidate');
-
-        $token = Str::random(64);
-
         $preInscription = PreInscription::create(array_merge($validated, [
-            'user_id' => $user->id,
-            'invitation_token' => $token,
+            'invitation_token' => Str::random(64),
             'invitation_sent_at' => now(),
         ]));
 
-        $invitationUrl = route('invitation.show', ['token' => $token]);
+        $activationUrl = route('pre-inscription.activate.show', $preInscription->invitation_token);
 
-        Mail::to($user->email)->send(new PreInscriptionInvitation($user, $invitationUrl));
+        Mail::to($preInscription->email)->send(new PreInscriptionInvitation($preInscription, $activationUrl));
 
         return response()->json(['success' => true]);
     }

@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\User;
+use App\Models\PreInscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -14,8 +14,8 @@ class PreInscriptionInvitation extends Mailable
     use Queueable, SerializesModels;
 
     public function __construct(
-        public readonly User $user,
-        public readonly string $invitationUrl,
+        public readonly PreInscription $preInscription,
+        public readonly string $activationUrl,
     ) {}
 
     public function envelope(): Envelope

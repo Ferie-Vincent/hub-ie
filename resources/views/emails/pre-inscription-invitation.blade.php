@@ -26,14 +26,14 @@
     </div>
 
     <div class="body">
-        <p>Bonjour {{ $user->first_name }},</p>
+        <p>Bonjour {{ $preInscription->prenom }},</p>
         <p>
             Votre pré-inscription au <strong>Hub Import-Export 2026</strong> a bien été enregistrée.
             Pour suivre l'avancement de votre dossier, activez votre espace personnel en créant votre mot de passe.
         </p>
 
         <div style="text-align:center;margin:32px 0;">
-            <a href="{{ $invitationUrl }}" class="btn">Créer mon mot de passe</a>
+            <a href="{{ $activationUrl }}" class="btn">Créer mon mot de passe</a>
         </div>
 
         <p>
@@ -42,7 +42,7 @@
 
         <p class="link-fallback">
             Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>
-            {{ $invitationUrl }}
+            {{ $activationUrl }}
         </p>
     </div>
 
