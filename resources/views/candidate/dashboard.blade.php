@@ -9,6 +9,7 @@
         ->first();
 
     $isAccepted = $app && $app->status->value === 'accepted';
+    $enrollment = $user->enrollment()->first();
 
     // Accès rapide stats (accepted uniquement)
     $unreadCount = 0;
@@ -278,9 +279,10 @@
             <div class="flex flex-col sm:flex-row items-center gap-8">
                 {{-- QR --}}
                 <div class="bg-white rounded-2xl p-3 shadow-2xl shrink-0">
-                    @if($app->qr_token)
-                    <img src="{{ route('application.qr', $app) }}" alt="QR code — {{ $app->reference_code }}"
-                         class="w-36 h-36 sm:w-40 sm:h-40">
+                    @if($enrollment?->qr_token)
+                    <div class="w-36 h-36 sm:w-40 sm:h-40">
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(160)->format('svg')->generate($enrollment->qr_token) !!}
+                    </div>
                     @else
                     <div class="w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center rounded-xl"
                          style="background:hsl(var(--sable-doux)/0.3);">
@@ -293,7 +295,7 @@
                     <div>
                         <p class="text-xs uppercase tracking-widest mb-1" style="color:hsl(var(--blanc-pur)/0.4);">Code numérique</p>
                         <p class="font-mono font-black text-blanc-pur tracking-[0.4em]" style="font-size: 2.5rem; line-height:1;">
-                            {{ $app->check_in_code }}
+                            {{ $enrollment?->check_in_code ?? $app->check_in_code }}
                         </p>
                     </div>
                     @if($app->group_label)
@@ -303,7 +305,7 @@
                     </div>
                     @endif
                     <p class="text-xs" style="color:hsl(var(--blanc-pur)/0.35);">À présenter à l'entrée chaque jour</p>
-                    <a href="{{ route('application.badge.download', $app) }}"
+                    <a href="{{ route('participant.badge.download') }}"
                        class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold text-blanc-pur border transition-colors hover:bg-blanc-pur/10 cursor-pointer"
                        style="border-color:hsl(var(--blanc-pur)/0.2);">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
