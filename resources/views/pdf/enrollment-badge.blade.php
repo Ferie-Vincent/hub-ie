@@ -48,6 +48,12 @@ body {
     flex-direction: column;
     gap: 1mm;
 }
+.logo-img {
+    height: 8mm;
+    width: auto;
+    display: block;
+    margin-bottom: 1mm;
+}
 .logo-text {
     font-size: 8.5pt;
     font-weight: 700;
@@ -176,7 +182,8 @@ body {
 
     <div class="header">
         <div class="header-left">
-            <div class="logo-text">Hub Import-Export 2026</div>
+            @php $logoBase64 = base64_encode(file_get_contents(public_path('images/logo-hie.png'))); @endphp
+            <img src="data:image/png;base64,{{ $logoBase64 }}" alt="Hub Import-Export" class="logo-img">
             <div class="logo-sub">22 – 25 Juin 2026 · Abidjan, Côte d'Ivoire</div>
         </div>
         <div class="session-pill">Session</div>
