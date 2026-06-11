@@ -136,7 +136,7 @@ body, .fi-body {
 .fi-sidebar-header .fi-icon-btn-icon { color: rgba(255,255,255,0.45) !important; }
 .fi-sidebar-header .fi-icon-btn:hover { background: rgba(255,255,255,0.08) !important; border-radius: var(--ins-radius) !important; }
 .fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon { color: #ffffff !important; }
-.fi-sidebar-nav { padding-block: 0.75rem !important; }
+.fi-sidebar-nav { padding-block: 0.375rem !important; }
 .fi-sidebar-group-label {
   font-family: var(--ins-font) !important;
   font-size: 10.5px !important;
@@ -145,24 +145,24 @@ body, .fi-body {
   text-transform: uppercase !important;
   color: var(--ins-nav-grp-cl) !important;
   padding-inline: 1.25rem !important;
-  padding-block: 0.75rem 0.3rem !important;
+  padding-block: 0.5rem 0.15rem !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
 .fi-sidebar-nav-groups > li + li {
-  margin-top: 0.5rem !important;
-  padding-top: 0.5rem !important;
+  margin-top: 0.25rem !important;
+  padding-top: 0.25rem !important;
   border-top: 1px solid rgba(255,255,255,0.07) !important;
 }
 .fi-sidebar-group-collapse-button .fi-icon-btn-icon { color: rgba(255,255,255,0.30) !important; }
 .fi-sidebar-item-button {
   border-radius: var(--ins-radius) !important;
   margin-inline: 0.625rem !important;
-  margin-block: 1px !important;
-  padding-block: 0.5rem !important;
+  margin-block: 0 !important;
+  padding-block: 0.3rem !important;
   padding-inline: 0.875rem !important;
-  min-height: 38px !important;
+  min-height: 32px !important;
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
