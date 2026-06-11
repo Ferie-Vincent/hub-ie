@@ -239,13 +239,19 @@ body, .fi-body {
 .fi-topbar-item:hover { color: var(--ins-ink) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   LAYOUT — reduce horizontal whitespace, keep content tight
+   LAYOUT — full-width content, no excess horizontal whitespace
+   Filament wraps content in .fi-body (px-4/6/8) then .fi-page
+   (max-w-7xl mx-auto). Override both to use full available width.
 ═══════════════════════════════════════════════════════════════ */
-.fi-page {
+.fi-body {
   padding-inline: 1.25rem !important;
+}
+.fi-page,
+.fi-page > * {
   max-width: 100% !important;
 }
-.fi-main-ctn {
+.fi-main-ctn,
+.fi-simple-main {
   padding-inline: 0 !important;
   max-width: 100% !important;
 }
@@ -316,7 +322,8 @@ body, .fi-body {
 /* ═══════════════════════════════════════════════════════════════
    TABLES
 ═══════════════════════════════════════════════════════════════ */
-.fi-ta-content { border-radius: var(--ins-radius-xl) !important; overflow-x: auto !important; overflow-y: visible !important; }
+.fi-ta-ctn, .fi-ta-content, .fi-section-content > div { overflow-x: auto !important; }
+.fi-ta-content { border-radius: var(--ins-radius-xl) !important; min-width: 0 !important; }
 .fi-ta-header-cell {
   font-family: var(--ins-font) !important;
   font-size: 11px !important;
