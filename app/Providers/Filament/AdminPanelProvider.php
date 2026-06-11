@@ -147,7 +147,7 @@ body, .fi-body {
 .fi-sidebar-header .fi-icon-btn-icon { color: rgba(255,255,255,0.45) !important; }
 .fi-sidebar-header .fi-icon-btn:hover { background: rgba(255,255,255,0.08) !important; border-radius: var(--ins-radius) !important; }
 .fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon { color: #ffffff !important; }
-.fi-sidebar-nav { padding-block: 0.25rem !important; }
+.fi-sidebar-nav { padding-block: 0.25rem !important; padding-inline: 0.5rem !important; }
 .fi-sidebar-group-label {
   font-family: var(--ins-font) !important;
   font-size: 10.5px !important;
@@ -155,7 +155,7 @@ body, .fi-body {
   letter-spacing: 0.10em !important;
   text-transform: uppercase !important;
   color: var(--ins-nav-grp-cl) !important;
-  padding-inline: 1.25rem !important;
+  padding-inline: 0.75rem !important;
   padding-block: 0.35rem 0.05rem !important;
   white-space: nowrap !important;
   overflow: hidden !important;
