@@ -22,7 +22,7 @@ class WorkshopCourseFileResource extends Resource
 
     protected static ?string $navigationGroup = 'Ateliers';
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 21;
 
     protected static ?string $navigationLabel = 'Fichiers de cours';
 

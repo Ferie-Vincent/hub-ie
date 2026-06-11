@@ -30,7 +30,7 @@ class EnrollmentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Inscriptions';
 
-    protected static ?string $navigationGroup = 'Sessions';
+    protected static ?string $navigationGroup = 'Participants';
 
     protected static ?int $navigationSort = 10;
 

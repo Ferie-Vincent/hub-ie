@@ -18,7 +18,7 @@ class ExportCenter extends Page
 
     protected static ?string $navigationGroup = 'Administration';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 62;
 
     protected static ?string $title = 'Centre d\'export';
 

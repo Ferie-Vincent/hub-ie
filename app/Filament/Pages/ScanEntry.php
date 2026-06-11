@@ -16,7 +16,7 @@ class ScanEntry extends Page
 
     protected static ?string $navigationGroup = 'Événement';
 
-    protected static ?int $navigationSort = 60;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $title = 'Pointage';
 

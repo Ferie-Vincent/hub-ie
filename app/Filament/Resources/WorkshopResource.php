@@ -19,7 +19,7 @@ class WorkshopResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
-    protected static ?string $navigationGroup = 'Contenu';
+    protected static ?string $navigationGroup = 'Ateliers';
 
     protected static ?int $navigationSort = 20;
 

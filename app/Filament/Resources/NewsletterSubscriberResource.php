@@ -14,9 +14,9 @@ class NewsletterSubscriberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
 
-    protected static ?string $navigationGroup = 'Administration';
+    protected static ?string $navigationGroup = 'Communication';
 
-    protected static ?int $navigationSort = 15;
+    protected static ?int $navigationSort = 51;
 
     protected static ?string $navigationLabel = 'Newsletter';
 

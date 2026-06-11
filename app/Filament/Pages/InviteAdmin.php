@@ -18,9 +18,9 @@ class InviteAdmin extends Page
 
     protected static ?string $navigationLabel = 'Inviter un admin';
 
-    protected static ?string $navigationGroup = 'Système';
+    protected static ?string $navigationGroup = 'Administration';
 
-    protected static ?int $navigationSort = 90;
+    protected static ?int $navigationSort = 65;
 
     protected static string $view = 'filament.pages.invite-admin';
 

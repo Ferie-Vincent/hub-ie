@@ -23,7 +23,7 @@ class ConversationResource extends Resource
 
     protected static ?string $navigationGroup = 'Communication';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 50;
 
     protected static ?string $navigationLabel = 'Conversations';
 

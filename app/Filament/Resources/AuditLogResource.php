@@ -16,7 +16,7 @@ class AuditLogResource extends Resource
 
     protected static ?string $navigationGroup = 'Administration';
 
-    protected static ?int $navigationSort = 40;
+    protected static ?int $navigationSort = 64;
 
     protected static ?string $navigationLabel = 'Journal d\'audit';
 
