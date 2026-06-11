@@ -128,14 +128,23 @@ document.addEventListener('DOMContentLoaded', function () {
     script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
     script.onload = function () {
         const html5QrCode = new Html5Qrcode('qr-reader');
+        let lastToken = null;
+        let cooldownUntil = 0;
+
         html5QrCode.start(
             { facingMode: 'environment' },
             { fps: 10, qrbox: { width: 200, height: 200 } },
             function (decodedText) {
                 const token = decodedText.trim();
+                const now = Date.now();
+
+                // Ignore même token dans les 10s suivant le dernier scan
+                if (token === lastToken && now < cooldownUntil) return;
+
+                lastToken = token;
+                cooldownUntil = now + 10000;
+
                 @this.call('processQrToken', token);
-                html5QrCode.pause();
-                setTimeout(() => html5QrCode.resume(), 3000);
             },
             null
         ).catch(err => console.error('QR start error:', err));
