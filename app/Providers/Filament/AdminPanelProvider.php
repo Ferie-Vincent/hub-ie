@@ -109,7 +109,6 @@ body, .fi-body {
 ═══════════════════════════════════════════════════════════════ */
 /* Align sidebar width with Filament's --sidebar-width var */
 :root { --sidebar-width: 16rem; }
-.fi-layout { background-color: var(--ins-nav-bg) !important; }
 .fi-sidebar {
   background-color: var(--ins-nav-bg) !important;
   border: none !important;
@@ -122,18 +121,7 @@ body, .fi-body {
   width: var(--sidebar-width) !important;
   transition: width 0.22s cubic-bezier(0.4,0,0.2,1) !important;
 }
-/* Bleed sidebar bg 2px right to cover any sub-pixel layout gap */
-.fi-sidebar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -2px;
-  width: 2px;
-  height: 100%;
-  background: var(--ins-nav-bg);
-  z-index: 1;
-}
-.fi-main-sidebar { background-color: var(--ins-nav-bg) !important; border: none !important; }
+.fi-main-sidebar { background-color: var(--ins-nav-bg) !important; }
 .fi-sidebar-header {
   background-color: var(--ins-nav-bg) !important;
   border-bottom: 1px solid var(--ins-nav-border) !important;
@@ -268,7 +256,7 @@ body, .fi-body {
    (max-w-7xl mx-auto). Override both to use full available width.
 ═══════════════════════════════════════════════════════════════ */
 .fi-body {
-  padding-inline: 1.25rem !important;
+  padding-inline: 0 !important;
 }
 .fi-page,
 .fi-page > * {
@@ -346,8 +334,9 @@ body, .fi-body {
 /* ═══════════════════════════════════════════════════════════════
    TABLES
 ═══════════════════════════════════════════════════════════════ */
-.fi-ta-ctn, .fi-ta-content, .fi-section-content > div { overflow-x: auto !important; }
-.fi-ta-content { border-radius: var(--ins-radius-xl) !important; min-width: 0 !important; }
+.fi-ta-ctn, .fi-ta-content { overflow-x: auto !important; }
+.fi-ta-content { border-radius: var(--ins-radius-xl) !important; min-width: 0 !important; width: 100% !important; }
+.fi-table { table-layout: auto !important; width: 100% !important; }
 .fi-ta-header-cell {
   font-family: var(--ins-font) !important;
   font-size: 11px !important;
