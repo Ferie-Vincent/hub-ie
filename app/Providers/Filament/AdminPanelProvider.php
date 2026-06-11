@@ -104,12 +104,20 @@ body, .fi-body {
    SIDEBAR — dark forest green · 260px
    Active: rgba(255,255,255,0.12) tint + orange left accent bar
 ═══════════════════════════════════════════════════════════════ */
+/* Align sidebar width with Filament's --sidebar-width var */
+:root { --sidebar-width: 16rem; }
 .fi-sidebar {
   background-color: var(--ins-nav-bg) !important;
   border-right: none !important;
-  width: 260px !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-width: 0px !important;
+  width: var(--sidebar-width) !important;
   transition: width 0.22s cubic-bezier(0.4,0,0.2,1) !important;
 }
+/* Cover any gap between layout edge and fixed sidebar */
+.fi-main-sidebar { background-color: var(--ins-nav-bg) !important; }
 .fi-sidebar-header {
   background-color: var(--ins-nav-bg) !important;
   border-bottom: 1px solid var(--ins-nav-border) !important;
