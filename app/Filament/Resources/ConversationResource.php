@@ -171,11 +171,12 @@ class ConversationResource extends Resource
                     ->relationship('workshop', 'title'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->iconButton(),
                 Tables\Actions\Action::make('reply')
                     ->label('Répondre')
                     ->icon('heroicon-o-paper-airplane')
                     ->color('primary')
+                    ->iconButton()
                     ->visible(fn (Conversation $record): bool => ! $record->is_closed)
                     ->form([
                         Forms\Components\Textarea::make('body')
@@ -201,6 +202,7 @@ class ConversationResource extends Resource
                     ->label('Clôturer')
                     ->icon('heroicon-o-lock-closed')
                     ->color('gray')
+                    ->iconButton()
                     ->requiresConfirmation()
                     ->visible(fn (Conversation $record): bool => ! $record->is_closed)
                     ->action(fn (Conversation $record) => $record->update(['is_closed' => true])),
@@ -208,6 +210,7 @@ class ConversationResource extends Resource
                     ->label('Rouvrir')
                     ->icon('heroicon-o-lock-open')
                     ->color('success')
+                    ->iconButton()
                     ->visible(fn (Conversation $record): bool => $record->is_closed)
                     ->action(fn (Conversation $record) => $record->update(['is_closed' => false])),
             ])
