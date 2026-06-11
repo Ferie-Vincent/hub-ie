@@ -128,7 +128,7 @@ body, .fi-body {
 .fi-sidebar {
   background-color: var(--ins-nav-bg) !important;
   border-right: 1px solid var(--ins-nav-border) !important;
-  width: 220px !important;
+  width: 260px !important;
   transition: width 0.22s cubic-bezier(0.4,0,0.2,1) !important;
 }
 
@@ -168,14 +168,17 @@ body, .fi-body {
 
 /* Group labels — Simple: 11px, uppercase, very muted */
 .fi-sidebar-group-label {
-  font-family: var(--ins-font-mono) !important;
-  font-size: 11px !important;
+  font-family: var(--ins-font) !important;
+  font-size: 10.5px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.12em !important;
+  letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
   color: var(--ins-nav-grp-cl) !important;
   padding-inline: 1.25rem !important;
   padding-block: 0.5rem 0.25rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* Group separators — Simple: subtle line */
@@ -218,6 +221,9 @@ body, .fi-body {
   font-size: 0.8125rem !important;
   font-weight: 500 !important;
   transition: color 0.15s !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* Hover */
@@ -239,6 +245,9 @@ body, .fi-body {
   color: var(--ins-nav-active-cl) !important;
   font-weight: 600 !important;
   font-size: 0.8125rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* Sidebar badges */
