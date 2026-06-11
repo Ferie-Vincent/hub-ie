@@ -448,11 +448,16 @@ label, .fi-fo-field-wrp-label { font-size: 13px !important; font-weight: 500 !im
 /* ═══════════════════════════════════════════════════════════════
    CONTENT DENSITY
 ═══════════════════════════════════════════════════════════════ */
-.fi-main { padding-inline: 1rem !important; padding-block: 0.75rem !important; }
-.fi-page-header { padding-block: 0.5rem 0.75rem !important; }
-.fi-page-header .fi-breadcrumbs { margin-bottom: 0.15rem !important; }
-.fi-page-header h1.fi-header-heading { font-size: 1.35rem !important; line-height: 1.3 !important; }
-.fi-ta-ctn { border-radius: 0.625rem !important; }
+/* Main wrapper horizontal padding */
+main.fi-main { padding-inline: 1.25rem !important; }
+/* Page section: py-8 gap-y-8 → compact */
+.fi-page > section { padding-block: 0.75rem !important; gap: 0.75rem !important; }
+/* Page header */
+.fi-header-heading { font-size: 1.35rem !important; line-height: 1.3 !important; }
+
+/* ─── Sidebar group gaps ─────────────────────────────────────── */
+/* Nullify gap-y-7 on the groups list; separators via li+li rule */
+.fi-sidebar-nav-groups { gap: 0 !important; }
 </style>
 HTML)
             ->middleware([
