@@ -413,15 +413,16 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
     @endforelse
   </div>
 
-  <div class="hd-card">
+  <div class="hd-card" style="display:flex;flex-direction:column;">
     <span class="hd-kicker">Tranches d'âge</span>
-    <div style="display:flex;align-items:flex-end;gap:.5rem;height:88px;margin-top:.375rem;">
+    <div style="display:flex;align-items:flex-end;gap:.5rem;flex:1;min-height:80px;padding-top:.375rem;">
       @foreach($ageData as $lbl => $count)
-      @php $h = max(round($count / max($ageMax,1) * 76), $count > 0 ? 3 : 2); @endphp
-      <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem;flex:1;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--hd-t2);">{{ $count }}</span>
-        <div style="width:100%;border-radius:3px 3px 0 0;background:{{ $count > 0 ? 'var(--hd-orange)' : 'var(--hd-track)' }};height:{{ $h }}px;"></div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.47rem;font-weight:700;letter-spacing:.04em;color:var(--hd-t3);text-align:center;line-height:1.2;white-space:pre-line;">{{ str_replace(' ',"\n",$lbl) }}</span>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1;height:100%;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--hd-t2);flex-shrink:0;">{{ $count }}</span>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;padding-bottom:.3rem;">
+          <div style="width:100%;border-radius:3px 3px 0 0;background:{{ $count > 0 ? 'var(--hd-orange)' : 'var(--hd-track)' }};height:{{ max(round($count / max($ageMax,1) * 100), $count > 0 ? 5 : 2) }}%;min-height:{{ $count > 0 ? '4px' : '2px' }};"></div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.47rem;font-weight:700;letter-spacing:.04em;color:var(--hd-t3);text-align:center;line-height:1.2;white-space:pre-line;flex-shrink:0;">{{ str_replace(' ',"\n",$lbl) }}</span>
       </div>
       @endforeach
     </div>
@@ -429,8 +430,8 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
 
 </div>
 
-{{-- ── 5. ATELIERS + ENTONNOIR + QUOTAS ─────────────────────────────────── --}}
-<div class="hd-g3">
+{{-- ── 5. ATELIERS + QUOTAS ──────────────────────────────────────────────── --}}
+<div class="hd-g2">
 
   {{-- Workshops --}}
   <div class="hd-card">
@@ -446,23 +447,6 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
     @empty
     <p style="font-size:.78rem;color:var(--hd-t3);">Aucune donnée</p>
     @endforelse
-  </div>
-
-  {{-- Status funnel --}}
-  <div class="hd-card">
-    <span class="hd-kicker">Entonnoir de sélection</span>
-    @php $fCols=['#4CAF7A','#009A44','#C5A96A','#E8741C','#C45A0A']; @endphp
-    @foreach($statusFunnel as $i => $row)
-    <div class="hd-funnel">
-      <div class="hd-funnel-hd">
-        <span style="font-size:.75rem;color:var(--hd-t2);">{{ $row['label'] }}</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:{{ $fCols[$i] ?? 'var(--hd-t2)' }};">{{ $row['count'] }}</span>
-      </div>
-      <div class="hd-track">
-        <div class="hd-fill" style="width:{{ $row['pct'] }}%;background:{{ $fCols[$i] ?? 'var(--hd-track)' }};"></div>
-      </div>
-    </div>
-    @endforeach
   </div>
 
   {{-- Quotas inclusivité --}}
@@ -495,31 +479,10 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
 
 </div>
 
-{{-- ── 6. GÉOGRAPHIE + SOURCES ──────────────────────────────────────────── --}}
-<div class="hd-g2">
-
-  <div class="hd-card">
-    <span class="hd-kicker">Répartition géographique — Top villes</span>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1.75rem;margin-top:.25rem;">
-      @forelse($geographyData as $city => $count)
-      @php $pct = round($count / max($geoMax,1) * 100); @endphp
-      <div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:.25rem;">
-          <span style="font-size:.75rem;font-weight:600;color:var(--hd-t2);">{{ $city }}</span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--hd-t2);">{{ $count }}</span>
-        </div>
-        <div class="hd-track" style="height:4px;">
-          <div class="hd-fill" style="width:{{ $pct }}%;background:var(--hd-orange);"></div>
-        </div>
-      </div>
-      @empty
-      <p style="font-size:.78rem;color:var(--hd-t3);">Aucune donnée</p>
-      @endforelse
-    </div>
-  </div>
-
-  <div class="hd-card">
-    <span class="hd-kicker">Sources de connaissance</span>
+{{-- ── 6. SOURCES ────────────────────────────────────────────────────────── --}}
+<div class="hd-card">
+  <span class="hd-kicker">Sources de connaissance</span>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.375rem 2rem;">
     @forelse($referralData as $src => $count)
     @php $pct = round($count / max($refMax,1) * 100); @endphp
     <div class="hd-bar" style="grid-template-columns:1fr 76px 28px;">
@@ -531,28 +494,8 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
     <p style="font-size:.78rem;color:var(--hd-t3);">Aucune donnée</p>
     @endforelse
   </div>
-
 </div>
 
-{{-- ── 7. POINTAGE ÉVÉNEMENT ────────────────────────────────────────────── --}}
-<div class="hd-card">
-  <span class="hd-kicker">Pointage par jour — 22 au 25 juin 2026</span>
-  <div style="display:flex;align-items:flex-end;gap:2rem;height:96px;margin-top:.625rem;">
-    @php $attLabels = ['22 juin','23 juin','24 juin','25 juin']; @endphp
-    @foreach($attendanceData as $i => $count)
-    @php $h = max(round($count / max($attMax,1) * 80), $count > 0 ? 4 : 2); @endphp
-    <div style="display:flex;flex-direction:column;align-items:center;gap:.375rem;flex:1;">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:{{ $count > 0 ? 'var(--hd-vert)' : 'var(--hd-t3)' }};">{{ $count }}</span>
-      <div style="width:100%;border-radius:4px 4px 0 0;background:{{ $count > 0 ? 'var(--hd-vert)' : 'var(--hd-track)' }};height:{{ $h }}px;"></div>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.52rem;font-weight:700;letter-spacing:.05em;color:var(--hd-t3);">{{ $attLabels[$i] }}</span>
-    </div>
-    @endforeach
-  </div>
-  <div style="display:flex;align-items:center;gap:.5rem;margin-top:.75rem;">
-    <span style="width:7px;height:7px;border-radius:2px;background:var(--hd-vert);display:inline-block;flex-shrink:0;"></span>
-    <span style="font-size:.68rem;color:var(--hd-t3);">J-{{ $daysToEvent }} avant l'ouverture · Les données de présence s'afficheront à partir du 22 juin 2026.</span>
-  </div>
-</div>
 
 </div>{{-- /.hd-wrap --}}
 </x-filament-panels::page>
