@@ -7,18 +7,14 @@ use App\Enums\ApplicationStatus;
 use App\Enums\Gender;
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Models\Application;
-use App\Services\ApplicationStatusService;
-use Filament\Forms;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontFamily;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 class ApplicationResource extends Resource
 {
@@ -93,7 +89,7 @@ class ApplicationResource extends Resource
                 Tables\Columns\TextColumn::make('user.city')
                     ->label('Ville')
                     ->searchable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('category')
                     ->label('Profil')
@@ -176,88 +172,8 @@ class ApplicationResource extends Resource
             ->persistFiltersInSession()
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\Action::make('change_status')
-                    ->label('Statut')
-                    ->icon('heroicon-m-arrow-path')
-                    ->color('gray')
-                    ->modalHeading('Changer le statut')
-                    ->modalWidth('md')
-                    ->form([
-                        Forms\Components\Select::make('status')
-                            ->label('Nouveau statut')
-                            ->options(fn (Application $record) => collect(ApplicationStatus::cases())
-                                ->reject(fn ($s) => $s === ApplicationStatus::Draft)
-                                ->filter(fn ($s) => app(ApplicationStatusService::class)->canTransition($record, $s))
-                                ->mapWithKeys(fn ($s) => [$s->value => $s->label()])
-                            )
-                            ->required()
-                            ->live()
-                            ->default(fn (Application $record) => $record->status->value),
-                        Forms\Components\Textarea::make('admin_notes')
-                            ->label('Notes internes')
-                            ->placeholder('Visible uniquement par les administrateurs')
-                            ->rows(2)
-                            ->default(fn (Application $record) => $record->admin_notes),
-                        Forms\Components\Textarea::make('rejection_reason')
-                            ->label('Motif de refus')
-                            ->placeholder('Communiqué au candidat si non retenu(e)')
-                            ->rows(2)
-                            ->hidden(fn (Forms\Get $get) => $get('status') !== ApplicationStatus::Rejected->value),
-                    ])
-                    ->action(function (Application $record, array $data): void {
-                        try {
-                            app(ApplicationStatusService::class)->transition(
-                                $record,
-                                ApplicationStatus::from($data['status']),
-                                $data['admin_notes'] ?? null,
-                            );
-                            if (! blank($data['rejection_reason'] ?? null)) {
-                                $record->update(['rejection_reason' => $data['rejection_reason']]);
-                            }
-                        } catch (\DomainException $e) {
-                            Notification::make()->title('Transition impossible')->body($e->getMessage())->danger()->send();
-                        }
-                    })
-                    ->successNotificationTitle('Statut mis à jour'),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('bulk_change_status')
-                        ->label('Changer le statut')
-                        ->icon('heroicon-m-arrow-path')
-                        ->modalHeading('Changer le statut des candidatures sélectionnées')
-                        ->form([
-                            Forms\Components\Select::make('status')
-                                ->label('Nouveau statut')
-                                ->options(
-                                    collect(ApplicationStatus::cases())
-                                        ->reject(fn ($s) => $s === ApplicationStatus::Draft)
-                                        ->mapWithKeys(fn ($s) => [$s->value => $s->label()])
-                                )
-                                ->required(),
-                        ])
-                        ->action(function (Collection $records, array $data): void {
-                            $service = app(ApplicationStatusService::class);
-                            $to = ApplicationStatus::from($data['status']);
-                            $errors = 0;
-                            foreach ($records as $record) {
-                                try {
-                                    $service->transition($record, $to);
-                                } catch (\DomainException) {
-                                    $errors++;
-                                }
-                            }
-                            if ($errors > 0) {
-                                Notification::make()
-                                    ->title("{$errors} transition(s) ignorée(s) (transition interdite)")
-                                    ->warning()
-                                    ->send();
-                            }
-                        })
-                        ->deselectRecordsAfterCompletion()
-                        ->successNotificationTitle('Statuts mis à jour'),
-                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     /* ─────────────────────────────────────────────────────────── */
