@@ -156,12 +156,13 @@ class ApplicationResource extends Resource
 
             Infolists\Components\Section::make('Dossier')
                 ->icon('heroicon-m-identification')
+                ->iconColor('primary')
                 ->columns(3)
                 ->schema([
                     Infolists\Components\TextEntry::make('reference_code')
                         ->label('Référence')
                         ->badge()
-                        ->color('gray')
+                        ->color('primary')
                         ->fontFamily(FontFamily::Mono),
                     Infolists\Components\TextEntry::make('status')
                         ->label('Statut actuel')
@@ -176,6 +177,7 @@ class ApplicationResource extends Resource
 
             Infolists\Components\Section::make('Identité')
                 ->icon('heroicon-m-user')
+                ->iconColor('info')
                 ->columns(3)
                 ->schema([
                     Infolists\Components\TextEntry::make('user.first_name')
@@ -212,6 +214,7 @@ class ApplicationResource extends Resource
 
             Infolists\Components\Section::make('Profil professionnel')
                 ->icon('heroicon-m-briefcase')
+                ->iconColor('warning')
                 ->columns(2)
                 ->schema([
                     Infolists\Components\TextEntry::make('category')
@@ -246,6 +249,7 @@ class ApplicationResource extends Resource
 
             Infolists\Components\Section::make('Motivation & Ateliers')
                 ->icon('heroicon-m-document-text')
+                ->iconColor('success')
                 ->columns(2)
                 ->schema([
                     Infolists\Components\TextEntry::make('motivation')
@@ -282,6 +286,7 @@ class ApplicationResource extends Resource
 
             Infolists\Components\Section::make('Évaluation & Décision')
                 ->icon('heroicon-m-star')
+                ->iconColor('danger')
                 ->columns(2)
                 ->schema([
                     Infolists\Components\TextEntry::make('average_score')
