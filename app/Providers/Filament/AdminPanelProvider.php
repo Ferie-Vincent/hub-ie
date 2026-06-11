@@ -109,18 +109,31 @@ body, .fi-body {
 ═══════════════════════════════════════════════════════════════ */
 /* Align sidebar width with Filament's --sidebar-width var */
 :root { --sidebar-width: 16rem; }
+.fi-layout { background-color: var(--ins-nav-bg) !important; }
 .fi-sidebar {
   background-color: var(--ins-nav-bg) !important;
-  border-right: none !important;
+  border: none !important;
   box-shadow: none !important;
+  outline: none !important;
   --tw-ring-shadow: 0 0 #0000 !important;
   --tw-ring-offset-shadow: 0 0 #0000 !important;
   --tw-ring-offset-width: 0px !important;
+  --tw-shadow: 0 0 #0000 !important;
   width: var(--sidebar-width) !important;
   transition: width 0.22s cubic-bezier(0.4,0,0.2,1) !important;
 }
-/* Cover any gap between layout edge and fixed sidebar */
-.fi-main-sidebar { background-color: var(--ins-nav-bg) !important; }
+/* Bleed sidebar bg 2px right to cover any sub-pixel layout gap */
+.fi-sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 2px;
+  height: 100%;
+  background: var(--ins-nav-bg);
+  z-index: 1;
+}
+.fi-main-sidebar { background-color: var(--ins-nav-bg) !important; border: none !important; }
 .fi-sidebar-header {
   background-color: var(--ins-nav-bg) !important;
   border-bottom: 1px solid var(--ins-nav-border) !important;
