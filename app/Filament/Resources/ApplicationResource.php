@@ -98,36 +98,12 @@ class ApplicationResource extends Resource
                     ->color(fn ($state) => $state?->color())
                     ->toggleable(),
 
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Statut')
-                    ->badge()
-                    ->formatStateUsing(fn ($state) => $state?->label())
-                    ->color(fn ($state) => $state?->color())
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('average_score')
-                    ->label('Score')
-                    ->numeric(decimalPlaces: 1)
-                    ->placeholder('—')
-                    ->sortable()
-                    ->toggleable(),
-
                 Tables\Columns\TextColumn::make('submitted_at')
                     ->label('Soumis le')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->label('Statut')
-                    ->options(
-                        collect(ApplicationStatus::cases())
-                            ->reject(fn ($s) => $s === ApplicationStatus::Draft)
-                            ->mapWithKeys(fn ($s) => [$s->value => $s->label()])
-                    )
-                    ->multiple()
-                    ->preload(),
-
                 Tables\Filters\SelectFilter::make('category')
                     ->label('Profil professionnel')
                     ->options(
