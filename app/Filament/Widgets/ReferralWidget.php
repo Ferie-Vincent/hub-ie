@@ -32,8 +32,8 @@ class ReferralWidget extends ChartWidget
             'datasets' => [[
                 'label' => 'Candidats',
                 'data' => array_values($data),
-                'backgroundColor' => 'hsla(25,68%,44%,0.75)',
-                'borderColor' => 'hsl(25 68% 44%)',
+                'backgroundColor' => 'hsla(145,65%,40%,0.75)',
+                'borderColor' => 'hsl(145 65% 40%)',
                 'borderWidth' => 1,
                 'borderRadius' => 4,
             ]],

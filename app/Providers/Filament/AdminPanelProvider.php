@@ -55,7 +55,9 @@ class AdminPanelProvider extends PanelProvider
    Sidebar : forêt #1B3829 · émeraude #27AE60 · page : #EEF2F0
 ════════════════════════════════════════════════════════════════ */
 
-:root {
+/* Filament font variable override */
+:root, [data-filament-panel] {
+  --fi-font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
   --s-sidebar:     #1B3829;
   --s-sidebar-2:   #214430;
   --s-sidebar-3:   #274E37;
@@ -158,45 +160,49 @@ main.fi-main,
   color: var(--s-ivory-30) !important;
 }
 
-/* ── Nav items wrapper ───────────────────────────────────────── */
+/* ── Nav items — Simple: 42px height, clean solid active ───── */
 .fi-sidebar-item-button {
-  border-radius: 6px !important;
-  margin-inline: 10px !important;
-  margin-block: 1.5px !important;
-  padding-block: 0.45rem !important;
+  border-radius: 5px !important;
+  margin-inline: 12px !important;
+  margin-block: 2px !important;
+  min-height: 42px !important;
+  padding-block: 0.5rem !important;
+  padding-inline: 0.75rem !important;
   transition: background 0.15s ease !important;
 }
 
 /* Rest state */
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-icon {
-  color: var(--s-ivory-30) !important;
+  color: rgba(214,235,216,0.42) !important;
   transition: color 0.15s !important;
 }
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label {
-  color: var(--s-ivory-60) !important;
-  font-size: 0.84rem !important;
+  color: rgba(214,235,216,0.65) !important;
+  font-size: 0.855rem !important;
   font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
   transition: color 0.15s !important;
 }
 
 /* Hover state */
 .fi-sidebar-item-button:hover,
 .fi-sidebar-item-button:focus-visible {
-  background: var(--s-green-sub) !important;
+  background: rgba(255,255,255,0.06) !important;
 }
 .fi-sidebar-item-button:hover .fi-sidebar-item-icon,
 .fi-sidebar-item-button:focus-visible .fi-sidebar-item-icon {
-  color: var(--s-green-b) !important;
+  color: rgba(214,235,216,0.80) !important;
 }
 .fi-sidebar-item-button:hover .fi-sidebar-item-label,
 .fi-sidebar-item-button:focus-visible .fi-sidebar-item-label {
-  color: rgba(214,235,216,0.90) !important;
+  color: rgba(214,235,216,0.92) !important;
 }
 
-/* Active state — Simple style: filled green bg + white text */
+/* Active state — Simple: solid emerald fill, white text, subtle shadow */
 .fi-sidebar-item.fi-active .fi-sidebar-item-button {
   background: var(--s-green) !important;
-  border-radius: 6px !important;
+  border-radius: 5px !important;
+  box-shadow: 0 2px 8px rgba(39,174,96,0.35) !important;
 }
 .fi-sidebar-item.fi-active .fi-sidebar-item-icon {
   color: #ffffff !important;
@@ -204,7 +210,8 @@ main.fi-main,
 .fi-sidebar-item.fi-active .fi-sidebar-item-label {
   color: #ffffff !important;
   font-weight: 700 !important;
-  font-size: 0.84rem !important;
+  font-size: 0.855rem !important;
+  letter-spacing: 0.01em !important;
 }
 
 /* Badges */
