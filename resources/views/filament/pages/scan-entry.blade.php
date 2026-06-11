@@ -132,8 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { facingMode: 'environment' },
             { fps: 10, qrbox: { width: 200, height: 200 } },
             function (decodedText) {
-                const url = new URL(decodedText);
-                const token = url.pathname.split('/').pop();
+                const token = decodedText.trim();
                 @this.call('processQrToken', token);
                 html5QrCode.pause();
                 setTimeout(() => html5QrCode.resume(), 3000);
