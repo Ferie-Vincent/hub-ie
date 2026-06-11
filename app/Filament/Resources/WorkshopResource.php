@@ -66,19 +66,17 @@ class WorkshopResource extends Resource
                 Tables\Columns\TextColumn::make('display_order')
                     ->label('#')->sortable()->width('50px'),
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Titre')->searchable()->weight('medium'),
+                    ->label('Titre')->searchable()->weight('medium')->limit(45),
                 Tables\Columns\TextColumn::make('capacity')
                     ->label('Capacité')->numeric()->alignEnd()->sortable(),
-                Tables\Columns\TextColumn::make('registered_count')
-                    ->label('Inscrits')->numeric()->alignEnd()->sortable(),
+                Tables\Columns\TextColumn::make('enrolled_count')
+                    ->label('Inscrits confirmés')->numeric()->alignEnd()->sortable(),
                 Tables\Columns\TextColumn::make('spots_left')
                     ->label('Places restantes')
                     ->alignEnd()
                     ->getStateUsing(fn (Workshop $record): int => $record->spotsLeft())
                     ->badge()
                     ->color(fn (int $state): string => $state === 0 ? 'danger' : 'success'),
-                Tables\Columns\TextColumn::make('enrolled_count')
-                    ->label('Confirmés')->numeric()->alignEnd()->sortable(),
                 Tables\Columns\IconColumn::make('is_published')
                     ->label('Publié')->boolean(),
             ])
