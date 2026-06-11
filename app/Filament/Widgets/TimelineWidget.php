@@ -32,8 +32,8 @@ class TimelineWidget extends ChartWidget
             'datasets' => [[
                 'label' => 'Candidatures cumulées',
                 'data' => $values,
-                'borderColor' => 'hsl(25 68% 44%)',
-                'backgroundColor' => 'hsla(25,68%,44%,0.12)',
+                'borderColor' => 'hsl(145 65% 40%)',
+                'backgroundColor' => 'hsla(145,65%,40%,0.12)',
                 'fill' => true,
                 'tension' => 0.4,
                 'pointRadius' => 2,
