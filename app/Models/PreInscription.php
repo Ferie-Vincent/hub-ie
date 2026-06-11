@@ -20,6 +20,7 @@ class PreInscription extends Model
         'motivation_objectifs',
         'invitation_token',
         'invitation_sent_at',
+        'user_id',
     ];
 
     protected function casts(): array

@@ -56,7 +56,7 @@ class PreInscriptionActivationController extends Controller
         $user->markEmailAsVerified();
         $user->assignRole('candidate');
 
-        $preInscription->update(['user_id' => $user->id]);
+        $preInscription->update(['user_id' => $user->id, 'invitation_token' => null]);
 
         event(new Registered($user));
 
