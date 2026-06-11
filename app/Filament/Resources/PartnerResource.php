@@ -18,7 +18,7 @@ class PartnerResource extends Resource
 
     protected static ?string $navigationGroup = 'Contenu';
 
-    protected static ?int $navigationSort = 21;
+    protected static ?int $navigationSort = 42;
 
     protected static ?string $navigationLabel = 'Partenaires';
 

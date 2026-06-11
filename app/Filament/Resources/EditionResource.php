@@ -20,9 +20,11 @@ class EditionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static ?string $navigationGroup = 'Configuration';
+    protected static ?string $navigationGroup = 'Administration';
 
     protected static ?string $navigationLabel = 'Éditions';
+
+    protected static ?int $navigationSort = 61;
 
     protected static ?string $modelLabel = 'Édition';
 

@@ -20,7 +20,7 @@ class AttendanceResource extends Resource
 
     protected static ?string $navigationGroup = 'Événement';
 
-    protected static ?int $navigationSort = 61;
+    protected static ?int $navigationSort = 32;
 
     protected static ?string $navigationLabel = 'Présences';
 

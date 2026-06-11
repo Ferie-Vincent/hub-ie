@@ -17,7 +17,7 @@ class AttendanceStats extends Page
 
     protected static ?string $navigationGroup = 'Événement';
 
-    protected static ?int $navigationSort = 62;
+    protected static ?int $navigationSort = 31;
 
     protected static ?string $title = 'Statistiques pointage';
 

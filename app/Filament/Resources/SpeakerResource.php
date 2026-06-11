@@ -18,7 +18,7 @@ class SpeakerResource extends Resource
 
     protected static ?string $navigationGroup = 'Contenu';
 
-    protected static ?int $navigationSort = 23;
+    protected static ?int $navigationSort = 43;
 
     protected static ?string $navigationLabel = 'Intervenants';
 
