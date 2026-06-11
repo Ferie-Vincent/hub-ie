@@ -48,9 +48,9 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
   --hd-noir:    #0D0F0D;
   --hd-cream:   #F5F2ED;
   --hd-white:   #FAFAF8;
-  --hd-t1:      rgba(13,15,13,0.90);
-  --hd-t2:      rgba(13,15,13,0.60);
-  --hd-t3:      rgba(13,15,13,0.36);
+  --hd-t1:      rgba(13,15,13,0.92);
+  --hd-t2:      rgba(13,15,13,0.72);
+  --hd-t3:      rgba(13,15,13,0.54);
   --hd-border:  rgba(13,15,13,0.08);
   --hd-track:   rgba(13,15,13,0.07);
   --hd-shadow:  0 1px 4px rgba(13,15,13,0.06);
@@ -105,7 +105,7 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
 /* ── Typography ─────────────────────────────────────────── */
 .hd-kicker {
   font-family:'JetBrains Mono',monospace;
-  font-size:.52rem; font-weight:700; letter-spacing:.22em;
+  font-size:.65rem; font-weight:700; letter-spacing:.12em;
   text-transform:uppercase; color:var(--hd-t3);
   display:block; margin-bottom:.5rem;
 }
@@ -115,10 +115,10 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
   color:var(--hd-t1); margin:.375rem 0 .25rem;
 }
 .hd-num-sm  { font-size:1.875rem; }
-.hd-num-unit{ font-size:1rem; font-weight:400; color:var(--hd-t3); margin-left:.2rem; }
+.hd-num-unit{ font-size:1rem; font-weight:400; color:var(--hd-t2); margin-left:.2rem; }
 .hd-sub {
   font-family:'JetBrains Mono',monospace;
-  font-size:.57rem; font-weight:700; letter-spacing:.15em;
+  font-size:.68rem; font-weight:700; letter-spacing:.08em;
   text-transform:uppercase; color:var(--hd-t3);
 }
 
