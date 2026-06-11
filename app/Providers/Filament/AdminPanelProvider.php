@@ -91,11 +91,14 @@ class AdminPanelProvider extends PanelProvider
 }
 
 /* ── Typography ─────────────────────────────────────────────── */
+html { background-color: var(--ins-nav-bg) !important; margin: 0 !important; padding: 0 !important; }
 body, .fi-body {
   font-family: var(--ins-font) !important;
   font-size: var(--ins-font-size) !important;
   color: var(--ins-body-color) !important;
   background-color: var(--ins-body-bg) !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 *, *::before, *::after { font-family: inherit; }
 .fi-main, main.fi-main, .fi-layout-main { background-color: var(--ins-body-bg) !important; }
