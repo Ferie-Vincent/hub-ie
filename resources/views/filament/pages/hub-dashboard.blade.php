@@ -241,10 +241,6 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
 
     {{-- Quick action pills --}}
     <div style="display:flex;flex-wrap:wrap;gap:.625rem;margin-top:1.375rem;padding-top:1.25rem;border-top:1px solid rgba(250,250,248,.10);">
-      <a href="/admin/committee-board" class="hd-pill" style="color:var(--hd-orange);background:rgba(232,116,28,.15);border-color:rgba(232,116,28,.32);">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Tableau de délibération
-      </a>
       <a href="/admin/scan-entry" class="hd-pill" style="color:#4CAF7A;background:rgba(0,154,68,.15);border-color:rgba(0,154,68,.32);">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16.97 16.97A7 7 0 1 1 7.03 7.03 7 7 0 0 1 16.97 16.97z"/></svg>
         Scan entrée
@@ -313,10 +309,6 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
     <span class="hd-kicker">Dossiers à évaluer</span>
     <p class="hd-num" style="{{ $toEvaluate == 0 ? 'color:var(--hd-t3)' : 'color:var(--hd-amber);' }}">{{ $toEvaluate }}</p>
     <p class="hd-sub">éligibles + en cours</p>
-    <a href="/admin/committee-board" class="hd-badge" style="background:rgba(197,169,106,.14);color:var(--hd-sable);text-decoration:none;margin-top:.5rem;">
-      <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1.5 3h7M1.5 5h5M1.5 7h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Accéder au comité →
-    </a>
   </div>
 
 </div>
