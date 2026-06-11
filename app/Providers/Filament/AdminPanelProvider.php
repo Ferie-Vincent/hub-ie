@@ -27,9 +27,15 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::hex('#c07a30'),
-                'gray' => Color::Slate,
+                'primary' => Color::hex('#1DA853'),
+                'gray' => Color::Zinc,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
+                'danger' => Color::Rose,
+                'info' => Color::Sky,
             ])
+            ->brandLogo(asset('images/logo-hie.png'))
+            ->brandLogoHeight('2.25rem')
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -41,142 +47,405 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook('panels::head.end', fn () => <<<'HTML'
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700..900;1,9..144,700&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,700..900;1,9..144,700&display=swap" rel="stylesheet">
 <style>
-body { font-family: "Manrope", sans-serif !important; }
+/* ════════════════════════════════════════════════════════════════
+   HUB IMPORT-EXPORT 2026 — SIMPLE-INSPIRED GREEN AUTHORITY
+   Inspired by Coderthemes Simple · Green Nature variant
+   Sidebar : forêt #1B3829 · émeraude #27AE60 · page : #EEF2F0
+════════════════════════════════════════════════════════════════ */
+
+:root {
+  --s-sidebar:     #1B3829;
+  --s-sidebar-2:   #214430;
+  --s-sidebar-3:   #274E37;
+  --s-green:       #27AE60;
+  --s-green-b:     #2ECC71;
+  --s-green-sub:   rgba(39,174,96,0.10);
+  --s-green-glow:  rgba(39,174,96,0.18);
+  --s-ivory:       #D6EBD8;
+  --s-ivory-60:    rgba(214,235,216,0.60);
+  --s-ivory-30:    rgba(214,235,216,0.30);
+  --s-ivory-15:    rgba(214,235,216,0.15);
+  --s-page:        #EEF2F0;
+  --s-border:      #DDE8E2;
+  --s-ink:         #1A2920;
+  --s-ink-60:      rgba(26,41,32,0.60);
+  --s-ink-40:      rgba(26,41,32,0.40);
+  --s-card-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+}
+
+body { font-family: "Nunito", sans-serif !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   SIDEBAR SOMBRE — Hub Import-Export
-   Palette : noir-vert #0F1210 · sable/or #C8AC6C · orange #E8741C
+   LAYOUT — page background (Simple's light-gray body)
 ═══════════════════════════════════════════════════════════════ */
+.fi-main,
+main.fi-main,
+.fi-layout-main,
+.fi-body { background-color: var(--s-page) !important; }
 
-/* ── 1. Fond principal ────────────────────────────────────── */
-.fi-sidebar,
-.fi-sidebar-header {
-  background-color: #0F1210 !important;
-}
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════════════ */
 .fi-sidebar {
-  border-right: 1px solid rgba(200, 172, 108, 0.12) !important;
-  box-shadow: none !important;
+  background-color: var(--s-sidebar) !important;
+  border-right: none !important;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.18) !important;
+  position: relative !important;
+  transition: width 0.22s cubic-bezier(0.4,0,0.2,1) !important;
 }
 
-/* ── 2. En-tête : supprimer le ring gris, ajouter séparateur ─ */
+/* ── Sidebar header ──────────────────────────────────────────── */
 .fi-sidebar-header {
+  background-color: var(--s-sidebar) !important;
+  border-bottom: 1px solid rgba(39,174,96,0.12) !important;
   box-shadow: none !important;
   --tw-ring-shadow: 0 0 #0000 !important;
-  border-bottom: 1px solid rgba(200, 172, 108, 0.12) !important;
+  padding-top: 1.1rem !important;
+  padding-bottom: 1.1rem !important;
 }
 
-/* ── 3. Logo / marque ─────────────────────────────────────── */
-.fi-logo,
-.fi-sidebar-header a,
-.fi-brand-name {
-  color: #F5F2ED !important;
+/* Logo */
+.fi-logo img, .fi-sidebar-header img[alt] {
+  filter: brightness(1.6) saturate(0.75) !important;
+  max-height: 2rem !important;
+  width: auto !important;
+  object-fit: contain !important;
+}
+.fi-logo, .fi-sidebar-header a, .fi-brand-name {
+  color: #FFFFFF !important;
+  font-family: "Nunito", sans-serif !important;
+  font-weight: 700 !important;
 }
 
-/* ── 4. Boutons rétraction / expansion ───────────────────── */
-.fi-sidebar-header .fi-icon-btn,
+/* Header toggle buttons */
 .fi-sidebar-header .fi-icon-btn-icon {
-  color: rgba(200, 172, 108, 0.5) !important;
+  color: var(--s-ivory-30) !important;
+  transition: color 0.15s !important;
 }
 .fi-sidebar-header .fi-icon-btn:hover {
-  background-color: rgba(245, 242, 237, 0.05) !important;
+  background: var(--s-green-sub) !important;
+  border-radius: 6px !important;
 }
 .fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon {
-  color: rgba(245, 242, 237, 0.8) !important;
+  color: var(--s-green-b) !important;
 }
 
-/* ── 5. Labels de groupe ──────────────────────────────────── */
+/* ── Navigation ──────────────────────────────────────────────── */
+.fi-sidebar-nav { padding: 0.5rem 0 !important; }
+
+/* Group labels — compact mono */
 .fi-sidebar-group-label {
   font-family: "JetBrains Mono", monospace !important;
   font-size: 0.58rem !important;
-  letter-spacing: 0.2em !important;
-  color: rgba(200, 172, 108, 0.4) !important;
+  letter-spacing: 0.18em !important;
   text-transform: uppercase !important;
+  color: rgba(39,174,96,0.45) !important;
+  padding-inline-start: 1.1rem !important;
+  padding-block: 0.15rem !important;
 }
 
-/* Séparateurs entre groupes */
+/* Group separators */
 .fi-sidebar-nav-groups > li + li {
-  padding-top: 0.5rem !important;
-  margin-top: 0.25rem !important;
-  border-top: 1px solid rgba(200, 172, 108, 0.07) !important;
+  padding-top: 0.625rem !important;
+  margin-top: 0.375rem !important;
+  border-top: 1px solid rgba(214,235,216,0.06) !important;
 }
 
-/* ── 6. Items — état repos ────────────────────────────────── */
+/* Collapse buttons */
+.fi-sidebar-group-collapse-button .fi-icon-btn-icon {
+  color: var(--s-ivory-30) !important;
+}
+
+/* ── Nav items wrapper ───────────────────────────────────────── */
+.fi-sidebar-item-button {
+  border-radius: 6px !important;
+  margin-inline: 10px !important;
+  margin-block: 1.5px !important;
+  padding-block: 0.45rem !important;
+  transition: background 0.15s ease !important;
+}
+
+/* Rest state */
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-icon {
-  color: rgba(245, 242, 237, 0.3) !important;
+  color: var(--s-ivory-30) !important;
+  transition: color 0.15s !important;
 }
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label {
-  color: rgba(245, 242, 237, 0.5) !important;
+  color: var(--s-ivory-60) !important;
+  font-size: 0.84rem !important;
+  font-weight: 500 !important;
+  transition: color 0.15s !important;
 }
 
-/* ── 7. Items — hover ─────────────────────────────────────── */
+/* Hover state */
 .fi-sidebar-item-button:hover,
 .fi-sidebar-item-button:focus-visible {
-  background-color: rgba(245, 242, 237, 0.05) !important;
+  background: var(--s-green-sub) !important;
 }
 .fi-sidebar-item-button:hover .fi-sidebar-item-icon,
 .fi-sidebar-item-button:focus-visible .fi-sidebar-item-icon {
-  color: rgba(245, 242, 237, 0.7) !important;
+  color: var(--s-green-b) !important;
 }
 .fi-sidebar-item-button:hover .fi-sidebar-item-label,
 .fi-sidebar-item-button:focus-visible .fi-sidebar-item-label {
-  color: rgba(245, 242, 237, 0.85) !important;
+  color: rgba(214,235,216,0.90) !important;
 }
 
-/* ── 8. Item actif ────────────────────────────────────────── */
+/* Active state — Simple style: filled green bg + white text */
 .fi-sidebar-item.fi-active .fi-sidebar-item-button {
-  background-color: rgba(232, 116, 28, 0.1) !important;
+  background: var(--s-green) !important;
+  border-radius: 6px !important;
+}
+.fi-sidebar-item.fi-active .fi-sidebar-item-icon {
+  color: #ffffff !important;
+}
+.fi-sidebar-item.fi-active .fi-sidebar-item-label {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.84rem !important;
+}
+
+/* Badges */
+.fi-sidebar-item .fi-badge {
+  background: rgba(39,174,96,0.18) !important;
+  color: var(--s-green-b) !important;
+  border: none !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.6rem !important;
+  font-weight: 700 !important;
+  border-radius: 20px !important;
+}
+.fi-sidebar-item.fi-active .fi-badge {
+  background: rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+}
+
+/* Grouped sub-items */
+.fi-sidebar-item-grouped-border > div {
+  background: rgba(39,174,96,0.20) !important;
+}
+.fi-sidebar-item-grouped-border .rounded-full {
+  background: rgba(39,174,96,0.40) !important;
+}
+.fi-sidebar-item.fi-active .fi-sidebar-item-grouped-border .rounded-full {
+  background: rgba(255,255,255,0.7) !important;
+}
+
+/* ── Footer (user) ───────────────────────────────────────────── */
+.fi-sidebar-footer {
+  border-top: 1px solid rgba(214,235,216,0.07) !important;
+  background: rgba(0,0,0,0.12) !important;
+  padding-block: 0.625rem !important;
+}
+.fi-user-menu-trigger {
+  border-radius: 6px !important;
+  transition: background 0.15s !important;
+}
+.fi-user-menu-trigger:hover {
+  background: var(--s-green-sub) !important;
+}
+[class*="fi-user-name"] {
+  color: var(--s-ivory-60) !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+}
+[class*="fi-user-email"] {
+  color: var(--s-ivory-30) !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.6rem !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOPBAR — blanc propre, Simple style
+═══════════════════════════════════════════════════════════════ */
+.fi-topbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--s-border) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+  min-height: 60px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE HEADER & BREADCRUMB
+═══════════════════════════════════════════════════════════════ */
+.fi-page-header {
+  padding-bottom: 0.75rem !important;
+  border-bottom: none !important;
+  margin-bottom: 1rem !important;
+}
+.fi-page-header-heading {
+  font-family: "Fraunces", serif !important;
+  font-weight: 800 !important;
+  font-size: 1.5rem !important;
+  color: var(--s-ink) !important;
+  letter-spacing: -0.01em !important;
+}
+[class*="fi-breadcrumbs"] {
+  font-size: 0.75rem !important;
+  color: var(--s-ink-40) !important;
+}
+[class*="fi-breadcrumbs"] a { color: var(--s-ink-60) !important; }
+[class*="fi-breadcrumbs"] a:hover { color: var(--s-green) !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CARDS & SECTIONS — Simple: white float on light bg
+═══════════════════════════════════════════════════════════════ */
+.fi-section {
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--s-border) !important;
+  box-shadow: var(--s-card-shadow) !important;
+}
+.fi-section-header {
+  border-bottom: 1px solid var(--s-border) !important;
+  padding-block: 1rem !important;
+}
+.fi-section-header-heading {
+  font-family: "Nunito", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  color: var(--s-ink) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STAT WIDGETS — Simple's KPI cards
+═══════════════════════════════════════════════════════════════ */
+.fi-wi-stats-overview-stat {
+  background: #ffffff !important;
+  border: 1px solid var(--s-border) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--s-card-shadow) !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+  overflow: hidden !important;
   position: relative !important;
 }
-.fi-sidebar-item.fi-active .fi-sidebar-item-button::before {
+/* Thin left accent bar (Simple style) */
+.fi-wi-stats-overview-stat::before {
   content: '';
   position: absolute;
   inset-inline-start: 0;
-  top: 20%;
-  bottom: 20%;
-  width: 2px;
-  background: #E8741C;
-  border-radius: 0 2px 2px 0;
+  top: 0; bottom: 0;
+  width: 3px;
+  background: var(--s-green) !important;
+  border-radius: 2px 0 0 2px;
 }
-.fi-sidebar-item.fi-active .fi-sidebar-item-icon {
-  color: #E8741C !important;
+.fi-wi-stats-overview-stat:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.09) !important;
+  transform: translateY(-2px) !important;
 }
-.fi-sidebar-item.fi-active .fi-sidebar-item-label {
-  color: #E8741C !important;
+.fi-wi-stats-overview-stat-value {
+  font-family: "Fraunces", serif !important;
+  font-weight: 800 !important;
+  font-size: 1.85rem !important;
+  color: var(--s-ink) !important;
+  letter-spacing: -0.02em !important;
+}
+.fi-wi-stats-overview-stat-label {
+  font-size: 0.75rem !important;
   font-weight: 600 !important;
+  color: var(--s-ink-60) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+.fi-wi-stats-overview-stat-description {
+  font-size: 0.75rem !important;
+  color: var(--s-ink-40) !important;
 }
 
-/* ── 9. Badges ────────────────────────────────────────────── */
-.fi-sidebar-item .fi-badge {
-  background-color: rgba(200, 172, 108, 0.12) !important;
-  color: rgba(200, 172, 108, 0.8) !important;
-  border: none !important;
+/* ═══════════════════════════════════════════════════════════════
+   TABLES — Simple's clean data tables
+═══════════════════════════════════════════════════════════════ */
+.fi-ta-header-cell {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: var(--s-ink-40) !important;
+  background: #F8FAF9 !important;
 }
-.fi-sidebar-item.fi-active .fi-badge {
-  background-color: rgba(232, 116, 28, 0.18) !important;
-  color: #E8741C !important;
+.fi-ta-row:hover > td {
+  background: rgba(39,174,96,0.03) !important;
 }
-
-/* ── 10. Sous-items (grouped border dots) ─────────────────── */
-.fi-sidebar-item-grouped-border > div {
-  background-color: rgba(200, 172, 108, 0.18) !important;
-}
-.fi-sidebar-item-grouped-border .rounded-full {
-  background-color: rgba(200, 172, 108, 0.35) !important;
-}
-.fi-sidebar-item.fi-active .fi-sidebar-item-grouped-border .rounded-full {
-  background-color: #E8741C !important;
+.fi-ta-row:nth-child(even) > td {
+  background: rgba(238,242,240,0.5) !important;
 }
 
-/* ── 11. Bouton collapse de groupe ───────────────────────── */
-.fi-sidebar-group-collapse-button .fi-icon-btn-icon {
-  color: rgba(200, 172, 108, 0.4) !important;
+/* ═══════════════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════════════ */
+.fi-btn {
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+}
+.fi-btn-color-primary.fi-btn-style-filled {
+  box-shadow: 0 2px 6px rgba(39,174,96,0.25) !important;
+  transition: box-shadow 0.18s ease, transform 0.15s ease !important;
+}
+.fi-btn-color-primary.fi-btn-style-filled:hover {
+  box-shadow: 0 4px 14px rgba(39,174,96,0.40) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* ── 12. Transition douce sur l'élargissement ─────────────── */
-.fi-sidebar {
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+/* ═══════════════════════════════════════════════════════════════
+   FORM INPUTS
+═══════════════════════════════════════════════════════════════ */
+.fi-input {
+  border-radius: 6px !important;
+  border-color: var(--s-border) !important;
+  font-size: 0.875rem !important;
+}
+.fi-input:focus {
+  border-color: var(--s-green) !important;
+  box-shadow: 0 0 0 3px rgba(39,174,96,0.12) !important;
+}
+.fi-select-input {
+  border-radius: 6px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODAL & DROPDOWN
+═══════════════════════════════════════════════════════════════ */
+.fi-modal-window {
+  border-radius: 10px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+}
+.fi-dropdown-panel {
+  border-radius: 8px !important;
+  border: 1px solid var(--s-border) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BADGES & STATUS
+═══════════════════════════════════════════════════════════════ */
+.fi-badge {
+  border-radius: 20px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  padding: 0.15rem 0.6rem !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NOTIFICATIONS
+═══════════════════════════════════════════════════════════════ */
+.fi-notification {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+.fi-notification-success {
+  border-left: 3px solid var(--s-green) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOGIN PAGE — card centrée sur fond page
+═══════════════════════════════════════════════════════════════ */
+.fi-simple-page {
+  background: var(--s-page) !important;
+}
+.fi-simple-main {
+  background: var(--s-page) !important;
 }
 </style>
 HTML)
