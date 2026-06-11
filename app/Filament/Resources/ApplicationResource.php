@@ -171,7 +171,7 @@ class ApplicationResource extends Resource
             ->persistSortInSession()
             ->persistFiltersInSession()
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->slideOver(),
             ])
             ->bulkActions([]);
     }
@@ -343,7 +343,6 @@ class ApplicationResource extends Resource
     {
         return [
             'index' => Pages\ListApplications::route('/'),
-            'view' => Pages\ViewApplication::route('/{record}'),
         ];
     }
 }
