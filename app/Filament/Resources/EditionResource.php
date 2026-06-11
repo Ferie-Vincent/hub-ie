@@ -201,12 +201,13 @@ class EditionResource extends Resource
             ])
             ->defaultSort('year', 'desc')
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->iconButton(),
 
                 Tables\Actions\Action::make('activate')
                     ->label('Activer')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
+                    ->iconButton()
                     ->requiresConfirmation()
                     ->modalHeading('Activer cette édition ?')
                     ->modalDescription('Les autres éditions seront archivées. Les candidatures restent visibles par édition.')
@@ -225,6 +226,7 @@ class EditionResource extends Resource
                     ->label('Lancer l\'annonce')
                     ->icon('heroicon-o-megaphone')
                     ->color('warning')
+                    ->iconButton()
                     ->requiresConfirmation()
                     ->modalHeading('Envoyer l\'email à tous les anciens participants ?')
                     ->modalDescription('Un email sera envoyé à tous les utilisateurs ayant participé aux éditions précédentes.')
@@ -242,6 +244,7 @@ class EditionResource extends Resource
                     ->visible(fn (Edition $record): bool => $record->is_active && ! $record->hasBeenLaunched()),
 
                 Tables\Actions\DeleteAction::make()
+                    ->iconButton()
                     ->visible(fn (Edition $record): bool => $record->applications_count === 0),
             ])
             ->bulkActions([]);

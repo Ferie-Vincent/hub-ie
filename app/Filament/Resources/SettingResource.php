@@ -58,7 +58,7 @@ class SettingResource extends Resource
                 Tables\Columns\TextColumn::make('value')->label('Valeur')->limit(50)->toggleable(),
             ])
             ->defaultSort('group')
-            ->actions([Tables\Actions\EditAction::make()]);
+            ->actions([Tables\Actions\EditAction::make()->iconButton()]);
     }
 
     public static function getPages(): array

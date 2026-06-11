@@ -72,7 +72,7 @@ class PartnerResource extends Resource
             ])
             ->defaultSort('display_order')
             ->reorderable('display_order')
-            ->actions([Tables\Actions\EditAction::make()]);
+            ->actions([Tables\Actions\EditAction::make()->iconButton()]);
     }
 
     public static function getPages(): array

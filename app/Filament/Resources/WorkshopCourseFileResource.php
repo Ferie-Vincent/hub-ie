@@ -169,11 +169,12 @@ class WorkshopCourseFileResource extends Resource
                     ->label('Télécharger')
                     ->icon('heroicon-m-arrow-down-tray')
                     ->color('gray')
+                    ->iconButton()
                     ->url(fn (WorkshopCourseFile $record): string => Storage::disk('public')->url($record->file_path))
                     ->openUrlInNewTab(),
 
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()->iconButton(),
+                Tables\Actions\DeleteAction::make()->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -95,6 +95,7 @@ class EnrollmentResource extends Resource
                     ->label('Valider l\'inscription')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
+                    ->iconButton()
                     ->visible(fn (Enrollment $r) => $r->status === EnrollmentStatus::Waitlisted)
                     ->requiresConfirmation()
                     ->action(function (Enrollment $enrollment) {
@@ -111,6 +112,7 @@ class EnrollmentResource extends Resource
                     ->label('Déplacer vers...')
                     ->icon('heroicon-o-arrow-right-circle')
                     ->color('warning')
+                    ->iconButton()
                     ->visible(fn (Enrollment $r) => $r->status === EnrollmentStatus::Enrolled)
                     ->form([
                         Select::make('workshop_id')
@@ -129,7 +131,7 @@ class EnrollmentResource extends Resource
                         }
                     }),
 
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()->iconButton(),
             ])
             ->bulkActions([])
             ->defaultSort('created_at', 'desc');
