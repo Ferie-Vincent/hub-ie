@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\EnrollmentStatus;
 use App\Models\Enrollment;
+use App\Services\BadgePdfService;
 use App\Services\CancellationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,16 +15,28 @@ class EnrollmentController extends Controller
 {
     public function __construct(private readonly CancellationService $cancellation) {}
 
-    public function downloadBadge(Request $request): Response|RedirectResponse
+    public function downloadBadge(Request $request, BadgePdfService $badgeService): Response|RedirectResponse
     {
         $enrollment = $request->user()
             ->enrollment()
             ->where('status', EnrollmentStatus::Enrolled->value)
             ->first();
 
-        if (! $enrollment || ! $enrollment->hasBadge() || ! $enrollment->isBadgeValid()) {
+        if (! $enrollment || ! $enrollment->isBadgeValid()) {
             return redirect()->route('participant.badge')
                 ->with('error', 'Votre badge n\'est pas encore disponible.');
+        }
+
+        // Génération à la volée si le PDF n'a pas encore été produit
+        if (! $enrollment->hasBadge()) {
+            try {
+                $path = $badgeService->generateForEnrollment($enrollment);
+                $enrollment->update(['badge_path' => $path]);
+                $enrollment->refresh();
+            } catch (\Throwable $e) {
+                return redirect()->route('participant.badge')
+                    ->with('error', 'Génération du badge impossible. Veuillez réessayer.');
+            }
         }
 
         $filename = 'badge-hub-ie-2026.pdf';

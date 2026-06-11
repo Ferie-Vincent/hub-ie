@@ -13,6 +13,7 @@ use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Workshop;
 use App\Models\WorkshopCourseFile;
+use App\Services\BadgePdfService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -108,6 +109,17 @@ class DemoParticipantSeeder extends Seeder
                     'enrolled_at' => now()->subDays(20),
                 ]
             );
+        }
+
+        // Génère le badge PDF pour le participant demo
+        if ($enrollment && ! $enrollment->hasBadge()) {
+            try {
+                $badgeService = app(BadgePdfService::class);
+                $path = $badgeService->generateForEnrollment($enrollment);
+                $enrollment->update(['badge_path' => $path]);
+            } catch (\Throwable $e) {
+                $this->command->warn('Badge PDF non généré : '.$e->getMessage());
+            }
         }
 
         // ── 4. Fichiers de cours par atelier ────────────────────────────────
