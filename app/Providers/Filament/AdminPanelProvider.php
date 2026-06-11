@@ -61,12 +61,12 @@ class AdminPanelProvider extends PanelProvider
 :root {
   /* Font */
   --ins-font:          "Geist", ui-sans-serif, system-ui, sans-serif;
-  --ins-font-size:     13px;
+  --ins-font-size:     14px;
   --ins-font-mono:     "JetBrains Mono", ui-monospace, monospace;
 
   /* Body */
   --ins-body-bg:       #f9f9f9;
-  --ins-body-color:    #374151;
+  --ins-body-color:    #111827;
   --ins-secondary-bg:  #ffffff;
 
   /* Borders */
@@ -84,12 +84,12 @@ class AdminPanelProvider extends PanelProvider
   /* Sidebar (light white variant) */
   --ins-nav-bg:        #ffffff;
   --ins-nav-border:    #e5e7eb;
-  --ins-nav-color:     #4a7c59;
-  --ins-nav-hover-bg:  rgba(39,174,96,0.07);
-  --ins-nav-hover-cl:  #1B3829;
+  --ins-nav-color:     #1a4d2e;
+  --ins-nav-hover-bg:  rgba(39,174,96,0.08);
+  --ins-nav-hover-cl:  #0d2b18;
   --ins-nav-active-bg: #27AE60;
   --ins-nav-active-cl: #ffffff;
-  --ins-nav-grp-cl:    #a3c4a8;
+  --ins-nav-grp-cl:    #4f7a56;
 
   /* Topbar */
   --ins-topbar-bg:     #ffffff;
@@ -218,8 +218,8 @@ body, .fi-body {
 }
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label {
   color: var(--ins-nav-color) !important;
-  font-size: 0.8125rem !important;
-  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
   transition: color 0.15s !important;
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -275,8 +275,8 @@ body, .fi-body {
 }
 .fi-user-menu-trigger { border-radius: var(--ins-radius) !important; transition: background 0.15s !important; }
 .fi-user-menu-trigger:hover { background: rgba(39,174,96,0.07) !important; }
-[class*="fi-user-name"] { color: #1B3829 !important; font-size: 13px !important; font-weight: 600 !important; }
-[class*="fi-user-email"] { color: #a3c4a8 !important; font-family: var(--ins-font-mono) !important; font-size: 11px !important; }
+[class*="fi-user-name"] { color: #0d2b18 !important; font-size: 14px !important; font-weight: 700 !important; }
+[class*="fi-user-email"] { color: #4f7a56 !important; font-family: var(--ins-font-mono) !important; font-size: 11.5px !important; }
 
 /* ═══════════════════════════════════════════════════════════════
    TOPBAR — Simple: #ffffff, height 60px, shadow
