@@ -81,15 +81,15 @@ class AdminPanelProvider extends PanelProvider
   --ins-shadow:        0px 1px 4px 0px rgba(130,143,163,0.15);
   --ins-shadow-lg:     0 0.25rem 1rem rgba(55,65,81,0.20);
 
-  /* Sidebar (dark green variant of Simple) */
-  --ins-nav-bg:        #1B3829;
-  --ins-nav-border:    rgba(255,255,255,0.06);
-  --ins-nav-color:     rgba(214,235,216,0.58);
-  --ins-nav-hover-bg:  rgba(255,255,255,0.055);
-  --ins-nav-hover-cl:  rgba(214,235,216,0.88);
+  /* Sidebar (light white variant) */
+  --ins-nav-bg:        #ffffff;
+  --ins-nav-border:    #e5e7eb;
+  --ins-nav-color:     #4a7c59;
+  --ins-nav-hover-bg:  rgba(39,174,96,0.07);
+  --ins-nav-hover-cl:  #1B3829;
   --ins-nav-active-bg: #27AE60;
   --ins-nav-active-cl: #ffffff;
-  --ins-nav-grp-cl:    rgba(39,174,96,0.40);
+  --ins-nav-grp-cl:    #a3c4a8;
 
   /* Topbar */
   --ins-topbar-bg:     #ffffff;
@@ -135,7 +135,7 @@ body, .fi-body {
 /* Sidebar header */
 .fi-sidebar-header {
   background-color: var(--ins-nav-bg) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  border-bottom: 1px solid var(--ins-nav-border) !important;
   box-shadow: none !important;
   --tw-ring-shadow: 0 0 #0000 !important;
   height: var(--ins-topbar-h) !important;
@@ -146,22 +146,22 @@ body, .fi-body {
 
 /* Logo */
 .fi-logo img, .fi-sidebar-header img[alt] {
-  filter: brightness(1.8) saturate(0.7) !important;
+  filter: none !important;
   max-height: 1.875rem !important;
   width: auto !important;
   object-fit: contain !important;
 }
 .fi-logo, .fi-sidebar-header a, .fi-brand-name {
-  color: #ffffff !important;
+  color: #1B3829 !important;
   font-family: var(--ins-font) !important;
   font-size: 15px !important;
   font-weight: 700 !important;
 }
 
 /* Header collapse buttons */
-.fi-sidebar-header .fi-icon-btn-icon { color: rgba(214,235,216,0.30) !important; }
-.fi-sidebar-header .fi-icon-btn:hover { background: rgba(255,255,255,0.05) !important; border-radius: var(--ins-radius) !important; }
-.fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon { color: rgba(214,235,216,0.75) !important; }
+.fi-sidebar-header .fi-icon-btn-icon { color: #a3c4a8 !important; }
+.fi-sidebar-header .fi-icon-btn:hover { background: rgba(39,174,96,0.07) !important; border-radius: var(--ins-radius) !important; }
+.fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon { color: #27AE60 !important; }
 
 /* Navigation padding */
 .fi-sidebar-nav { padding-block: 0.5rem !important; }
@@ -185,11 +185,11 @@ body, .fi-body {
 .fi-sidebar-nav-groups > li + li {
   margin-top: 0.5rem !important;
   padding-top: 0.5rem !important;
-  border-top: 1px solid rgba(255,255,255,0.05) !important;
+  border-top: 1px solid #f3f4f6 !important;
 }
 
 /* Collapse arrow — muted */
-.fi-sidebar-group-collapse-button .fi-icon-btn-icon { color: rgba(214,235,216,0.25) !important; }
+.fi-sidebar-group-collapse-button .fi-icon-btn-icon { color: #c8dcc9 !important; }
 
 /* ── Nav items — Simple exact: px 20, py 8, icon 16px, 13px ── */
 .fi-sidebar-item-button {
@@ -269,14 +269,14 @@ body, .fi-body {
 
 /* Sidebar footer (user info) */
 .fi-sidebar-footer {
-  border-top: 1px solid rgba(255,255,255,0.06) !important;
-  background: rgba(0,0,0,0.10) !important;
+  border-top: 1px solid #f3f4f6 !important;
+  background: #fafafa !important;
   padding-block: 0.5rem !important;
 }
 .fi-user-menu-trigger { border-radius: var(--ins-radius) !important; transition: background 0.15s !important; }
-.fi-user-menu-trigger:hover { background: rgba(255,255,255,0.06) !important; }
-[class*="fi-user-name"] { color: rgba(214,235,216,0.72) !important; font-size: 13px !important; font-weight: 600 !important; }
-[class*="fi-user-email"] { color: rgba(214,235,216,0.35) !important; font-family: var(--ins-font-mono) !important; font-size: 11px !important; }
+.fi-user-menu-trigger:hover { background: rgba(39,174,96,0.07) !important; }
+[class*="fi-user-name"] { color: #1B3829 !important; font-size: 13px !important; font-weight: 600 !important; }
+[class*="fi-user-email"] { color: #a3c4a8 !important; font-family: var(--ins-font-mono) !important; font-size: 11px !important; }
 
 /* ═══════════════════════════════════════════════════════════════
    TOPBAR — Simple: #ffffff, height 60px, shadow
