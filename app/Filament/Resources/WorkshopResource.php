@@ -86,12 +86,14 @@ class WorkshopResource extends Resource
                 Tables\Actions\Action::make('voir_inscrits')
                     ->label('Voir les inscrits')
                     ->icon('heroicon-o-user-group')
+                    ->iconButton()
                     ->url(fn (Workshop $record): string => EnrollmentResource::getUrl('index', [
                         'tableFilters[workshop_id][value]' => $record->id,
                     ])),
                 Tables\Actions\Action::make('reset_count')
                     ->label('Réinitialiser compteur')
                     ->icon('heroicon-o-arrow-path')
+                    ->iconButton()
                     ->visible(fn (): bool => auth()->user()?->hasPermissionTo('manage-content') ?? false)
                     ->requiresConfirmation()
                     ->modalHeading('Réinitialiser le compteur d\'inscrits')
@@ -123,7 +125,7 @@ class WorkshopResource extends Resource
                             ->success()
                             ->send();
                     }),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->iconButton(),
             ]);
     }
 
