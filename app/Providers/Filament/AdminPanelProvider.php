@@ -444,6 +444,15 @@ label, .fi-fo-field-wrp-label { font-size: 13px !important; font-weight: 500 !im
   border-radius: var(--ins-radius-xl) !important;
   box-shadow: var(--ins-shadow) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTENT DENSITY
+═══════════════════════════════════════════════════════════════ */
+.fi-main { padding-inline: 1rem !important; padding-block: 0.75rem !important; }
+.fi-page-header { padding-block: 0.5rem 0.75rem !important; }
+.fi-page-header .fi-breadcrumbs { margin-bottom: 0.15rem !important; }
+.fi-page-header h1.fi-header-heading { font-size: 1.35rem !important; line-height: 1.3 !important; }
+.fi-ta-ctn { border-radius: 0.625rem !important; }
 </style>
 HTML)
             ->middleware([
