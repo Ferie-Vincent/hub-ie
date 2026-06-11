@@ -86,17 +86,11 @@ class ApplicationResource extends Resource
                     ->description(fn (Application $record): string => $record->user?->email ?? '')
                     ->weight(FontWeight::Medium),
 
-                Tables\Columns\TextColumn::make('user.city')
-                    ->label('Ville')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
                 Tables\Columns\TextColumn::make('category')
                     ->label('Profil')
                     ->badge()
                     ->formatStateUsing(fn ($state) => $state?->label())
-                    ->color(fn ($state) => $state?->color())
-                    ->toggleable(),
+                    ->color(fn ($state) => $state?->color()),
 
                 Tables\Columns\TextColumn::make('submitted_at')
                     ->label('Soumis le')
