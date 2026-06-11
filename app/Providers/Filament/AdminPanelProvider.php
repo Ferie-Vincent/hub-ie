@@ -47,412 +47,443 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook('panels::head.end', fn () => <<<'HTML'
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,700..900;1,9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════════════════════════════
-   HUB IMPORT-EXPORT 2026 — SIMPLE-INSPIRED GREEN AUTHORITY
-   Inspired by Coderthemes Simple · Green Nature variant
-   Sidebar : forêt #1B3829 · émeraude #27AE60 · page : #EEF2F0
+   HUB IMPORT-EXPORT 2026 — CODERTHEMES SIMPLE (exact tokens)
+   Font    : Geist 13px · weight 400/500/600/700
+   Body    : #f9f9f9 · Border : #e5e7eb · Radius-xl : 1rem
+   Sidebar : #1B3829 (green dark variant) · Active : #27AE60
+   Topbar  : #ffffff · shadow: 0px 1px 4px rgba(130,143,163,0.15)
 ════════════════════════════════════════════════════════════════ */
 
-/* Filament font variable override */
-:root, [data-filament-panel] {
-  --fi-font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
-  --s-sidebar:     #1B3829;
-  --s-sidebar-2:   #214430;
-  --s-sidebar-3:   #274E37;
-  --s-green:       #27AE60;
-  --s-green-b:     #2ECC71;
-  --s-green-sub:   rgba(39,174,96,0.10);
-  --s-green-glow:  rgba(39,174,96,0.18);
-  --s-ivory:       #D6EBD8;
-  --s-ivory-60:    rgba(214,235,216,0.60);
-  --s-ivory-30:    rgba(214,235,216,0.30);
-  --s-ivory-15:    rgba(214,235,216,0.15);
-  --s-page:        #EEF2F0;
-  --s-border:      #DDE8E2;
-  --s-ink:         #1A2920;
-  --s-ink-60:      rgba(26,41,32,0.60);
-  --s-ink-40:      rgba(26,41,32,0.40);
-  --s-card-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+/* ── Exact Simple design tokens ─────────────────────────────── */
+:root {
+  /* Font */
+  --ins-font:          "Geist", ui-sans-serif, system-ui, sans-serif;
+  --ins-font-size:     13px;
+  --ins-font-mono:     "JetBrains Mono", ui-monospace, monospace;
+
+  /* Body */
+  --ins-body-bg:       #f9f9f9;
+  --ins-body-color:    #374151;
+  --ins-secondary-bg:  #ffffff;
+
+  /* Borders */
+  --ins-border:        #e5e7eb;
+  --ins-radius:        0.4rem;
+  --ins-radius-sm:     0.3rem;
+  --ins-radius-lg:     0.6rem;
+  --ins-radius-xl:     1rem;
+  --ins-radius-pill:   50rem;
+
+  /* Shadows */
+  --ins-shadow:        0px 1px 4px 0px rgba(130,143,163,0.15);
+  --ins-shadow-lg:     0 0.25rem 1rem rgba(55,65,81,0.20);
+
+  /* Sidebar (dark green variant of Simple) */
+  --ins-nav-bg:        #1B3829;
+  --ins-nav-border:    rgba(255,255,255,0.06);
+  --ins-nav-color:     rgba(214,235,216,0.58);
+  --ins-nav-hover-bg:  rgba(255,255,255,0.055);
+  --ins-nav-hover-cl:  rgba(214,235,216,0.88);
+  --ins-nav-active-bg: #27AE60;
+  --ins-nav-active-cl: #ffffff;
+  --ins-nav-grp-cl:    rgba(39,174,96,0.40);
+
+  /* Topbar */
+  --ins-topbar-bg:     #ffffff;
+  --ins-topbar-h:      60px;
+
+  /* Brand green */
+  --ins-green:         #27AE60;
+  --ins-green-b:       #2ECC71;
+
+  /* Content ink */
+  --ins-ink:           #111827;
+  --ins-ink-muted:     #6b7280;
+
+  /* Filament font override */
+  --fi-font-family: var(--ins-font);
 }
 
-body { font-family: "Nunito", sans-serif !important; }
+/* ── Typography — base 13px Geist ───────────────────────────── */
+body, .fi-body {
+  font-family: var(--ins-font) !important;
+  font-size: var(--ins-font-size) !important;
+  color: var(--ins-body-color) !important;
+  background-color: var(--ins-body-bg) !important;
+}
+*, *::before, *::after { font-family: inherit; }
+
+/* ── Page body background ────────────────────────────────────── */
+.fi-main, main.fi-main, .fi-layout-main {
+  background-color: var(--ins-body-bg) !important;
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   LAYOUT — page background (Simple's light-gray body)
-═══════════════════════════════════════════════════════════════ */
-.fi-main,
-main.fi-main,
-.fi-layout-main,
-.fi-body { background-color: var(--s-page) !important; }
-
-/* ═══════════════════════════════════════════════════════════════
-   SIDEBAR
+   SIDEBAR — Simple dark-green variant
+   Width: 220px | font: 13px Geist | active: solid #27AE60
 ═══════════════════════════════════════════════════════════════ */
 .fi-sidebar {
-  background-color: var(--s-sidebar) !important;
-  border-right: none !important;
-  box-shadow: 2px 0 12px rgba(0,0,0,0.18) !important;
-  position: relative !important;
+  background-color: var(--ins-nav-bg) !important;
+  border-right: 1px solid var(--ins-nav-border) !important;
+  width: 220px !important;
   transition: width 0.22s cubic-bezier(0.4,0,0.2,1) !important;
 }
 
-/* ── Sidebar header ──────────────────────────────────────────── */
+/* Sidebar header */
 .fi-sidebar-header {
-  background-color: var(--s-sidebar) !important;
-  border-bottom: 1px solid rgba(39,174,96,0.12) !important;
+  background-color: var(--ins-nav-bg) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
   box-shadow: none !important;
   --tw-ring-shadow: 0 0 #0000 !important;
-  padding-top: 1.1rem !important;
-  padding-bottom: 1.1rem !important;
+  height: var(--ins-topbar-h) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-inline: 1.25rem !important;
 }
 
 /* Logo */
 .fi-logo img, .fi-sidebar-header img[alt] {
-  filter: brightness(1.6) saturate(0.75) !important;
-  max-height: 2rem !important;
+  filter: brightness(1.8) saturate(0.7) !important;
+  max-height: 1.875rem !important;
   width: auto !important;
   object-fit: contain !important;
 }
 .fi-logo, .fi-sidebar-header a, .fi-brand-name {
-  color: #FFFFFF !important;
-  font-family: "Nunito", sans-serif !important;
+  color: #ffffff !important;
+  font-family: var(--ins-font) !important;
+  font-size: 15px !important;
   font-weight: 700 !important;
 }
 
-/* Header toggle buttons */
-.fi-sidebar-header .fi-icon-btn-icon {
-  color: var(--s-ivory-30) !important;
-  transition: color 0.15s !important;
-}
-.fi-sidebar-header .fi-icon-btn:hover {
-  background: var(--s-green-sub) !important;
-  border-radius: 6px !important;
-}
-.fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon {
-  color: var(--s-green-b) !important;
-}
+/* Header collapse buttons */
+.fi-sidebar-header .fi-icon-btn-icon { color: rgba(214,235,216,0.30) !important; }
+.fi-sidebar-header .fi-icon-btn:hover { background: rgba(255,255,255,0.05) !important; border-radius: var(--ins-radius) !important; }
+.fi-sidebar-header .fi-icon-btn:hover .fi-icon-btn-icon { color: rgba(214,235,216,0.75) !important; }
 
-/* ── Navigation ──────────────────────────────────────────────── */
-.fi-sidebar-nav { padding: 0.5rem 0 !important; }
+/* Navigation padding */
+.fi-sidebar-nav { padding-block: 0.5rem !important; }
 
-/* Group labels — compact mono */
+/* Group labels — Simple: 11px, uppercase, very muted */
 .fi-sidebar-group-label {
-  font-family: "JetBrains Mono", monospace !important;
-  font-size: 0.58rem !important;
-  letter-spacing: 0.18em !important;
+  font-family: var(--ins-font-mono) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
-  color: rgba(39,174,96,0.45) !important;
-  padding-inline-start: 1.1rem !important;
-  padding-block: 0.15rem !important;
+  color: var(--ins-nav-grp-cl) !important;
+  padding-inline: 1.25rem !important;
+  padding-block: 0.5rem 0.25rem !important;
 }
 
-/* Group separators */
+/* Group separators — Simple: subtle line */
 .fi-sidebar-nav-groups > li + li {
-  padding-top: 0.625rem !important;
-  margin-top: 0.375rem !important;
-  border-top: 1px solid rgba(214,235,216,0.06) !important;
+  margin-top: 0.5rem !important;
+  padding-top: 0.5rem !important;
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
 }
 
-/* Collapse buttons */
-.fi-sidebar-group-collapse-button .fi-icon-btn-icon {
-  color: var(--s-ivory-30) !important;
-}
+/* Collapse arrow — muted */
+.fi-sidebar-group-collapse-button .fi-icon-btn-icon { color: rgba(214,235,216,0.25) !important; }
 
-/* ── Nav items — Simple: 42px height, clean solid active ───── */
+/* ── Nav items — Simple exact: px 20, py 8, icon 16px, 13px ── */
 .fi-sidebar-item-button {
-  border-radius: 5px !important;
-  margin-inline: 12px !important;
-  margin-block: 2px !important;
-  min-height: 42px !important;
+  border-radius: var(--ins-radius) !important;
+  margin-inline: 0.625rem !important;
+  margin-block: 1px !important;
   padding-block: 0.5rem !important;
-  padding-inline: 0.75rem !important;
-  transition: background 0.15s ease !important;
+  padding-inline: 1.25rem !important;
+  min-height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
 }
 
-/* Rest state */
+.fi-sidebar-item-icon {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Rest */
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-icon {
-  color: rgba(214,235,216,0.42) !important;
+  color: var(--ins-nav-color) !important;
   transition: color 0.15s !important;
 }
 .fi-sidebar-item:not(.fi-active) .fi-sidebar-item-label {
-  color: rgba(214,235,216,0.65) !important;
-  font-size: 0.855rem !important;
+  color: var(--ins-nav-color) !important;
+  font-size: 0.8125rem !important;
   font-weight: 500 !important;
-  letter-spacing: 0.01em !important;
   transition: color 0.15s !important;
 }
 
-/* Hover state */
+/* Hover */
 .fi-sidebar-item-button:hover,
 .fi-sidebar-item-button:focus-visible {
-  background: rgba(255,255,255,0.06) !important;
+  background: var(--ins-nav-hover-bg) !important;
 }
 .fi-sidebar-item-button:hover .fi-sidebar-item-icon,
-.fi-sidebar-item-button:focus-visible .fi-sidebar-item-icon {
-  color: rgba(214,235,216,0.80) !important;
-}
+.fi-sidebar-item-button:focus-visible .fi-sidebar-item-icon { color: var(--ins-nav-hover-cl) !important; }
 .fi-sidebar-item-button:hover .fi-sidebar-item-label,
-.fi-sidebar-item-button:focus-visible .fi-sidebar-item-label {
-  color: rgba(214,235,216,0.92) !important;
-}
+.fi-sidebar-item-button:focus-visible .fi-sidebar-item-label { color: var(--ins-nav-hover-cl) !important; }
 
-/* Active state — Simple: solid emerald fill, white text, subtle shadow */
+/* Active — Simple: solid primary fill, white text */
 .fi-sidebar-item.fi-active .fi-sidebar-item-button {
-  background: var(--s-green) !important;
-  border-radius: 5px !important;
-  box-shadow: 0 2px 8px rgba(39,174,96,0.35) !important;
+  background: var(--ins-nav-active-bg) !important;
 }
-.fi-sidebar-item.fi-active .fi-sidebar-item-icon {
-  color: #ffffff !important;
-}
+.fi-sidebar-item.fi-active .fi-sidebar-item-icon { color: var(--ins-nav-active-cl) !important; }
 .fi-sidebar-item.fi-active .fi-sidebar-item-label {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  font-size: 0.855rem !important;
-  letter-spacing: 0.01em !important;
-}
-
-/* Badges */
-.fi-sidebar-item .fi-badge {
-  background: rgba(39,174,96,0.18) !important;
-  color: var(--s-green-b) !important;
-  border: none !important;
-  font-family: "JetBrains Mono", monospace !important;
-  font-size: 0.6rem !important;
-  font-weight: 700 !important;
-  border-radius: 20px !important;
-}
-.fi-sidebar-item.fi-active .fi-badge {
-  background: rgba(255,255,255,0.25) !important;
-  color: #fff !important;
-}
-
-/* Grouped sub-items */
-.fi-sidebar-item-grouped-border > div {
-  background: rgba(39,174,96,0.20) !important;
-}
-.fi-sidebar-item-grouped-border .rounded-full {
-  background: rgba(39,174,96,0.40) !important;
-}
-.fi-sidebar-item.fi-active .fi-sidebar-item-grouped-border .rounded-full {
-  background: rgba(255,255,255,0.7) !important;
-}
-
-/* ── Footer (user) ───────────────────────────────────────────── */
-.fi-sidebar-footer {
-  border-top: 1px solid rgba(214,235,216,0.07) !important;
-  background: rgba(0,0,0,0.12) !important;
-  padding-block: 0.625rem !important;
-}
-.fi-user-menu-trigger {
-  border-radius: 6px !important;
-  transition: background 0.15s !important;
-}
-.fi-user-menu-trigger:hover {
-  background: var(--s-green-sub) !important;
-}
-[class*="fi-user-name"] {
-  color: var(--s-ivory-60) !important;
-  font-size: 0.8rem !important;
+  color: var(--ins-nav-active-cl) !important;
   font-weight: 600 !important;
+  font-size: 0.8125rem !important;
 }
-[class*="fi-user-email"] {
-  color: var(--s-ivory-30) !important;
-  font-family: "JetBrains Mono", monospace !important;
-  font-size: 0.6rem !important;
+
+/* Sidebar badges */
+.fi-sidebar-item .fi-badge {
+  font-family: var(--ins-font-mono) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  background: rgba(39,174,96,0.18) !important;
+  color: var(--ins-green-b) !important;
+  border: none !important;
+  border-radius: var(--ins-radius-pill) !important;
 }
+.fi-sidebar-item.fi-active .fi-badge { background: rgba(255,255,255,0.2) !important; color: #fff !important; }
+
+/* Sub-items connector dots */
+.fi-sidebar-item-grouped-border > div { background: rgba(39,174,96,0.22) !important; }
+.fi-sidebar-item-grouped-border .rounded-full { background: rgba(39,174,96,0.45) !important; }
+.fi-sidebar-item.fi-active .fi-sidebar-item-grouped-border .rounded-full { background: rgba(255,255,255,0.7) !important; }
+
+/* Sidebar footer (user info) */
+.fi-sidebar-footer {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: rgba(0,0,0,0.10) !important;
+  padding-block: 0.5rem !important;
+}
+.fi-user-menu-trigger { border-radius: var(--ins-radius) !important; transition: background 0.15s !important; }
+.fi-user-menu-trigger:hover { background: rgba(255,255,255,0.06) !important; }
+[class*="fi-user-name"] { color: rgba(214,235,216,0.72) !important; font-size: 13px !important; font-weight: 600 !important; }
+[class*="fi-user-email"] { color: rgba(214,235,216,0.35) !important; font-family: var(--ins-font-mono) !important; font-size: 11px !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   TOPBAR — blanc propre, Simple style
+   TOPBAR — Simple: #ffffff, height 60px, shadow
 ═══════════════════════════════════════════════════════════════ */
 .fi-topbar {
-  background: #ffffff !important;
-  border-bottom: 1px solid var(--s-border) !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
-  min-height: 60px !important;
+  background: var(--ins-topbar-bg) !important;
+  border-bottom: 1px solid var(--ins-border) !important;
+  box-shadow: var(--ins-shadow) !important;
+  min-height: var(--ins-topbar-h) !important;
 }
+.fi-topbar-item { color: var(--ins-ink-muted) !important; font-size: 13px !important; }
+.fi-topbar-item:hover { color: var(--ins-ink) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   PAGE HEADER & BREADCRUMB
+   PAGE HEADER — Simple: compact, 15px title
 ═══════════════════════════════════════════════════════════════ */
-.fi-page-header {
-  padding-bottom: 0.75rem !important;
-  border-bottom: none !important;
-  margin-bottom: 1rem !important;
-}
+.fi-page-header { padding-bottom: 0.75rem !important; border-bottom: none !important; }
 .fi-page-header-heading {
-  font-family: "Fraunces", serif !important;
-  font-weight: 800 !important;
-  font-size: 1.5rem !important;
-  color: var(--s-ink) !important;
+  font-family: var(--ins-font) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: var(--ins-ink) !important;
   letter-spacing: -0.01em !important;
 }
-[class*="fi-breadcrumbs"] {
-  font-size: 0.75rem !important;
-  color: var(--s-ink-40) !important;
-}
-[class*="fi-breadcrumbs"] a { color: var(--s-ink-60) !important; }
-[class*="fi-breadcrumbs"] a:hover { color: var(--s-green) !important; }
+[class*="fi-breadcrumbs"] { font-size: 12px !important; color: var(--ins-ink-muted) !important; }
+[class*="fi-breadcrumbs"] a { color: var(--ins-ink-muted) !important; }
+[class*="fi-breadcrumbs"] a:hover { color: var(--ins-green) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   CARDS & SECTIONS — Simple: white float on light bg
+   CARDS & SECTIONS — Simple exact: 1rem radius, 1px border, NO shadow
 ═══════════════════════════════════════════════════════════════ */
 .fi-section {
-  background: #ffffff !important;
-  border-radius: 8px !important;
-  border: 1px solid var(--s-border) !important;
-  box-shadow: var(--s-card-shadow) !important;
+  background: var(--ins-secondary-bg) !important;
+  border-radius: var(--ins-radius-xl) !important;
+  border: 1px solid var(--ins-border) !important;
+  box-shadow: none !important;
 }
 .fi-section-header {
-  border-bottom: 1px solid var(--s-border) !important;
-  padding-block: 1rem !important;
+  border-bottom: 1px solid var(--ins-border) !important;
+  padding-block: 0.9375rem !important;
+  padding-inline: 1.0625rem !important;
 }
 .fi-section-header-heading {
-  font-family: "Nunito", sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  color: var(--s-ink) !important;
+  font-family: var(--ins-font) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: var(--ins-ink) !important;
 }
+.fi-section-content { padding: 0.9375rem 1.0625rem !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   STAT WIDGETS — Simple's KPI cards
+   STAT WIDGETS — Simple exact: 1rem radius, 1px border, no shadow
+   KPI value: 24px Geist bold · label: 11px muted uppercase
 ═══════════════════════════════════════════════════════════════ */
 .fi-wi-stats-overview-stat {
-  background: #ffffff !important;
-  border: 1px solid var(--s-border) !important;
-  border-radius: 8px !important;
-  box-shadow: var(--s-card-shadow) !important;
-  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-/* Thin left accent bar (Simple style) */
-.fi-wi-stats-overview-stat::before {
-  content: '';
-  position: absolute;
-  inset-inline-start: 0;
-  top: 0; bottom: 0;
-  width: 3px;
-  background: var(--s-green) !important;
-  border-radius: 2px 0 0 2px;
+  background: var(--ins-secondary-bg) !important;
+  border: 1px solid var(--ins-border) !important;
+  border-radius: var(--ins-radius-xl) !important;
+  box-shadow: none !important;
+  padding: 0.9375rem 1.0625rem !important;
+  transition: box-shadow 0.18s ease !important;
 }
 .fi-wi-stats-overview-stat:hover {
-  box-shadow: 0 6px 24px rgba(0,0,0,0.09) !important;
-  transform: translateY(-2px) !important;
+  box-shadow: var(--ins-shadow) !important;
 }
 .fi-wi-stats-overview-stat-value {
-  font-family: "Fraunces", serif !important;
-  font-weight: 800 !important;
-  font-size: 1.85rem !important;
-  color: var(--s-ink) !important;
+  font-family: var(--ins-font) !important;
+  font-weight: 700 !important;
+  font-size: 24px !important;
+  color: var(--ins-ink) !important;
   letter-spacing: -0.02em !important;
+  line-height: 1.2 !important;
 }
 .fi-wi-stats-overview-stat-label {
-  font-size: 0.75rem !important;
+  font-family: var(--ins-font) !important;
+  font-size: 11px !important;
   font-weight: 600 !important;
-  color: var(--s-ink-60) !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
+  color: var(--ins-ink-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
 }
 .fi-wi-stats-overview-stat-description {
-  font-size: 0.75rem !important;
-  color: var(--s-ink-40) !important;
+  font-size: 12px !important;
+  color: var(--ins-ink-muted) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   TABLES — Simple's clean data tables
+   TABLES — Simple: 13px Geist, #e5e7eb borders, hover tint
 ═══════════════════════════════════════════════════════════════ */
+.fi-ta-content { border-radius: var(--ins-radius-xl) !important; overflow: hidden !important; }
 .fi-ta-header-cell {
-  font-size: 0.72rem !important;
-  font-weight: 700 !important;
+  font-family: var(--ins-font) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  color: var(--s-ink-40) !important;
-  background: #F8FAF9 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--ins-ink-muted) !important;
+  background: #f9fafb !important;
+  padding-block: 0.625rem !important;
+  border-bottom: 1px solid var(--ins-border) !important;
 }
-.fi-ta-row:hover > td {
-  background: rgba(39,174,96,0.03) !important;
+.fi-ta-cell {
+  font-family: var(--ins-font) !important;
+  font-size: 13px !important;
+  color: var(--ins-body-color) !important;
+  border-bottom: 1px solid #f3f4f6 !important;
 }
-.fi-ta-row:nth-child(even) > td {
-  background: rgba(238,242,240,0.5) !important;
+.fi-ta-row:hover > td, .fi-ta-row:hover > .fi-ta-cell {
+  background: #f9fafb !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   BUTTONS
+   BUTTONS — Simple: 0.4rem radius, 13px, weight 500
 ═══════════════════════════════════════════════════════════════ */
 .fi-btn {
-  font-weight: 600 !important;
-  border-radius: 6px !important;
+  font-family: var(--ins-font) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  border-radius: var(--ins-radius) !important;
+  padding-block: 0.4532rem !important;
+  padding-inline: 1.1rem !important;
 }
 .fi-btn-color-primary.fi-btn-style-filled {
-  box-shadow: 0 2px 6px rgba(39,174,96,0.25) !important;
-  transition: box-shadow 0.18s ease, transform 0.15s ease !important;
+  box-shadow: none !important;
+  transition: opacity 0.15s ease !important;
 }
-.fi-btn-color-primary.fi-btn-style-filled:hover {
-  box-shadow: 0 4px 14px rgba(39,174,96,0.40) !important;
-  transform: translateY(-1px) !important;
-}
+.fi-btn-color-primary.fi-btn-style-filled:hover { opacity: 0.9 !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   FORM INPUTS
+   FORM INPUTS — Simple: 0.4rem radius, 13px, #e5e7eb border
 ═══════════════════════════════════════════════════════════════ */
-.fi-input {
-  border-radius: 6px !important;
-  border-color: var(--s-border) !important;
-  font-size: 0.875rem !important;
+.fi-input,
+.fi-select-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  font-family: var(--ins-font) !important;
+  font-size: 13px !important;
+  border-radius: var(--ins-radius) !important;
+  border-color: var(--ins-border) !important;
+  background: var(--ins-secondary-bg) !important;
+  color: var(--ins-body-color) !important;
+  padding-block: 0.4532rem !important;
+  padding-inline: 0.77rem !important;
 }
-.fi-input:focus {
-  border-color: var(--s-green) !important;
-  box-shadow: 0 0 0 3px rgba(39,174,96,0.12) !important;
+.fi-input:focus,
+.fi-select-input:focus,
+input:focus {
+  border-color: var(--ins-green) !important;
+  box-shadow: 0 0 0 3px rgba(39,174,96,0.10) !important;
+  outline: none !important;
 }
-.fi-select-input {
-  border-radius: 6px !important;
-}
+label, .fi-fo-field-wrp-label { font-size: 13px !important; font-weight: 500 !important; color: var(--ins-ink) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   MODAL & DROPDOWN
+   MODAL — Simple: 0.6rem radius, shadow-lg
 ═══════════════════════════════════════════════════════════════ */
 .fi-modal-window {
-  border-radius: 10px !important;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+  border-radius: var(--ins-radius-lg) !important;
+  box-shadow: var(--ins-shadow-lg) !important;
+  border: 1px solid var(--ins-border) !important;
 }
-.fi-dropdown-panel {
-  border-radius: 8px !important;
-  border: 1px solid var(--s-border) !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
-}
+.fi-modal-header { border-bottom: 1px solid var(--ins-border) !important; }
+.fi-modal-footer { border-top: 1px solid var(--ins-border) !important; }
+.fi-modal-heading { font-size: 15px !important; font-weight: 600 !important; color: var(--ins-ink) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   BADGES & STATUS
+   DROPDOWN — Simple: 0.4rem radius, 1px border, shadow
+═══════════════════════════════════════════════════════════════ */
+.fi-dropdown-panel {
+  border-radius: var(--ins-radius) !important;
+  border: 1px solid var(--ins-border) !important;
+  box-shadow: var(--ins-shadow-lg) !important;
+  background: var(--ins-secondary-bg) !important;
+}
+.fi-dropdown-list-item-label { font-size: 13px !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   BADGES — Simple: pill shape, 11px, weight 600
 ═══════════════════════════════════════════════════════════════ */
 .fi-badge {
-  border-radius: 20px !important;
-  font-size: 0.7rem !important;
-  font-weight: 700 !important;
-  padding: 0.15rem 0.6rem !important;
+  font-family: var(--ins-font) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border-radius: var(--ins-radius-pill) !important;
+  padding-block: 0.125rem !important;
+  padding-inline: 0.5rem !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   NOTIFICATIONS
+   NOTIFICATIONS — Simple: shadow, 0.4rem radius
 ═══════════════════════════════════════════════════════════════ */
 .fi-notification {
-  border-radius: 8px !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+  font-family: var(--ins-font) !important;
+  font-size: 13px !important;
+  border-radius: var(--ins-radius) !important;
+  border: 1px solid var(--ins-border) !important;
+  box-shadow: var(--ins-shadow-lg) !important;
 }
-.fi-notification-success {
-  border-left: 3px solid var(--s-green) !important;
-}
+.fi-notification-title { font-weight: 600 !important; font-size: 13px !important; }
+.fi-notification-body  { font-size: 12px !important; color: var(--ins-ink-muted) !important; }
+.fi-notification-success { border-left: 3px solid var(--ins-green) !important; }
+.fi-notification-warning { border-left: 3px solid #eab308 !important; }
+.fi-notification-danger  { border-left: 3px solid #ef4444 !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   LOGIN PAGE — card centrée sur fond page
+   LOGIN PAGE — Simple body bg + card
 ═══════════════════════════════════════════════════════════════ */
-.fi-simple-page {
-  background: var(--s-page) !important;
+.fi-simple-page, .fi-simple-main {
+  background: var(--ins-body-bg) !important;
 }
-.fi-simple-main {
-  background: var(--s-page) !important;
+.fi-simple-main .fi-section {
+  border-radius: var(--ins-radius-xl) !important;
+  box-shadow: var(--ins-shadow) !important;
 }
 </style>
 HTML)
