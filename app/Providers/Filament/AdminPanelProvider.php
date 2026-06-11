@@ -239,8 +239,16 @@ body, .fi-body {
 .fi-topbar-item:hover { color: var(--ins-ink) !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   PAGE HEADER
+   LAYOUT — reduce horizontal whitespace, keep content tight
 ═══════════════════════════════════════════════════════════════ */
+.fi-page {
+  padding-inline: 1.25rem !important;
+  max-width: 100% !important;
+}
+.fi-main-ctn {
+  padding-inline: 0 !important;
+  max-width: 100% !important;
+}
 .fi-page-header { padding-bottom: 0.75rem !important; border-bottom: none !important; }
 .fi-page-header-heading {
   font-family: var(--ins-font) !important;
@@ -308,7 +316,7 @@ body, .fi-body {
 /* ═══════════════════════════════════════════════════════════════
    TABLES
 ═══════════════════════════════════════════════════════════════ */
-.fi-ta-content { border-radius: var(--ins-radius-xl) !important; overflow: hidden !important; }
+.fi-ta-content { border-radius: var(--ins-radius-xl) !important; overflow-x: auto !important; overflow-y: visible !important; }
 .fi-ta-header-cell {
   font-family: var(--ins-font) !important;
   font-size: 11px !important;
