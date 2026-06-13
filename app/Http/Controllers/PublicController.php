@@ -6,6 +6,7 @@ use App\Models\Edition;
 use App\Models\FaqItem;
 use App\Models\News;
 use App\Models\Partner;
+use App\Models\Speaker;
 use App\Models\Workshop;
 
 class PublicController extends Controller
@@ -45,7 +46,12 @@ class PublicController extends Controller
             ->take(6)
             ->get();
 
-        return view('public.home', compact('edition', 'workshops', 'faqItems'));
+        $speakers = Speaker::where('is_published', true)
+            ->orderByDesc('is_featured')
+            ->orderBy('display_order')
+            ->get();
+
+        return view('public.home', compact('edition', 'workshops', 'faqItems', 'speakers'));
     }
 
     public function ateliers()
