@@ -122,7 +122,7 @@ $tagColors = [
 ];
 @endphp
 
-<section class="py-16 bg-blanc-creme" x-data="{ jour: 1 }">
+<section class="py-16 bg-blanc-creme" style="background-color:hsl(var(--blanc-creme))" x-data="{ jour: 1 }">
     <div class="max-w-hub mx-auto px-6">
 
         {{-- Sélecteur de jours --}}
@@ -130,26 +130,24 @@ $tagColors = [
             @foreach($jours as $num => $jour)
             <button
                 @click="jour = {{ $num }}"
-                :class="jour === {{ $num }}
-                    ? 'bg-noir-profond text-blanc-pur shadow-lg border-transparent'
-                    : 'bg-blanc-pur text-noir-profond border-sable hover:border-gris-500/30 hover:shadow-sm'"
-                class="text-left px-5 py-4 rounded-2xl border transition-all duration-300 flex items-center gap-4"
+                :class="jour === {{ $num }} ? '!bg-vert-ivoire !text-blanc-pur shadow-lg !border-vert-fonce' : ''"
+                class="text-left px-5 py-4 rounded-2xl border border-sable bg-blanc-pur text-noir-profond hover:border-vert-ivoire/30 hover:shadow-sm transition-all duration-300 flex items-center gap-4"
             >
                 <div class="flex-shrink-0">
-                    <div class="font-mono font-bold leading-none"
-                         :class="jour === {{ $num }} ? 'text-orange-soft' : 'text-vert-ivoire'"
+                    <div class="font-mono font-bold leading-none text-vert-ivoire"
+                         :class="jour === {{ $num }} ? '!text-orange-soft' : ''"
                          style="font-size: 1.75rem; line-height: 1;">{{ $jour['day'] }}</div>
-                    <div class="text-[0.58rem] font-bold uppercase tracking-widest mt-0.5"
-                         :class="jour === {{ $num }} ? 'text-blanc-pur/40' : 'text-gris-500/50'">{{ $jour['month'] }}</div>
+                    <div class="text-[0.58rem] font-bold uppercase tracking-widest mt-0.5 text-gris-500/60"
+                         :class="jour === {{ $num }} ? '!text-blanc-pur/60' : ''">{{ $jour['month'] }}</div>
                 </div>
-                <div class="w-px h-7 flex-shrink-0"
-                     :class="jour === {{ $num }} ? 'bg-blanc-pur/15' : 'bg-sable'"></div>
+                <div class="w-px h-7 flex-shrink-0 bg-sable"
+                     :class="jour === {{ $num }} ? '!bg-blanc-pur/30' : ''"></div>
                 <div class="flex-1 min-w-0">
-                    <div class="text-[0.6rem] font-bold uppercase tracking-widest mb-0.5"
-                         :class="jour === {{ $num }} ? 'text-blanc-pur/40' : 'text-gris-500/50'">Jour {{ $num }}</div>
+                    <div class="text-[0.6rem] font-bold uppercase tracking-widest mb-0.5 text-gris-500/60"
+                         :class="jour === {{ $num }} ? '!text-blanc-pur/60' : ''">Jour {{ $num }}</div>
                     <div class="font-semibold text-xs leading-tight truncate">{{ $jour['theme'] }}</div>
                 </div>
-            </a>
+            </button>
             @endforeach
         </div>
 
