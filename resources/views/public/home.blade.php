@@ -730,6 +730,73 @@ $newsletterSubtitle = $edition?->newsletter_subtitle ?? 'Recevez le programme of
 
 
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
+{{-- SECTION INTERVENANTS                                                    --}}
+{{-- ══════════════════════════════════════════════════════════════════════ --}}
+@if($speakers->isNotEmpty())
+<section class="py-24 bg-blanc-creme" aria-labelledby="speakers-title">
+    <div class="max-w-hub mx-auto px-6">
+
+        {{-- En-tête --}}
+        <div class="text-center mb-14 reveal">
+            <div class="kicker-orange rounded-full mb-4 inline-block">Intervenants</div>
+            <h2 id="speakers-title"
+                class="font-serif font-bold text-noir-profond"
+                style="font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.02em; line-height: 1.1;">
+                Ils animent<br>
+                <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">le Hub 2026.</em>
+            </h2>
+        </div>
+
+        {{-- Grille speakers --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($speakers as $speaker)
+            <div class="glass rounded-3xl p-6 text-center reveal hub-card-lift flex flex-col items-center gap-4">
+
+                {{-- Photo ou initiales --}}
+                @if($speaker->photo_path)
+                <img
+                    src="{{ asset('storage/'.$speaker->photo_path) }}"
+                    alt="{{ $speaker->full_name }}"
+                    class="w-20 h-20 rounded-2xl object-cover object-center flex-shrink-0"
+                    loading="lazy"
+                >
+                @else
+                <div class="w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl font-serif font-bold text-blanc-pur"
+                     style="background: linear-gradient(135deg, hsl(var(--vert-ivoire)/0.7), hsl(var(--vert-fonce)/0.9));">
+                    {{ mb_strtoupper(mb_substr($speaker->first_name, 0, 1)).mb_strtoupper(mb_substr($speaker->last_name, 0, 1)) }}
+                </div>
+                @endif
+
+                {{-- Infos --}}
+                <div class="flex-1 min-w-0 w-full">
+                    @if($speaker->is_featured)
+                    <span class="inline-block text-[0.6rem] font-bold uppercase tracking-widest text-orange-soft mb-2">Intervenant clé</span>
+                    @endif
+                    <p class="font-serif font-bold text-blanc-pur text-base leading-tight">{{ $speaker->full_name }}</p>
+                    <p class="text-xs text-blanc-pur/60 mt-1 leading-snug">{{ $speaker->title }}</p>
+                    <p class="text-[0.65rem] font-mono text-vert-soft/80 mt-1 uppercase tracking-wide">{{ $speaker->organization }}</p>
+                </div>
+
+                {{-- LinkedIn --}}
+                @if($speaker->linkedin)
+                <a href="{{ $speaker->linkedin }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="text-blanc-pur/30 hover:text-vert-ivoire transition-colors"
+                   aria-label="LinkedIn de {{ $speaker->full_name }}">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+                @endif
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+
+{{-- ══════════════════════════════════════════════════════════════════════ --}}
 {{-- SECTION 8 — PROGRAMME (BRIEF §III.1 #8, CONTENT §A.4)                 --}}
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
 @php
