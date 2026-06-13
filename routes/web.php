@@ -15,7 +15,7 @@ use App\Livewire\Participant\Profile;
 use Illuminate\Support\Facades\Route;
 
 // ── Site public (BRIEF §III.1, §IV.6) ───────────────────────────────────────
-Route::get('/', fn () => view('public.home'))->name('home');
+Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/programme', fn () => view('public.programme'))->name('programme');
 Route::get('/ateliers', [PublicController::class, 'ateliers'])->name('ateliers.index');
 Route::get('/ateliers/{slug}', [PublicController::class, 'atelier'])->name('ateliers.show');

@@ -3,8 +3,11 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ApplicationStatus;
+use App\Enums\EnrollmentStatus;
 use App\Models\Application;
 use App\Models\Attendance;
+use App\Models\Enrollment;
+use App\Models\Workshop;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
@@ -24,16 +27,13 @@ class StatsOverviewWidget extends BaseWidget
 
         $delta24h = Application::where('submitted_at', '>=', now()->subDay())->count();
 
-        $accepted = Application::where('status', ApplicationStatus::Accepted->value)->count();
-        $quota = 180;
+        $enrolled = Enrollment::where('status', EnrollmentStatus::Enrolled->value)->count();
+
+        $totalCapacity = Workshop::where('is_published', true)->sum('capacity');
+        $spotsLeft = max(0, $totalCapacity - $enrolled);
 
         $today = Carbon::today();
-        $present = Attendance::whereDate('event_date', $today)->distinct('application_id')->count('application_id');
-
-        $toEval = Application::whereIn('status', [
-            ApplicationStatus::Eligible->value,
-            ApplicationStatus::UnderReview->value,
-        ])->count();
+        $present = Attendance::whereDate('event_date', $today)->distinct('enrollment_id')->count('enrollment_id');
 
         $sparkline = $this->submissionsSparkline();
 
@@ -44,8 +44,8 @@ class StatsOverviewWidget extends BaseWidget
                 ->color('primary')
                 ->chart($sparkline),
 
-            Stat::make('Auditeurs retenus', $accepted.' / '.$quota)
-                ->description(round($accepted / $quota * 100).' % du quota atteint')
+            Stat::make('Inscrits en ateliers', $enrolled)
+                ->description($totalCapacity > 0 ? round($enrolled / $totalCapacity * 100).'% du quota rempli' : '—')
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('success'),
 
@@ -54,10 +54,10 @@ class StatsOverviewWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-map-pin')
                 ->color('info'),
 
-            Stat::make('Dossiers à évaluer', $toEval)
-                ->description('Éligibles + en cours')
-                ->descriptionIcon('heroicon-m-clipboard-document-check')
-                ->color('warning'),
+            Stat::make('Places disponibles', $spotsLeft)
+                ->description('Sur '.$totalCapacity.' places totales')
+                ->descriptionIcon('heroicon-m-ticket')
+                ->color($spotsLeft < 20 ? 'danger' : 'warning'),
         ];
     }
 

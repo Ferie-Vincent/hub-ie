@@ -4,8 +4,10 @@ namespace App\Filament\Pages;
 
 use App\Enums\ApplicationCategory;
 use App\Enums\ApplicationStatus;
+use App\Enums\EnrollmentStatus;
 use App\Models\Application;
 use App\Models\Attendance;
+use App\Models\Enrollment;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Support\Carbon;
 
@@ -24,13 +26,13 @@ class Dashboard extends BaseDashboard
 
     public int $delta24h = 0;
 
-    public int $accepted = 0;
+    public int $enrolled = 0;
+
+    public int $waitlisted = 0;
 
     public int $quota = 180;
 
     public int $presentToday = 0;
-
-    public int $toEvaluate = 0;
 
     public int $daysToEvent = 0;
 
@@ -48,8 +50,6 @@ class Dashboard extends BaseDashboard
     public array $categoryData = [];
 
     public array $workshopData = [];
-
-    public array $statusFunnel = [];
 
     public array $attendanceData = [];
 
@@ -73,13 +73,10 @@ class Dashboard extends BaseDashboard
         // --- KPIs ---
         $this->totalSubmitted = Application::whereNotIn('status', $exclude)->count();
         $this->delta24h = Application::where('submitted_at', '>=', $now->copy()->subDay())->count();
-        $this->accepted = Application::where('status', ApplicationStatus::Accepted->value)->count();
+        $this->enrolled = Enrollment::where('status', EnrollmentStatus::Enrolled->value)->count();
+        $this->waitlisted = Enrollment::where('status', EnrollmentStatus::Waitlisted->value)->count();
         $this->presentToday = Attendance::whereDate('event_date', Carbon::today())
             ->distinct('enrollment_id')->count('enrollment_id');
-        $this->toEvaluate = Application::whereIn('status', [
-            ApplicationStatus::Eligible->value,
-            ApplicationStatus::UnderReview->value,
-        ])->count();
         $this->daysToEvent = max(0, (int) $now->diffInDays(Carbon::parse('2026-06-22'), false));
 
         // --- Cumulative 30-day sparkline ---
@@ -96,7 +93,7 @@ class Dashboard extends BaseDashboard
         $this->sparklineCumul = $values;
         $this->sparklineLabels = $labels;
 
-        // --- Gender ---
+        // --- Gender (all submitted candidates) ---
         $joinBase = Application::whereNotIn('status', $exclude)
             ->join('users', 'users.id', '=', 'applications.user_id');
         $this->genderData = [
@@ -106,7 +103,7 @@ class Dashboard extends BaseDashboard
         ];
         $this->genderTotal = array_sum($this->genderData);
 
-        // --- Age groups ---
+        // --- Age groups (all submitted candidates) ---
         $ageBase = Application::whereNotIn('status', $exclude)
             ->join('users', 'users.id', '=', 'applications.user_id')
             ->whereNotNull('users.birth_date');
@@ -130,40 +127,14 @@ class Dashboard extends BaseDashboard
         arsort($catData);
         $this->categoryData = $catData;
 
-        // --- Workshops (factory stores integers 1–4) ---
-        $workshopLabels = [1 => 'ZLECAf & CEDEAO', 2 => 'Financement', 3 => 'E-commerce', 4 => 'Conformité'];
-        $wCounts = [1 => 0, 2 => 0, 3 => 0, 4 => 0];
-        Application::whereNotIn('status', $exclude)->whereNotNull('chosen_workshops')
-            ->each(function ($app) use (&$wCounts) {
-                foreach ((array) $app->chosen_workshops as $idx) {
-                    if (isset($wCounts[(int) $idx])) {
-                        $wCounts[(int) $idx]++;
-                    }
-                }
-            });
-        $this->workshopData = [];
-        foreach ($workshopLabels as $idx => $label) {
-            $this->workshopData[$label] = $wCounts[$idx];
-        }
-
-        // --- Status funnel ---
-        $funnelStatuses = [
-            ApplicationStatus::Received,
-            ApplicationStatus::Eligible,
-            ApplicationStatus::UnderReview,
-            ApplicationStatus::Shortlisted,
-            ApplicationStatus::Accepted,
-        ];
-        $maxFunnel = Application::where('status', ApplicationStatus::Received->value)->count() ?: 1;
-        $this->statusFunnel = [];
-        foreach ($funnelStatuses as $s) {
-            $c = Application::where('status', $s->value)->count();
-            $this->statusFunnel[] = [
-                'label' => $s->label(),
-                'count' => $c,
-                'pct' => round($c / $maxFunnel * 100),
-            ];
-        }
+        // --- Workshops: real enrollment counts (not application choices) ---
+        $this->workshopData = Enrollment::where('enrollments.status', EnrollmentStatus::Enrolled->value)
+            ->join('workshops', 'workshops.id', '=', 'enrollments.workshop_id')
+            ->selectRaw('workshops.title, COUNT(*) as total')
+            ->groupBy('workshops.id', 'workshops.title')
+            ->orderByDesc('total')
+            ->pluck('total', 'title')
+            ->toArray();
 
         // --- Attendance (4 event days) ---
         $this->attendanceData = [];
@@ -193,11 +164,12 @@ class Dashboard extends BaseDashboard
             ->pluck('total', 'referral_source')
             ->toArray();
 
-        // --- Quota ---
-        $acceptedJoin = Application::where('status', ApplicationStatus::Accepted->value)
-            ->join('users', 'users.id', '=', 'applications.user_id');
-        $this->women = (clone $acceptedJoin)->where('users.gender', 'F')->count();
-        $this->young = (clone $acceptedJoin)->where('users.birth_date', '>=', $now->copy()->subYears(35)->toDateString())->count();
+        // --- Quota inclusivité (based on confirmed enrolled) ---
+        $enrolledJoin = Enrollment::where('enrollments.status', EnrollmentStatus::Enrolled->value)
+            ->join('users', 'users.id', '=', 'enrollments.user_id');
+        $this->women = (clone $enrolledJoin)->where('users.gender', 'F')->count();
+        $this->young = (clone $enrolledJoin)->whereNotNull('users.birth_date')
+            ->where('users.birth_date', '>=', $now->copy()->subYears(35)->toDateString())->count();
         $this->womenPct = $this->quota > 0 ? round($this->women / $this->quota * 100) : 0;
         $this->youngPct = $this->quota > 0 ? round($this->young / $this->quota * 100) : 0;
     }

@@ -1,4 +1,99 @@
 <x-layouts.public :darkHero="true">
+@php
+// ── Résolution des variables depuis l'édition active (avec fallbacks) ───────
+
+$heroPatronText = $edition?->hero_patron_text
+    ?? 'Sous le haut patronage de <strong class="text-blanc-pur">Monsieur le Ministre du Commerce, de l\'Industrie et de l\'Artisanat</strong> de la République de Côte d\'Ivoire.';
+
+$heroSubtitle = $edition?->hero_subtitle
+    ?? 'Le rendez-vous stratégique des acteurs du commerce extérieur ivoirien&nbsp;: <em class="text-blanc-pur/90 not-italic">se former, s\'outiller et conquérir</em> les marchés régionaux et internationaux.';
+
+$datesCles = $edition?->dates_cles ?? [
+    ['lieu' => 'Abidjan',    'sublabel' => 'Ouverture officielle',            'date' => '22 juin'],
+    ['lieu' => 'CGECI',      'sublabel' => 'Ateliers — Jour 1',               'date' => '23 juin'],
+    ['lieu' => 'CCI-CI',     'sublabel' => 'Ateliers — Jour 2',               'date' => '24 juin'],
+    ['lieu' => 'SEEN Hôtel', 'sublabel' => 'Clôture & remise des certificats','date' => '25 juin'],
+];
+
+$ministerName  = $edition?->minister_name  ?? 'Kalil KONATÉ';
+$ministerTitle = $edition?->minister_title ?? 'Ministre du Commerce, de l\'Industrie et de l\'Artisanat';
+
+$ministerSpeech = collect($edition?->minister_speech ?? [])->pluck('text')->filter()->values()->all();
+if (empty($ministerSpeech)) {
+    $ministerSpeech = [
+        'L\'économie mondiale traverse une période de mutation structurelle marquée par des reconfigurations géopolitiques et commerciales sans précédent. Dans ce contexte, la résilience du commerce extérieur ivoirien repose plus que jamais sur la capacité de nos acteurs économiques à comprendre, anticiper et capter les opportunités offertes par les marchés stratégiques.',
+        'L\'édition 2026 du Hub Import-Export, placée sous le thème « Résilience et compétitivité du commerce extérieur ivoirien : s\'outiller pour conquérir les marchés stratégiques dans un monde en pleine crise », traduit l\'engagement résolu de mon Ministère à outiller concrètement nos commerçants, agro-transformateurs, PME et grandes entreprises pour qu\'ils tirent pleinement parti des accords régionaux (CEDEAO, ZLECAf) et des marchés internationaux (Union européenne, Chine).',
+        'Je formule le souhait que cette édition consolide une dynamique pérenne d\'accompagnement et de structuration de notre écosystème exportateur, et qu\'elle contribue à hisser la Côte d\'Ivoire au rang des nations africaines les plus compétitives en matière de commerce international.',
+    ];
+}
+
+$statsCards = $edition?->stats_cards ?? [
+    ['value' => '180',        'label' => 'Auditeurs sélectionnés', 'caption' => 'sur candidature, répartis en 3 groupes',         'color' => 'orange'],
+    ['value' => '17 016 Mds', 'label' => 'FCFA d\'exports CI',    'caption' => 'valeur annuelle du commerce extérieur ivoirien',  'color' => 'vert'],
+    ['value' => '4',          'label' => 'Ateliers thématiques',  'caption' => 'ZLECAf, Financement, E-commerce, Conformité',     'color' => 'orange'],
+    ['value' => '+165 %',     'label' => 'Croissance exports',    'caption' => 'du commerce extérieur ivoirien en 10 ans',         'color' => 'vert'],
+];
+
+$capObjectifs = $edition?->cap_objectifs ?? [
+    ['num' => '01', 'title' => 'Marchés régionaux',    'body' => 'Sensibiliser sur les opportunités CEDEAO, ZLECAf, UE et Chine.'],
+    ['num' => '02', 'title' => 'Conformité export',    'body' => 'Accompagner la mise en conformité (normes qualité, certification, douane).'],
+    ['num' => '03', 'title' => 'Outils numériques',    'body' => 'Encourager les outils numériques et la digitalisation des procédures.'],
+    ['num' => '04', 'title' => 'Financement',          'body' => 'Promouvoir l\'accès au financement et aux garanties export.'],
+    ['num' => '05', 'title' => 'Intelligence marché',  'body' => 'Favoriser l\'accès à l\'information stratégique sur les marchés mondiaux.'],
+];
+
+$capResultats = $edition?->cap_resultats ?? [
+    ['num' => '01', 'title' => '180 acteurs formés',    'body' => '180 acteurs économiques outillés pour l\'export avec un plan d\'action validé.'],
+    ['num' => '02', 'title' => 'Plans d\'action',       'body' => 'Plans individuels validés par les experts et institutions d\'appui.'],
+    ['num' => '03', 'title' => 'Réseau structuré',      'body' => 'Réseau d\'entreprises ivoiriennes orientées vers les marchés régionaux.'],
+    ['num' => '04', 'title' => 'Certification officielle', 'body' => 'Certificats officiels délivrés par le Ministère du Commerce.'],
+    ['num' => '05', 'title' => 'Mise en relation',      'body' => 'Accès aux institutions d\'appui : ACIEx, CNE, GUCE-CI.'],
+];
+
+$capPourquoi = $edition?->cap_pourquoi ?? [
+    ['num' => '01', 'title' => 'Gratuit & certifiant', 'body' => 'Formation de haut niveau, entièrement gratuite et certifiante.'],
+    ['num' => '02', 'title' => 'Experts de terrain',   'body' => 'Rencontrez ACIEx, CNE, CODINORM, CI-PME, GUCE-CI en direct.'],
+    ['num' => '03', 'title' => 'Réseau de 180 pairs',  'body' => 'Construisez votre réseau avec 180 pairs du commerce extérieur.'],
+    ['num' => '04', 'title' => 'Certificat ministériel','body' => 'Certificat officiel signé par le Ministre du Commerce.'],
+    ['num' => '05', 'title' => 'Impact national',      'body' => 'Représentez votre secteur et contribuez aux recommandations nationales.'],
+];
+
+$defaultProgramme = [
+    1 => [
+        ['label' => 'Accueil et installation des participants',                                        'tag' => 'Accueil'],
+        ['label' => 'Cérémonie d\'ouverture officielle',                                              'tag' => 'Plénière'],
+        ['label' => 'Conférence inaugurale : enjeux du commerce extérieur ivoirien en 2026',          'tag' => 'Conférence'],
+        ['label' => 'Pause déjeuner',                                                                  'tag' => 'Pause'],
+        ['label' => 'Présentation des institutions d\'appui (ACIEx, CNE, GUCE-CI, CODINORM, CI-PME)','tag' => 'Networking'],
+    ],
+    2 => [
+        ['label' => 'Atelier ZLECAf & CEDEAO — Groupe 1',                                            'tag' => 'Atelier'],
+        ['label' => 'Atelier Financement & garanties — Groupe 2',                                     'tag' => 'Atelier'],
+        ['label' => 'Atelier Commerce électronique — Groupe 3',                                       'tag' => 'Atelier'],
+        ['label' => 'Pause déjeuner',                                                                  'tag' => 'Pause'],
+        ['label' => 'Panel thématique : opérationnalisation de la ZLECAf en Côte d\'Ivoire',          'tag' => 'Panel'],
+    ],
+    3 => [
+        ['label' => 'Rotation des groupes (Conformité, ZLECAf, Financement, E-commerce)',             'tag' => 'Atelier'],
+        ['label' => 'Forum B2B avec banques & assureurs partenaires',                                 'tag' => 'B2B'],
+        ['label' => 'Pause déjeuner',                                                                  'tag' => 'Pause'],
+        ['label' => 'Échanges avec les journalistes — espace presse',                                 'tag' => 'Presse'],
+    ],
+    4 => [
+        ['label' => 'Restitution des travaux par les rapporteurs des ateliers',                       'tag' => 'Restitution'],
+        ['label' => 'Recommandations consolidées',                                                     'tag' => 'Plénière'],
+        ['label' => 'Évaluation des acquis (post-test)',                                              'tag' => 'Évaluation'],
+        ['label' => 'Cérémonie de clôture & remise des certificats',                                  'tag' => 'Cérémonie'],
+    ],
+];
+
+$programme = [
+    1 => $edition?->programme_j1 ?? $defaultProgramme[1],
+    2 => $edition?->programme_j2 ?? $defaultProgramme[2],
+    3 => $edition?->programme_j3 ?? $defaultProgramme[3],
+    4 => $edition?->programme_j4 ?? $defaultProgramme[4],
+];
+@endphp
 
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
 {{-- SECTION 2 — HERO (BRIEF §III.1 #2)                                    --}}
@@ -50,9 +145,7 @@
                     <svg class="w-4 h-4 text-orange-soft flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 14.5a6.5 6.5 0 110-13 6.5 6.5 0 010 13z"/>
                     </svg>
-                    <p class="text-xs text-blanc-pur/80 leading-snug">
-                        Sous le haut patronage de <strong class="text-blanc-pur">Monsieur le Ministre du Commerce, de l'Industrie et de l'Artisanat</strong> de la République de Côte d'Ivoire.
-                    </p>
+                    <p class="text-xs text-blanc-pur/80 leading-snug">{!! $heroPatronText !!}</p>
                 </div>
 
                 {{-- Logo SVG animé + H1 --}}
@@ -76,9 +169,7 @@
                 </div>
 
                 {{-- Sous-titre --}}
-                <p class="text-lg text-blanc-pur/70 leading-relaxed max-w-xl reveal">
-                    Le rendez-vous stratégique des acteurs du commerce extérieur ivoirien&nbsp;: <em class="text-blanc-pur/90 not-italic">se former, s'outiller et conquérir</em> les marchés régionaux et internationaux.
-                </p>
+                <p class="text-lg text-blanc-pur/70 leading-relaxed max-w-xl reveal">{!! $heroSubtitle !!}</p>
 
                 {{-- CTAs --}}
                 <div class="flex flex-wrap gap-4 reveal">
@@ -103,12 +194,7 @@
                     <div class="kicker-orange rounded-full mb-6">DATES CLÉS</div>
 
                     <ul class="space-y-0 divide-y divide-blanc-pur/10">
-                        @foreach([
-                            ['Abidjan',    'Ouverture officielle',           '22 juin', 'M5 9l7 7-7 7'],
-                            ['CGECI',      'Ateliers — Jour 1',              '23 juin', 'M5 9l7 7-7 7'],
-                            ['CCI-CI',     'Ateliers — Jour 2',              '24 juin', 'M5 9l7 7-7 7'],
-                            ['SEEN Hôtel', 'Clôture & remise des certificats','25 juin','M5 9l7 7-7 7'],
-                        ] as [$lieu, $sublabel, $date])
+                        @foreach($datesCles as $dc)
                         <li class="flex items-center gap-4 py-4">
                             <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                                  style="background: hsl(var(--vert-ivoire)/0.2);">
@@ -116,10 +202,10 @@
                                       style="background: hsl(var(--vert-soft));"></span>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-xs text-blanc-pur/50 uppercase tracking-wider font-medium">{{ $lieu }}</p>
-                                <p class="text-sm text-blanc-pur/85 font-medium truncate">{{ $sublabel }}</p>
+                                <p class="text-xs text-blanc-pur/50 uppercase tracking-wider font-medium">{{ $dc['lieu'] }}</p>
+                                <p class="text-sm text-blanc-pur/85 font-medium truncate">{{ $dc['sublabel'] }}</p>
                             </div>
-                            <span class="font-mono font-bold text-orange-soft text-sm flex-shrink-0">{{ $date }}</span>
+                            <span class="font-mono font-bold text-orange-soft text-sm flex-shrink-0">{{ $dc['date'] }}</span>
                         </li>
                         @endforeach
                     </ul>
@@ -245,8 +331,8 @@
                         <div class="absolute inset-0"
                              style="background: linear-gradient(to top, hsl(var(--noir-profond)/0.80) 0%, transparent 45%);"></div>
                         <div class="absolute bottom-6 inset-x-0 text-center z-10">
-                            <p class="font-serif font-bold text-blanc-pur text-base tracking-wide">Kalil KONATÉ</p>
-                            <p class="font-serif italic text-blanc-pur/70 text-xs mt-0.5">Ministre du Commerce, de l'Industrie et de l'Artisanat</p>
+                            <p class="font-serif font-bold text-blanc-pur text-base tracking-wide">{{ $ministerName }}</p>
+                            <p class="font-serif italic text-blanc-pur/70 text-xs mt-0.5">{{ $ministerTitle }}</p>
                             <p class="text-xs text-orange-soft font-medium mt-1">République de Côte d'Ivoire</p>
                         </div>
                     </div>
@@ -266,15 +352,15 @@
                 </div>
 
                 <blockquote class="border-l-2 border-vert-ivoire pl-5 space-y-4 text-noir-profond/80 leading-relaxed reveal">
-                    <p>L'économie mondiale traverse une période de mutation structurelle marquée par des reconfigurations géopolitiques et commerciales sans précédent. Dans ce contexte, la résilience du commerce extérieur ivoirien repose plus que jamais sur la capacité de nos acteurs économiques à comprendre, anticiper et capter les opportunités offertes par les marchés stratégiques.</p>
-                    <p>L'édition 2026 du Hub Import-Export, placée sous le thème « Résilience et compétitivité du commerce extérieur ivoirien : s'outiller pour conquérir les marchés stratégiques dans un monde en pleine crise », traduit l'engagement résolu de mon Ministère à outiller concrètement nos commerçants, agro-transformateurs, PME et grandes entreprises pour qu'ils tirent pleinement parti des accords régionaux (CEDEAO, ZLECAf) et des marchés internationaux (Union européenne, Chine).</p>
-                    <p>Je formule le souhait que cette édition consolide une dynamique pérenne d'accompagnement et de structuration de notre écosystème exportateur, et qu'elle contribue à hisser la Côte d'Ivoire au rang des nations africaines les plus compétitives en matière de commerce international.</p>
+                    @foreach($ministerSpeech as $para)
+                    <p>{{ $para }}</p>
+                    @endforeach
                 </blockquote>
 
                 <div class="flex items-center gap-3 reveal">
                     <div class="h-px flex-1 bg-sable"></div>
                     <p class="font-serif italic text-gris-500 text-sm">
-                        — Kalil KONATÉ, Ministre du Commerce, de l'Industrie et de l'Artisanat
+                        — {{ $ministerName }}, {{ $ministerTitle }}
                     </p>
                 </div>
             </div>
@@ -282,13 +368,8 @@
 
         {{-- Ligne 2 : 4 Stat cards full-width (BRIEF §III.1 #4) --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 reveal">
-            @foreach([
-                ['180',        'Auditeurs sélectionnés', 'sur candidature, répartis en 3 groupes',           'orange'],
-                ['17 016 Mds', 'FCFA d\'exports CI',     'valeur annuelle du commerce extérieur ivoirien',   'vert'],
-                ['4',          'Ateliers thématiques',   'ZLECAf, Financement, E-commerce, Conformité',      'orange'],
-                ['+165 %',     'Croissance exports',     'du commerce extérieur ivoirien en 10 ans',          'vert'],
-            ] as [$value, $label, $caption, $color])
-            <x-stat-card :value="$value" :label="$label" :caption="$caption" :color="$color"/>
+            @foreach($statsCards as $stat)
+            <x-stat-card :value="$stat['value']" :label="$stat['label']" :caption="$stat['caption'] ?? ''" :color="$stat['color'] ?? 'orange'"/>
             @endforeach
         </div>
 
@@ -379,52 +460,24 @@
             <div class="reveal">
 
                 @php
-                $tabs = [
-                    'objectifs' => [
-                        'color' => 'vert',
-                        'items' => [
-                            ['01', 'Marchés régionaux', 'Sensibiliser sur les opportunités CEDEAO, ZLECAf, UE et Chine.'],
-                            ['02', 'Conformité export', 'Accompagner la mise en conformité (normes qualité, certification, douane).'],
-                            ['03', 'Outils numériques', 'Encourager les outils numériques et la digitalisation des procédures.'],
-                            ['04', 'Financement', 'Promouvoir l\'accès au financement et aux garanties export.'],
-                            ['05', 'Intelligence marché', 'Favoriser l\'accès à l\'information stratégique sur les marchés mondiaux.'],
-                        ],
-                    ],
-                    'resultats' => [
-                        'color' => 'orange',
-                        'items' => [
-                            ['01', '180 acteurs formés', '180 acteurs économiques outillés pour l\'export avec un plan d\'action validé.'],
-                            ['02', 'Plans d\'action', 'Plans individuels validés par les experts et institutions d\'appui.'],
-                            ['03', 'Réseau structuré', 'Réseau d\'entreprises ivoiriennes orientées vers les marchés régionaux.'],
-                            ['04', 'Certification officielle', 'Certificats officiels délivrés par le Ministère du Commerce.'],
-                            ['05', 'Mise en relation', 'Accès aux institutions d\'appui : ACIEx, CNE, GUCE-CI.'],
-                        ],
-                    ],
-                    'pourquoi' => [
-                        'color' => 'vert',
-                        'items' => [
-                            ['01', 'Gratuit & certifiant', 'Formation de haut niveau, entièrement gratuite et certifiante.'],
-                            ['02', 'Experts de terrain', 'Rencontrez ACIEx, CNE, CODINORM, CI-PME, GUCE-CI en direct.'],
-                            ['03', 'Réseau de 180 pairs', 'Construisez votre réseau avec 180 pairs du commerce extérieur.'],
-                            ['04', 'Certificat ministériel', 'Certificat officiel signé par le Ministre du Commerce.'],
-                            ['05', 'Impact national', 'Représentez votre secteur et contribuez aux recommandations nationales.'],
-                        ],
-                    ],
+                $capTabs = [
+                    'objectifs' => ['color' => 'vert',   'items' => $capObjectifs],
+                    'resultats' => ['color' => 'orange',  'items' => $capResultats],
+                    'pourquoi'  => ['color' => 'vert',   'items' => $capPourquoi],
                 ];
                 @endphp
 
-                @foreach($tabs as $key => $tab)
+                @foreach($capTabs as $key => $tab)
                 <div x-show="tab === '{{ $key }}'" x-transition:enter="transition-opacity duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" {{ $key !== 'objectifs' ? "style=display:none" : '' }}>
                     <ul class="divide-y divide-blanc-pur/8">
-                        @foreach($tab['items'] as [$num, $title, $body])
+                        @foreach($tab['items'] as $item)
                         <li class="group flex gap-6 py-7 hover:bg-blanc-pur/3 -mx-4 px-4 rounded-xl transition-colors duration-200">
-                            <span class="font-mono text-sm font-bold flex-shrink-0 mt-0.5 w-7 text-right
-                                {{ $tab['color'] === 'orange' ? 'text-vert-ivoire/70' : 'text-vert-ivoire/70' }}">
-                                {{ $num }}
+                            <span class="font-mono text-sm font-bold flex-shrink-0 mt-0.5 w-7 text-right text-vert-ivoire/70">
+                                {{ $item['num'] }}
                             </span>
                             <div class="flex-1 min-w-0">
-                                <p class="font-semibold text-blanc-pur text-base mb-1.5">{{ $title }}</p>
-                                <p class="text-blanc-pur/60 text-sm leading-loose">{{ $body }}</p>
+                                <p class="font-semibold text-blanc-pur text-base mb-1.5">{{ $item['title'] }}</p>
+                                <p class="text-blanc-pur/60 text-sm leading-loose">{{ $item['body'] }}</p>
                             </div>
                             <svg class="w-4 h-4 flex-shrink-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity
                                 {{ $tab['color'] === 'orange' ? 'text-orange-soft' : 'text-vert-soft' }}"
@@ -735,34 +788,6 @@
 {{-- SECTION 8 — PROGRAMME (BRIEF §III.1 #8, CONTENT §A.4)                 --}}
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
 @php
-$programme = [
-    1 => [
-        ['Accueil et installation des participants',                                        'Accueil'],
-        ['Cérémonie d\'ouverture officielle',                                              'Plénière'],
-        ['Conférence inaugurale : enjeux du commerce extérieur ivoirien en 2026',          'Conférence'],
-        ['Pause déjeuner',                                                                  'Pause'],
-        ['Présentation des institutions d\'appui (ACIEx, CNE, GUCE-CI, CODINORM, CI-PME)','Networking'],
-    ],
-    2 => [
-        ['Atelier ZLECAf & CEDEAO — Groupe 1',                                            'Atelier'],
-        ['Atelier Financement & garanties — Groupe 2',                                     'Atelier'],
-        ['Atelier Commerce électronique — Groupe 3',                                       'Atelier'],
-        ['Pause déjeuner',                                                                  'Pause'],
-        ['Panel thématique : opérationnalisation de la ZLECAf en Côte d\'Ivoire',          'Panel'],
-    ],
-    3 => [
-        ['Rotation des groupes (Conformité, ZLECAf, Financement, E-commerce)',             'Atelier'],
-        ['Forum B2B avec banques & assureurs partenaires',                                 'B2B'],
-        ['Pause déjeuner',                                                                  'Pause'],
-        ['Échanges avec les journalistes — espace presse',                                 'Presse'],
-    ],
-    4 => [
-        ['Restitution des travaux par les rapporteurs des ateliers',                       'Restitution'],
-        ['Recommandations consolidées',                                                     'Plénière'],
-        ['Évaluation des acquis (post-test)',                                              'Évaluation'],
-        ['Cérémonie de clôture & remise des certificats',                                  'Cérémonie'],
-    ],
-];
 $tagColors = [
     'Accueil'     => 'bg-vert-soft-bg text-vert-fonce',
     'Plénière'    => 'bg-vert-soft-bg text-vert-ivoire',
@@ -846,7 +871,8 @@ $tagColors = [
             class="reveal"
         >
             <div class="bg-blanc-pur rounded-3xl overflow-hidden border border-sable/60 shadow-sm">
-                @foreach($items as $i => [$label, $tag])
+                @foreach($items as $i => $item)
+                @php $label = $item['label'] ?? ''; $tag = $item['tag'] ?? ''; @endphp
                 <div class="relative flex items-center gap-4 px-6 py-5 border-b border-sable/40 last:border-b-0 group
                             hover:bg-vert-soft-bg/20 transition-colors duration-200">
                     <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-vert-ivoire
