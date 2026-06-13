@@ -245,53 +245,82 @@
     @if($isAccepted)
 
     {{-- ── BADGE QR (2 cols) ─────────────────────────────────── --}}
-    <div class="sm:col-span-2 lg:row-span-2 rounded-3xl overflow-hidden shadow-lg"
-         style="background: linear-gradient(135deg, hsl(var(--noir-profond)) 0%, hsl(24 20% 16%) 100%);">
-        <div class="px-8 py-8">
-            <div class="flex items-start gap-2 mb-6">
-                <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest"
-                      style="color: hsl(var(--vert-ivoire));">
-                    <span class="h-2 w-2 rounded-full animate-pulse" style="background:hsl(var(--vert-ivoire));"></span>
-                    Badge d'entrée
-                </span>
+    <div class="sm:col-span-2 lg:row-span-2 rounded-3xl overflow-hidden shadow-lg flex flex-col"
+         style="background: linear-gradient(160deg, hsl(152 30% 11%) 0%, hsl(var(--vert-fonce)) 100%);">
+
+        {{-- En-tête ticket --}}
+        <div class="px-6 pt-6 pb-5 flex items-center justify-between border-b" style="border-color:hsl(var(--vert-ivoire)/0.15);">
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em]" style="color:hsl(var(--vert-ivoire)/0.6);">Hub Import-Export</p>
+                <p class="font-serif font-bold text-lg leading-tight text-blanc-pur">Badge d'accès 2026</p>
             </div>
-            <div class="flex flex-col sm:flex-row items-center gap-8">
-                {{-- QR --}}
-                <div class="bg-white rounded-2xl p-3 shadow-2xl shrink-0">
-                    @if($enrollment?->qr_token)
-                    <div class="w-36 h-36 sm:w-40 sm:h-40">
-                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(160)->format('svg')->generate($enrollment->qr_token) !!}
-                    </div>
-                    @else
-                    <div class="w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center rounded-xl"
-                         style="background:hsl(var(--sable-doux)/0.3);">
-                        <span class="text-xs text-gris-500 text-center px-3">QR code en génération…</span>
-                    </div>
-                    @endif
+            <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider"
+                  style="background:hsl(var(--vert-ivoire)/0.15); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.25);">
+                <span class="h-1.5 w-1.5 rounded-full animate-pulse" style="background:hsl(var(--vert-ivoire));"></span>
+                Confirmé
+            </span>
+        </div>
+
+        {{-- Corps : QR + code --}}
+        <div class="flex flex-col sm:flex-row items-center gap-6 px-6 py-6 flex-1">
+
+            {{-- QR code --}}
+            <div class="shrink-0 rounded-2xl p-3 shadow-2xl" style="background:white;">
+                @if($enrollment?->qr_token)
+                <div class="w-[140px] h-[140px]">
+                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(140)->format('svg')->generate($enrollment->qr_token) !!}
                 </div>
-                {{-- Infos badge --}}
-                <div class="text-center sm:text-left space-y-4">
-                    <div>
-                        <p class="text-xs uppercase tracking-widest mb-1" style="color:hsl(var(--blanc-pur)/0.4);">Code numérique</p>
-                        <p class="font-mono font-black text-blanc-pur tracking-[0.4em]" style="font-size: 2.5rem; line-height:1;">
-                            {{ $enrollment?->check_in_code ?? $app->check_in_code }}
-                        </p>
-                    </div>
+                @elseif($app->qr_token)
+                <div class="w-[140px] h-[140px]">
+                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(140)->format('svg')->generate($app->qr_token) !!}
+                </div>
+                @else
+                <div class="w-[140px] h-[140px] flex items-center justify-center rounded-xl" style="background:hsl(var(--sable-doux)/0.2);">
+                    <span class="text-[10px] text-gris-500 text-center px-3 leading-tight">En cours de génération…</span>
+                </div>
+                @endif
+            </div>
+
+            {{-- Infos --}}
+            <div class="flex-1 text-center sm:text-left space-y-4 min-w-0">
+
+                {{-- Nom + groupe --}}
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest mb-0.5" style="color:hsl(var(--blanc-pur)/0.4);">Titulaire</p>
+                    <p class="font-serif font-bold text-blanc-pur text-base leading-tight truncate">
+                        {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
+                    </p>
                     @if($app->group_label)
-                    <div class="inline-block rounded-2xl px-6 py-2 font-bold text-sm"
-                         style="background:hsl(var(--vert-ivoire)/0.15); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.3);">
+                    <span class="inline-block mt-1.5 rounded-lg px-3 py-0.5 text-xs font-bold"
+                          style="background:hsl(var(--vert-ivoire)/0.18); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.3);">
                         Groupe {{ $app->group_label }}
-                    </div>
+                    </span>
                     @endif
-                    <p class="text-xs" style="color:hsl(var(--blanc-pur)/0.35);">À présenter à l'entrée chaque jour</p>
-                    <a href="{{ route('participant.badge.download') }}"
-                       class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold text-blanc-pur border transition-colors hover:bg-blanc-pur/10 cursor-pointer"
-                       style="border-color:hsl(var(--blanc-pur)/0.2);">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        Mon badge PDF
-                    </a>
+                </div>
+
+                {{-- Séparateur perforation --}}
+                <div class="border-t border-dashed" style="border-color:hsl(var(--blanc-pur)/0.12);"></div>
+
+                {{-- Code numérique --}}
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest mb-1" style="color:hsl(var(--blanc-pur)/0.4);">Code d'entrée</p>
+                    <p class="font-mono font-black tracking-[0.35em] leading-none" style="font-size:1.9rem; color:hsl(var(--vert-ivoire));">
+                        {{ $enrollment?->check_in_code ?? $app->check_in_code }}
+                    </p>
+                    <p class="text-[10px] mt-1" style="color:hsl(var(--blanc-pur)/0.3);">Abidjan · 22–25 juin 2026</p>
                 </div>
             </div>
+        </div>
+
+        {{-- Pied ticket --}}
+        <div class="px-6 pb-5 pt-4 border-t flex items-center justify-between" style="border-color:hsl(var(--vert-ivoire)/0.12); border-style:dashed;">
+            <p class="text-[10px]" style="color:hsl(var(--blanc-pur)/0.3);">À présenter à l'entrée chaque jour</p>
+            <a href="{{ route('participant.badge.download') }}"
+               class="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition-all hover:scale-105 cursor-pointer"
+               style="background:hsl(var(--vert-ivoire)/0.15); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.3);">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Mon badge PDF
+            </a>
         </div>
     </div>
 
