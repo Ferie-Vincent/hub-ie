@@ -145,7 +145,7 @@ $programme = [
                     <svg class="w-4 h-4 text-orange-soft flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 14.5a6.5 6.5 0 110-13 6.5 6.5 0 010 13z"/>
                     </svg>
-                    <p class="text-xs text-blanc-pur/80 leading-snug">{!! $heroPatronText !!}</p>
+                    <p class="text-xs text-blanc-pur/80 leading-snug">{!! strip_tags($heroPatronText, ['strong', 'em', 'br']) !!}</p>
                 </div>
 
                 {{-- Logo SVG animé + H1 --}}
@@ -169,7 +169,7 @@ $programme = [
                 </div>
 
                 {{-- Sous-titre --}}
-                <p class="text-lg text-blanc-pur/70 leading-relaxed max-w-xl reveal">{!! $heroSubtitle !!}</p>
+                <p class="text-lg text-blanc-pur/70 leading-relaxed max-w-xl reveal">{!! strip_tags($heroSubtitle, ['em', 'strong', 'br']) !!}</p>
 
                 {{-- CTAs --}}
                 <div class="flex flex-wrap gap-4 reveal">
