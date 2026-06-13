@@ -93,6 +93,33 @@ $programme = [
     3 => $edition?->programme_j3 ?? $defaultProgramme[3],
     4 => $edition?->programme_j4 ?? $defaultProgramme[4],
 ];
+
+$institutions = $edition?->institutions ?? [
+    [
+        'kicker' => 'Haut Patronage',
+        'type'   => 'orange',
+        'title'  => 'Ministère du Commerce,<br>de l\'Industrie et de l\'Artisanat',
+        'text'   => 'Sous le haut patronage de Monsieur le Ministre du Commerce, de l\'Industrie et de l\'Artisanat de la République de Côte d\'Ivoire.',
+        'footer' => 'MCIA — République de Côte d\'Ivoire',
+    ],
+    [
+        'kicker' => 'Parrainage stratégique',
+        'type'   => 'vert',
+        'title'  => 'TradeMark Africa &amp; GIZ',
+        'text'   => 'Avec l\'appui technique et financier de TradeMark Africa et de la Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ).',
+        'footer' => 'Partenaires techniques &amp; financiers',
+    ],
+];
+
+$formatsEchange = $edition?->formats_echange ?? [
+    ['num' => '01', 'kicker' => 'Plénière',  'title' => 'Cérémonie d\'ouverture',  'description' => 'Ouverture officielle sous le haut patronage du Ministre, avec allocutions institutionnelles et cadrage stratégique.'],
+    ['num' => '02', 'kicker' => 'Atelier',   'title' => 'Ateliers thématiques',    'description' => 'Sessions pratiques en groupes de 60 animées par des experts. ZLECAf, finance, digital, normes & certification.'],
+    ['num' => '03', 'kicker' => 'Panel',     'title' => 'Panels thématiques',      'description' => 'Débats d\'experts sur l\'opérationnalisation des accords commerciaux et les bonnes pratiques sectorielles.'],
+    ['num' => '04', 'kicker' => 'B2B',       'title' => 'Forums & partenaires',    'description' => 'Rencontres B2B avec banques, assureurs, agences d\'appui et partenaires techniques pour nouer des contacts opérationnels.'],
+];
+
+$newsletterTitle    = $edition?->newsletter_title    ?? 'Rejoignez le Hub.';
+$newsletterSubtitle = $edition?->newsletter_subtitle ?? 'Recevez le programme officiel détaillé, les annonces des intervenants et les modalités d\'inscription dans votre boîte mail.';
 @endphp
 
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
@@ -256,56 +283,35 @@ $programme = [
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto">
-
-            {{-- Card Haut Patronage --}}
+            @foreach($institutions as $inst)
+            @php $isOrange = ($inst['type'] ?? 'orange') === 'orange'; @endphp
             <div class="glass rounded-3xl p-7 reveal hub-card-lift">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
                          style="background: hsl(var(--vert-ivoire) / 0.15); border: 1px solid hsl(var(--vert-ivoire) / 0.25);">
-                        <svg class="w-6 h-6" fill="none" stroke="hsl(var(--orange-soft))" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
+                        <svg class="w-6 h-6" fill="none"
+                             stroke="{{ $isOrange ? 'hsl(var(--orange-soft))' : 'hsl(var(--vert-soft))' }}"
+                             viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
+                            @if($isOrange)
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="kicker-orange rounded-full mb-3 text-[0.65rem]">Haut Patronage</p>
-                        <h3 class="font-serif font-bold text-blanc-pur text-base leading-tight mb-2">
-                            Ministère du Commerce,<br>de l'Industrie et de l'Artisanat
-                        </h3>
-                        <p class="text-xs text-blanc-pur/50 leading-relaxed">
-                            Sous le haut patronage de Monsieur le Ministre du Commerce, de l'Industrie et de l'Artisanat de la République de Côte d'Ivoire.
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-5 pt-5 border-t border-blanc-pur/10 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full animate-v10-pulse" style="background: hsl(var(--vert-ivoire));"></span>
-                    <span class="text-[0.6rem] font-mono text-orange-soft/70 uppercase tracking-widest">MCIA — République de Côte d'Ivoire</span>
-                </div>
-            </div>
-
-            {{-- Card Parrainage stratégique --}}
-            <div class="glass rounded-3xl p-7 reveal hub-card-lift">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-                         style="background: hsl(var(--vert-ivoire) / 0.15); border: 1px solid hsl(var(--vert-ivoire) / 0.25);">
-                        <svg class="w-6 h-6" fill="none" stroke="hsl(var(--vert-soft))" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
+                            @else
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253"/>
+                            @endif
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="kicker-vert rounded-full mb-3 text-[0.65rem]">Parrainage stratégique</p>
-                        <h3 class="font-serif font-bold text-blanc-pur text-base leading-tight mb-2">
-                            TradeMark Africa &amp; GIZ
-                        </h3>
-                        <p class="text-xs text-blanc-pur/50 leading-relaxed">
-                            Avec l'appui technique et financier de TradeMark Africa et de la Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ).
-                        </p>
+                        <p class="{{ $isOrange ? 'kicker-orange' : 'kicker-vert' }} rounded-full mb-3 text-[0.65rem]">{{ $inst['kicker'] }}</p>
+                        <h3 class="font-serif font-bold text-blanc-pur text-base leading-tight mb-2">{!! $inst['title'] !!}</h3>
+                        <p class="text-xs text-blanc-pur/50 leading-relaxed">{{ $inst['text'] }}</p>
                     </div>
                 </div>
                 <div class="mt-5 pt-5 border-t border-blanc-pur/10 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full animate-v10-green-pulse" style="background: hsl(var(--vert-ivoire));"></span>
-                    <span class="text-[0.6rem] font-mono text-vert-soft/70 uppercase tracking-widest">Partenaires techniques &amp; financiers</span>
+                    <span class="w-1.5 h-1.5 rounded-full {{ $isOrange ? 'animate-v10-pulse' : 'animate-v10-green-pulse' }}"
+                          style="background: hsl(var(--vert-ivoire));"></span>
+                    <span class="text-[0.6rem] font-mono {{ $isOrange ? 'text-orange-soft/70' : 'text-vert-soft/70' }} uppercase tracking-widest">{!! $inst['footer'] !!}</span>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -559,44 +565,7 @@ $programme = [
 
             {{-- Colonne droite — accordéon des 4 ateliers --}}
             <div class="space-y-3 reveal">
-                @php
-                $ateliers = [
-                    [
-                        'slug'    => 'zlecaf-cedeao',
-                        'num'     => '01',
-                        'title'   => 'ZLECAf & CEDEAO',
-                        'sub'     => 'Conquérir les marchés régionaux',
-                        'desc'    => 'Maîtriser les règles d\'origine, les protocoles tarifaires CEDEAO et les opportunités offertes par la Zone de Libre-Échange Continentale Africaine. Sessions animées par des experts ACIEx et CNE.',
-                        'icon'    => 'M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253',
-                    ],
-                    [
-                        'slug'    => 'financement-garanties',
-                        'num'     => '02',
-                        'title'   => 'Financement du commerce',
-                        'sub'     => 'Sécuriser ses opérations à l\'export',
-                        'desc'    => 'Découvrir les mécanismes de financement export, les garanties bancaires, l\'assurance-crédit et les dispositifs publics d\'appui (GUCE-CI, Afreximbank, BAD) pour les PME ivoiriennes.',
-                        'icon'    => 'M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z',
-                    ],
-                    [
-                        'slug'    => 'commerce-electronique',
-                        'num'     => '03',
-                        'title'   => 'Commerce électronique',
-                        'sub'     => 'Digitaliser ses échanges',
-                        'desc'    => 'Utiliser les plateformes B2B/B2C internationales, structurer sa présence digitale et tirer parti des guichets uniques numériques pour accélérer ses opérations à l\'export.',
-                        'icon'    => 'M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3',
-                    ],
-                    [
-                        'slug'    => 'conformite-qualite',
-                        'num'     => '04',
-                        'title'   => 'Conformité, qualité & certification',
-                        'sub'     => 'Maîtriser les normes',
-                        'desc'    => 'Comprendre les exigences normatives (sanitaires, environnementales, techniques) et structurer une démarche de certification export avec CODINORM. Cas pratiques par secteur.',
-                        'icon'    => 'M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z',
-                    ],
-                ];
-                @endphp
-
-                @foreach($ateliers as $i => $atelier)
+                @foreach($workshops as $i => $atelier)
                 <div
                     @click="active = active === {{ $i }} ? -1 : {{ $i }}"
                     :class="active === {{ $i }}
@@ -620,11 +589,11 @@ $programme = [
                             <p
                                 :class="active === {{ $i }} ? 'text-noir-profond' : 'text-noir-profond/80'"
                                 class="font-serif font-bold text-lg leading-tight transition-colors duration-300"
-                            >{{ $atelier['title'] }}</p>
+                            >{{ $atelier['titre'] }}</p>
                             <p
                                 x-show="active !== {{ $i }}"
                                 class="text-sm text-gris-500 mt-0.5 truncate"
-                            >{{ $atelier['sub'] }}</p>
+                            >{{ $atelier['tagline'] }}</p>
                         </div>
 
                         {{-- Icône thématique --}}
@@ -638,7 +607,7 @@ $programme = [
                                 :class="active === {{ $i }} ? 'text-white' : 'text-gris-500'"
                                 class="w-5 h-5 transition-colors duration-300"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $atelier['icon'] }}"/>
+                                {!! $atelier['icon'] !!}
                             </svg>
                         </div>
 
@@ -713,47 +682,23 @@ $programme = [
         </div>
 
         {{-- Grille de cartes glass --}}
+        @php
+        $formatVisual = [
+            0 => ['accent' => '--vert-ivoire', 'icon_path' => 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6'],
+            1 => ['accent' => '--vert-fonce',  'icon_path' => 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5'],
+            2 => ['accent' => '--vert-ivoire', 'icon_path' => 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z'],
+            3 => ['accent' => '--orange-soft', 'icon_path' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
+        ];
+        @endphp
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            @foreach([
-                [
-                    'num'         => '01',
-                    'kicker'      => 'Plénière',
-                    'title'       => 'Cérémonie d\'ouverture',
-                    'description' => 'Ouverture officielle sous le haut patronage du Ministre, avec allocutions institutionnelles et cadrage stratégique.',
-                    'icon_path'   => 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6',
-                    'accent'      => '--vert-ivoire',
-                ],
-                [
-                    'num'         => '02',
-                    'kicker'      => 'Atelier',
-                    'title'       => 'Ateliers thématiques',
-                    'description' => 'Sessions pratiques en groupes de 60 animées par des experts. ZLECAf, finance, digital, normes & certification.',
-                    'icon_path'   => 'M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5',
-                    'accent'      => '--vert-fonce',
-                ],
-                [
-                    'num'         => '03',
-                    'kicker'      => 'Panel',
-                    'title'       => 'Panels thématiques',
-                    'description' => 'Débats d\'experts sur l\'opérationnalisation des accords commerciaux et les bonnes pratiques sectorielles.',
-                    'icon_path'   => 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
-                    'accent'      => '--vert-ivoire',
-                ],
-                [
-                    'num'         => '04',
-                    'kicker'      => 'B2B',
-                    'title'       => 'Forums & partenaires',
-                    'description' => 'Rencontres B2B avec banques, assureurs, agences d\'appui et partenaires techniques pour nouer des contacts opérationnels.',
-                    'icon_path'   => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z',
-                    'accent'      => '--orange-soft',
-                ],
-            ] as $format)
+            @foreach($formatsEchange as $i => $format)
+            @php $fv = $formatVisual[$i] ?? $formatVisual[0]; @endphp
             <div class="relative rounded-3xl p-6 overflow-hidden reveal hub-card-lift"
                  style="background: hsla(0,0%,100%,0.10); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid hsla(0,0%,100%,0.14);">
 
                 {{-- Filet accent coloré en haut --}}
                 <div class="absolute top-0 left-0 right-0 h-[3px] rounded-t-3xl"
-                     style="background: linear-gradient(to right, hsl(var({{ $format['accent'] }})), transparent 80%);"></div>
+                     style="background: linear-gradient(to right, hsl(var({{ $fv['accent'] }})), transparent 80%);"></div>
 
                 {{-- Numéro fantôme en fond haut-droit --}}
                 <div class="absolute top-3 right-4 font-mono font-bold leading-none pointer-events-none select-none"
@@ -761,20 +706,20 @@ $programme = [
 
                 {{-- Numéro visible petit --}}
                 <div class="font-mono text-xs font-bold mb-5 relative z-10"
-                     style="color: hsl(var({{ $format['accent'] }}));">{{ $format['num'] }}</div>
+                     style="color: hsl(var({{ $fv['accent'] }}));">{{ $format['num'] }}</div>
 
                 {{-- Icône --}}
                 <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5"
-                     style="background: hsl(var({{ $format['accent'] }}) / 0.15); border: 1px solid hsl(var({{ $format['accent'] }}) / 0.25);">
-                    <svg class="w-6 h-6" fill="none" stroke="hsl(var({{ $format['accent'] }}))"
+                     style="background: hsl(var({{ $fv['accent'] }}) / 0.15); border: 1px solid hsl(var({{ $fv['accent'] }}) / 0.25);">
+                    <svg class="w-6 h-6" fill="none" stroke="hsl(var({{ $fv['accent'] }}))"
                          viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="{{ $format['icon_path'] }}"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="{{ $fv['icon_path'] }}"/>
                     </svg>
                 </div>
 
                 {{-- Kicker + titre + desc --}}
                 <p class="text-xs font-bold uppercase tracking-widest mb-2"
-                   style="color: hsl(var({{ $format['accent'] }}) / 0.8);">{{ $format['kicker'] }}</p>
+                   style="color: hsl(var({{ $fv['accent'] }}) / 0.8);">{{ $format['kicker'] }}</p>
                 <h3 class="font-serif font-bold text-blanc-pur text-xl leading-tight mb-3">{{ $format['title'] }}</h3>
                 <p class="text-sm leading-relaxed" style="color: hsla(0,0%,100%,0.55);">{{ $format['description'] }}</p>
             </div>
@@ -904,6 +849,68 @@ $tagColors = [
 
 
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
+{{-- SECTION FAQ — QUESTIONS FRÉQUENTES                                     --}}
+{{-- ══════════════════════════════════════════════════════════════════════ --}}
+@if($faqItems->isNotEmpty())
+<section class="py-24 bg-blanc-creme" aria-labelledby="faq-home-title">
+    <div class="max-w-hub mx-auto px-6">
+
+        <div class="max-w-3xl mx-auto">
+            {{-- En-tête --}}
+            <div class="text-center mb-12 reveal">
+                <div class="kicker-vert rounded-full mb-4 inline-block">Questions fréquentes</div>
+                <h2 id="faq-home-title"
+                    class="font-serif font-bold text-noir-profond"
+                    style="font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.02em; line-height: 1.1;">
+                    Tout ce que vous voulez<br>
+                    <em class="font-fraunces italic text-vert-ivoire" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">savoir sur le Hub.</em>
+                </h2>
+            </div>
+
+            {{-- Accordéon FAQ --}}
+            <div class="space-y-3" x-data="{ open: null }">
+                @foreach($faqItems as $idx => $faq)
+                <div
+                    class="rounded-2xl border-2 overflow-hidden transition-all duration-300 reveal"
+                    :class="open === {{ $idx }} ? 'border-vert-ivoire bg-blanc-pur shadow-md' : 'border-sable/80 bg-blanc-pur hover:border-vert-ivoire/40'"
+                >
+                    <button
+                        type="button"
+                        class="w-full text-left flex items-center gap-4 px-6 py-5"
+                        @click="open = open === {{ $idx }} ? null : {{ $idx }}"
+                        :aria-expanded="open === {{ $idx }}"
+                    >
+                        <span class="flex-1 font-serif font-bold text-base text-noir-profond leading-snug">{{ $faq->question }}</span>
+                        <svg
+                            :class="open === {{ $idx }} ? 'rotate-180 text-vert-ivoire' : 'text-gris-500/40'"
+                            class="w-5 h-5 flex-shrink-0 transition-all duration-300"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="open === {{ $idx }}" x-collapse class="px-6 pb-6">
+                        <p class="text-sm text-gris-500 leading-relaxed">{{ $faq->answer }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            {{-- Lien vers page FAQ complète --}}
+            <div class="text-center mt-10 reveal">
+                <a href="{{ route('faq') }}" class="inline-flex items-center gap-2 text-vert-ivoire font-semibold hover:gap-3 transition-all">
+                    Voir toutes les questions
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
+
+{{-- ══════════════════════════════════════════════════════════════════════ --}}
 {{-- SECTION 9 — REJOIGNEZ LE HUB / NEWSLETTER (BRIEF §III.1 #9, A.7)     --}}
 {{-- ══════════════════════════════════════════════════════════════════════ --}}
 <section class="relative py-24 bg-noir-profond overflow-hidden" aria-labelledby="newsletter-title">
@@ -916,10 +923,10 @@ $tagColors = [
             <h2 id="newsletter-title"
                 class="font-serif font-bold text-blanc-pur mb-4 reveal"
                 style="font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.02em; line-height: 1.05;">
-                Rejoignez le <em class="font-fraunces italic text-orange-soft" style="font-variation-settings: 'opsz' 144, 'SOFT' 100;">Hub.</em>
+                {{ $newsletterTitle }}
             </h2>
             <p class="text-blanc-pur/60 text-lg mb-10 reveal">
-                Recevez le programme officiel détaillé, les annonces des intervenants et les modalités d'inscription dans votre boîte mail.
+                {{ $newsletterSubtitle }}
             </p>
 
             <div x-data="{ sent: false, email: '', loading: false }" class="reveal">

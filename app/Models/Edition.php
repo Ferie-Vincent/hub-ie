@@ -44,6 +44,10 @@ class Edition extends Model
         'programme_j2',
         'programme_j3',
         'programme_j4',
+        'institutions',
+        'formats_echange',
+        'newsletter_title',
+        'newsletter_subtitle',
     ];
 
     protected function casts(): array
@@ -65,6 +69,8 @@ class Edition extends Model
             'programme_j2' => 'array',
             'programme_j3' => 'array',
             'programme_j4' => 'array',
+            'institutions' => 'array',
+            'formats_echange' => 'array',
             'registration_open' => 'boolean',
             'is_active' => 'boolean',
             'max_participants' => 'integer',

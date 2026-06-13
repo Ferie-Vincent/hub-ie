@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Edition;
+use App\Models\FaqItem;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Workshop;
@@ -32,7 +33,19 @@ class PublicController extends Controller
     {
         $edition = Edition::current();
 
-        return view('public.home', compact('edition'));
+        $workshops = Workshop::where('is_published', true)
+            ->orderBy('display_order')
+            ->take(4)
+            ->get()
+            ->map(fn ($w) => $this->workshopCard($w))
+            ->all();
+
+        $faqItems = FaqItem::where('is_published', true)
+            ->orderBy('display_order')
+            ->take(6)
+            ->get();
+
+        return view('public.home', compact('edition', 'workshops', 'faqItems'));
     }
 
     public function ateliers()

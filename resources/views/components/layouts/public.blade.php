@@ -132,6 +132,7 @@
                 ['Programme',   route('programme'),        'programme'],
                 ['Ateliers',    route('ateliers.index'),   'ateliers.*'],
                 ['Actualités',  route('actualites.index'), 'actualites.*'],
+                ['FAQ',         route('faq'),              'faq'],
                 ['Portfolio',   route('portfolio'),        'portfolio'],
                 ['Partenaires', route('partenaires'),      'partenaires'],
                 ['Contact',     route('contact'),          'contact'],
@@ -213,6 +214,7 @@
                 ['Programme',   route('programme'),        'programme'],
                 ['Ateliers',    route('ateliers.index'),   'ateliers.*'],
                 ['Actualités',  route('actualites.index'), 'actualites.*'],
+                ['FAQ',         route('faq'),              'faq'],
                 ['Portfolio',   route('portfolio'),        'portfolio'],
                 ['Partenaires', route('partenaires'),      'partenaires'],
                 ['Contact',     route('contact'),          'contact'],
@@ -285,6 +287,7 @@
                     @foreach([
                         ['Ateliers',      route('ateliers.index')],
                         ['Programme',     route('programme')],
+                        ['FAQ',           route('faq')],
                         ['Partenaires',   route('partenaires')],
                         ['Espace presse', route('presse')],
                     ] as [$label, $href])
