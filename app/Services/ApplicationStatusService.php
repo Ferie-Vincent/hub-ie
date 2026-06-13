@@ -25,6 +25,8 @@ class ApplicationStatusService
             ApplicationStatus::Withdrawn->value,
         ],
         ApplicationStatus::Received->value => [
+            ApplicationStatus::Accepted->value,
+            ApplicationStatus::Waitlisted->value,
             ApplicationStatus::Eligible->value,
             ApplicationStatus::Incomplete->value,
             ApplicationStatus::Withdrawn->value,
