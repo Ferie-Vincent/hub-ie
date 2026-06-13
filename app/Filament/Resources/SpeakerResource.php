@@ -39,6 +39,19 @@ class SpeakerResource extends Resource
                 Forms\Components\TextInput::make('last_name')->label('Nom')->required(),
                 Forms\Components\TextInput::make('title')->label('Titre / Fonction')->required(),
                 Forms\Components\TextInput::make('organization')->label('Organisation'),
+                Forms\Components\FileUpload::make('photo_path')
+                    ->label('Photo')
+                    ->image()
+                    ->disk('public')
+                    ->directory('speakers')
+                    ->imageResizeTargetWidth(400)
+                    ->imageResizeTargetHeight(500)
+                    ->imageResizeMode('cover')
+                    ->imagePreviewHeight(180)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->helperText('Format portrait recommandé (4:5). JPEG, PNG ou WebP, max 2 Mo.')
+                    ->maxSize(2048)
+                    ->columnSpanFull(),
                 Forms\Components\Textarea::make('bio')->label('Biographie')->rows(4)->columnSpanFull(),
                 Forms\Components\TextInput::make('linkedin')->label('LinkedIn')->url(),
                 Forms\Components\TextInput::make('display_order')->label('Ordre')->integer()->default(0),
@@ -53,6 +66,7 @@ class SpeakerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('display_order')->label('#')->sortable()->width('50px'),
+                Tables\Columns\ImageColumn::make('photo_path')->label('Photo')->disk('public')->height(48)->width(40)->extraImgAttributes(['class' => 'rounded-lg object-cover object-top']),
                 Tables\Columns\TextColumn::make('last_name')->label('Nom')->searchable()->weight('medium'),
                 Tables\Columns\TextColumn::make('first_name')->label('Prénom')->searchable(),
                 Tables\Columns\TextColumn::make('title')->label('Titre')->limit(50)->toggleable(),
