@@ -176,16 +176,8 @@
 </div>
 
 @if(!$app)
-{{-- Inscription en attente de traitement --}}
 <div class="rounded-3xl bg-white border border-gray-100 shadow-sm p-10 text-center">
-    <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5"
-         style="background: hsl(var(--vert-soft-bg));">
-        <svg class="w-8 h-8" style="color: hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-    </div>
-    <h2 class="font-serif font-bold text-xl text-noir-profond mb-2">Inscription en cours de traitement</h2>
-    <p class="text-sm text-gris-500 max-w-sm mx-auto">Votre espace est en cours de configuration. Actualisez la page dans quelques instants.</p>
+    <p class="text-sm text-gris-500">Une erreur est survenue lors de votre inscription. Contactez-nous à <a href="mailto:contact@hubimportexport.ci" class="link-underline">contact@hubimportexport.ci</a>.</p>
 </div>
 @else
 
