@@ -32,12 +32,9 @@
     @endif
 
     {{-- ══════════════════════════════════════════════════════════ --}}
-    {{-- GRILLE PRINCIPALE : FORMULAIRE (3) + SIDEBAR (2)          --}}
+    {{-- FORMULAIRE (pleine largeur)                                --}}
     {{-- ══════════════════════════════════════════════════════════ --}}
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
-
-        {{-- ── FORMULAIRE (3 colonnes) ──────────────────────────── --}}
-        <div class="lg:col-span-3 rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+        <div class="rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
 
             {{-- En-tête : avatar + identité --}}
             <div class="flex items-center gap-4 p-5 border-b border-gray-100">
@@ -178,8 +175,10 @@
             </form>
         </div>
 
-        {{-- ── SIDEBAR (2 colonnes) ──────────────────────────────── --}}
-        <div class="lg:col-span-2 flex gap-4 items-start">
+    {{-- ══════════════════════════════════════════════════════════ --}}
+    {{-- INSCRIPTION + ACCÈS RAPIDES (ligne pleine largeur)         --}}
+    {{-- ══════════════════════════════════════════════════════════ --}}
+    <div class="flex gap-4 items-start">
 
             {{-- Inscription --}}
             @if($app)
@@ -274,7 +273,6 @@
                 </div>
             </div>
 
-        </div>
     </div>
 
     {{-- ══════════════════════════════════════════════════════════ --}}
