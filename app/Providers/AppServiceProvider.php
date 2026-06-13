@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Jobs\CheckExpiredWaitlistOffers;
+use App\Listeners\ReactivateReturningUser;
 use App\Models\Application;
 use App\Models\Attendance;
 use App\Models\ConversationMessage;
@@ -20,7 +21,9 @@ use App\Policies\AttendancePolicy;
 use App\Policies\EvaluationPolicy;
 use App\Policies\NewsPolicy;
 use App\Policies\PartnerPolicy;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,7 +38,14 @@ class AppServiceProvider extends ServiceProvider
                 ->dailyAt('08:00')
                 ->timezone('Africa/Abidjan')
                 ->withoutOverlapping();
+
+            $schedule->command('hub:archive-editions')
+                ->dailyAt('00:05')
+                ->timezone('Africa/Abidjan')
+                ->withoutOverlapping();
         });
+        Event::listen(Login::class, ReactivateReturningUser::class);
+
         Gate::before(function (User $user, string $ability) {
             if ($user->hasRole('super_admin')) {
                 return true;

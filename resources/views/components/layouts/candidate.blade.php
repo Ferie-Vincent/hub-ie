@@ -64,6 +64,11 @@
         </nav>
 
         <div class="flex items-center gap-3">
+            {{-- Cloche notifications temps réel --}}
+            @auth
+            <livewire:shared.notification-bell />
+            @endauth
+
             {{-- Avatar + email desktop --}}
             <a href="{{ route('participant.profile') }}" class="flex items-center gap-2 group cursor-pointer">
                 @if(auth()->user()?->photo_path)
