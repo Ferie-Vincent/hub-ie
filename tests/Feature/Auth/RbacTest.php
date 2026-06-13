@@ -67,13 +67,13 @@ test('candidate cannot access candidature wizard without verification', function
         ->assertRedirect(route('verification.notice'));
 });
 
-test('candidate can access candidature wizard when verified', function () {
+test('candidate visiting /candidature is redirected to dashboard', function () {
     $candidate = User::factory()->create(['is_active' => true]);
     $candidate->assignRole('candidate');
 
     $this->actingAs($candidate)
         ->get('/candidature')
-        ->assertOk();
+        ->assertRedirect(route('candidate.dashboard'));
 });
 
 test('staff member is redirected away from candidature', function () {

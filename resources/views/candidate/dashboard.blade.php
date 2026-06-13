@@ -255,8 +255,8 @@
                 <p class="font-serif font-bold text-lg leading-tight text-blanc-pur">Badge d'accès 2026</p>
             </div>
             <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider"
-                  style="background:hsl(var(--vert-ivoire)/0.15); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.25);">
-                <span class="h-1.5 w-1.5 rounded-full animate-pulse" style="background:hsl(var(--vert-ivoire));"></span>
+                  style="background:hsl(var(--blanc-pur)/0.12); color:hsl(var(--blanc-pur)); border:1px solid hsl(var(--blanc-pur)/0.25);">
+                <span class="h-1.5 w-1.5 rounded-full animate-pulse" style="background:hsl(147 80% 55%);"></span>
                 Confirmé
             </span>
         </div>
@@ -313,11 +313,11 @@
         </div>
 
         {{-- Pied ticket --}}
-        <div class="px-6 pb-5 pt-4 border-t flex items-center justify-between" style="border-color:hsl(var(--vert-ivoire)/0.12); border-style:dashed;">
-            <p class="text-[10px]" style="color:hsl(var(--blanc-pur)/0.3);">À présenter à l'entrée chaque jour</p>
+        <div class="px-6 pb-5 pt-4 border-t flex items-center justify-between" style="border-color:hsl(var(--blanc-pur)/0.1); border-style:dashed;">
+            <p class="text-[10px]" style="color:hsl(var(--blanc-pur)/0.55);">À présenter à l'entrée chaque jour</p>
             <a href="{{ route('participant.badge.download') }}"
                class="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition-all hover:scale-105 cursor-pointer"
-               style="background:hsl(var(--vert-ivoire)/0.15); color:hsl(var(--vert-ivoire)); border:1px solid hsl(var(--vert-ivoire)/0.3);">
+               style="background:hsl(var(--blanc-pur)/0.12); color:hsl(var(--blanc-pur)); border:1px solid hsl(var(--blanc-pur)/0.3);">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 Mon badge PDF
             </a>
