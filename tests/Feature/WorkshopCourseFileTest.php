@@ -45,6 +45,9 @@ function makeEnrolledUser(Workshop $workshop): User
         'enrolled_at' => now(),
     ]);
 
+    $application = Application::factory()->accepted()->create(['user_id' => $user->id]);
+    $application->workshops()->attach($workshop->id);
+
     return $user;
 }
 
@@ -143,7 +146,7 @@ test('participant inscrit voit les fichiers de son atelier', function () {
 
     $component = Livewire::actingAs($user)->test(Downloads::class);
 
-    expect($component->get('enrollment'))->not->toBeNull();
+    expect($component->get('application'))->not->toBeNull();
     $courseFiles = $component->get('courseFiles');
     expect($courseFiles)->toHaveKey($this->workshop->id);
     expect($courseFiles[$this->workshop->id])->toHaveCount(1);
@@ -161,7 +164,7 @@ test('participant sans inscription ne voit aucun fichier', function () {
 
     $component = Livewire::actingAs($user)->test(Downloads::class);
 
-    expect($component->get('enrollment'))->toBeNull();
+    expect($component->get('application'))->toBeNull();
     expect($component->get('courseFiles'))->toBeEmpty();
 });
 
