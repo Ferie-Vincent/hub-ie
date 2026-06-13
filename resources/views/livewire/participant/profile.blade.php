@@ -179,11 +179,11 @@
         </div>
 
         {{-- ── SIDEBAR (2 colonnes) ──────────────────────────────── --}}
-        <div class="lg:col-span-2 grid grid-cols-3 gap-4 items-start">
+        <div class="lg:col-span-2 flex gap-4 items-start">
 
             {{-- Inscription --}}
             @if($app)
-            <div class="col-span-2 rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+            <div class="w-2/3 min-w-0 rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
                 <div class="flex items-center gap-2.5 border-b border-gray-100 px-5 py-3.5">
                     <div class="h-6 w-6 rounded-lg flex items-center justify-center" style="background:hsl(var(--vert-soft-bg));">
                         <svg class="w-3 h-3" style="color:hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,7 +245,7 @@
             @endif
 
             {{-- Accès rapides --}}
-            <div class="{{ $app ? 'col-span-1' : 'col-span-3' }} rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
+            <div class="{{ $app ? 'w-1/3' : 'w-full' }} min-w-0 rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
                 <div class="flex items-center gap-2.5 border-b border-gray-100 px-5 py-3.5">
                     <div class="h-6 w-6 rounded-lg flex items-center justify-center bg-gray-100">
                         <svg class="w-3 h-3 text-gris-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
