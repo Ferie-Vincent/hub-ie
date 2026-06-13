@@ -26,7 +26,7 @@ $gOffM   = round(-$gDashF, 4);
 $gOffX   = round(-$gDashF - $gDashM, 4);
 
 /* ── Computed values ──────────────────────────────────────── */
-$acceptedPct = round($accepted / max($quota, 1) * 100);
+$enrolledPct = round($enrolled / max($quota, 1) * 100);
 $catMax  = max(array_values($categoryData ?: [1]));
 $ageMax  = max(array_values($ageData ?: [1]));
 $wsMax   = max(array_values($workshopData ?: [1]));
@@ -224,16 +224,16 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
           <p style="font-family:'JetBrains Mono',monospace;font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(250,250,248,.50);margin-top:.25rem;">Candidatures</p>
         </div>
 
-        {{-- Hero stat: Accepted --}}
+        {{-- Hero stat: Enrolled --}}
         <div class="hd-stat-glass" style="background:rgba(0,154,68,.16);border:1px solid rgba(0,154,68,.32);">
-          <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#4CAF7A;line-height:1;">{{ $accepted }}<span style="font-size:.9rem;font-weight:400;color:rgba(76,175,122,.55);"> /{{ $quota }}</span></p>
-          <p style="font-family:'JetBrains Mono',monospace;font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(76,175,122,.65);margin-top:.25rem;">Retenus</p>
+          <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#4CAF7A;line-height:1;">{{ $enrolled }}<span style="font-size:.9rem;font-weight:400;color:rgba(76,175,122,.55);"> /{{ $quota }}</span></p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(76,175,122,.65);margin-top:.25rem;">Inscrits</p>
         </div>
 
-        {{-- Hero stat: To evaluate --}}
+        {{-- Hero stat: Waitlisted --}}
         <div class="hd-stat-glass" style="background:rgba(196,90,10,.15);border:1px solid rgba(196,90,10,.32);">
-          <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--hd-gold);line-height:1;">{{ $toEvaluate }}</p>
-          <p style="font-family:'JetBrains Mono',monospace;font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,158,98,.60);margin-top:.25rem;">À évaluer</p>
+          <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--hd-gold);line-height:1;">{{ $waitlisted }}</p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,158,98,.60);margin-top:.25rem;">En attente</p>
         </div>
 
       </div>
@@ -279,16 +279,16 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
     @endif
   </div>
 
-  {{-- Auditeurs retenus --}}
+  {{-- Inscrits en ateliers --}}
   <div class="hd-card">
     <div class="hd-accent" style="background:var(--hd-vert);"></div>
-    <span class="hd-kicker">Auditeurs retenus</span>
-    <p class="hd-num hd-num-sm">{{ $accepted }}<span class="hd-num-unit">/ {{ $quota }}</span></p>
+    <span class="hd-kicker">Inscrits en ateliers</span>
+    <p class="hd-num hd-num-sm">{{ $enrolled }}<span class="hd-num-unit">/ {{ $quota }}</span></p>
     <div class="hd-track" style="margin:.75rem 0 .5rem;">
-      <div class="hd-fill" style="width:{{ $acceptedPct }}%;background:var(--hd-vert);"></div>
+      <div class="hd-fill" style="width:{{ $enrolledPct }}%;background:var(--hd-vert);"></div>
       <div class="hd-marker" style="left:100%;"></div>
     </div>
-    <p class="hd-sub">{{ $acceptedPct }} % du quota atteint</p>
+    <p class="hd-sub">{{ $enrolledPct }} % du quota rempli</p>
   </div>
 
   {{-- Présents aujourd'hui --}}
@@ -303,12 +303,12 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
     </div>
   </div>
 
-  {{-- Dossiers à évaluer --}}
+  {{-- Liste d'attente --}}
   <div class="hd-card">
     <div class="hd-accent" style="background:var(--hd-sable);"></div>
-    <span class="hd-kicker">Dossiers à évaluer</span>
-    <p class="hd-num" style="{{ $toEvaluate == 0 ? 'color:var(--hd-t3)' : 'color:var(--hd-amber);' }}">{{ $toEvaluate }}</p>
-    <p class="hd-sub">éligibles + en cours</p>
+    <span class="hd-kicker">Liste d'attente</span>
+    <p class="hd-num" style="{{ $waitlisted == 0 ? 'color:var(--hd-t3)' : 'color:var(--hd-amber);' }}">{{ $waitlisted }}</p>
+    <p class="hd-sub">en attente d'une place</p>
   </div>
 
 </div>
@@ -427,7 +427,7 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
 
   {{-- Workshops --}}
   <div class="hd-card">
-    <span class="hd-kicker">Choix d'ateliers</span>
+    <span class="hd-kicker">Inscriptions par atelier</span>
     @php $wCols=['var(--hd-amber)','var(--hd-orange)','var(--hd-vert)','var(--hd-sable)']; $wi=0; @endphp
     @forelse($workshopData as $lbl => $count)
     @php $pct=round($count/max($wsMax,1)*100); $col=$wCols[$wi++%4]; @endphp
@@ -444,7 +444,7 @@ $attMax  = max(max($attendanceData ?: [1]), 10);
   {{-- Quotas inclusivité --}}
   <div class="hd-card">
     <span class="hd-kicker">Quotas inclusivité</span>
-    <p style="font-size:.7rem;color:var(--hd-t3);margin-bottom:1.25rem;">{{ $accepted }} / {{ $quota }} auditeurs retenus</p>
+    <p style="font-size:.7rem;color:var(--hd-t3);margin-bottom:1.25rem;">{{ $enrolled }} / {{ $quota }} auditeurs inscrits</p>
 
     <div style="margin-bottom:1.25rem;">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.375rem;">

@@ -28,6 +28,13 @@ class PublicController extends Controller
         ],
     ];
 
+    public function home()
+    {
+        $edition = Edition::current();
+
+        return view('public.home', compact('edition'));
+    }
+
     public function ateliers()
     {
         $workshops = Workshop::where('is_published', true)
@@ -84,6 +91,7 @@ class PublicController extends Controller
                 'applications',
                 'applications as accepted_count' => fn ($q) => $q->where('status', 'accepted'),
             ])
+            ->with(['portfolioPhotos' => fn ($q) => $q->orderBy('sort_order')])
             ->get();
 
         $currentEdition = Edition::current();

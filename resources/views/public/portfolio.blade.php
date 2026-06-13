@@ -131,6 +131,12 @@
                                             </p>
                                             @endif
 
+                                            @if($edition->description)
+                                            <p class="text-sm text-gris-500 leading-relaxed max-w-lg">
+                                                {{ $edition->description }}
+                                            </p>
+                                            @endif
+
                                             <div class="flex flex-wrap gap-4 text-xs text-gris-500 pt-1">
                                                 @if($edition->event_starts_at)
                                                 <span class="flex items-center gap-1.5">
@@ -155,19 +161,29 @@
                                         </div>
 
                                         {{-- Stats clés --}}
+                                        @php
+                                            $figures = $edition->key_figures ?? [];
+                                            $defaultFigures = [
+                                                ['val' => number_format($edition->accepted_count), 'lbl' => 'participants'],
+                                                ['val' => number_format($edition->applications_count), 'lbl' => 'candidatures'],
+                                            ];
+                                        @endphp
                                         <div class="grid grid-cols-2 gap-4 md:gap-6 md:text-right shrink-0">
-                                            <div>
-                                                <p class="text-2xl font-bold text-noir-profond tabular-nums">
-                                                    {{ number_format($edition->accepted_count) }}
-                                                </p>
-                                                <p class="text-xs text-gris-500 mt-0.5">participants</p>
-                                            </div>
-                                            <div>
-                                                <p class="text-2xl font-bold text-noir-profond tabular-nums">
-                                                    {{ number_format($edition->applications_count) }}
-                                                </p>
-                                                <p class="text-xs text-gris-500 mt-0.5">candidatures</p>
-                                            </div>
+                                            @if(count($figures) > 0)
+                                                @foreach(array_slice($figures, 0, 4) as $lbl => $val)
+                                                <div>
+                                                    <p class="text-2xl font-bold text-noir-profond tabular-nums">{{ $val }}</p>
+                                                    <p class="text-xs text-gris-500 mt-0.5">{{ $lbl }}</p>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                @foreach($defaultFigures as $fig)
+                                                <div>
+                                                    <p class="text-2xl font-bold text-noir-profond tabular-nums">{{ $fig['val'] }}</p>
+                                                    <p class="text-xs text-gris-500 mt-0.5">{{ $fig['lbl'] }}</p>
+                                                </div>
+                                                @endforeach
+                                            @endif
                                         </div>
 
                                     </div>
@@ -175,6 +191,22 @@
 
                             </div>
                         </div>
+
+                        {{-- Galerie photos --}}
+                        @if($edition->portfolioPhotos->isNotEmpty())
+                        <div class="px-6 pb-6 md:px-8 md:pb-8">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                                @foreach($edition->portfolioPhotos as $photo)
+                                <div class="aspect-[4/3] rounded-xl overflow-hidden group">
+                                    <img src="{{ asset('storage/'.$photo->image) }}"
+                                         alt="{{ $photo->caption ?? $edition->title }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
 
                     </div>
                     @endforeach

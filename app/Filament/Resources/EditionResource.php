@@ -119,6 +119,34 @@ class EditionResource extends Resource
                 ])
                 ->columns(2),
 
+            Forms\Components\Section::make('Portfolio public')
+                ->description('Contenu affiché sur la page /portfolio une fois l\'édition archivée.')
+                ->schema([
+                    Forms\Components\Textarea::make('description')
+                        ->label('Description / bilan')
+                        ->rows(4)
+                        ->maxLength(1000)
+                        ->placeholder('Résumé de l\'édition, résultats clés, impact…')
+                        ->columnSpanFull(),
+
+                    Forms\Components\FileUpload::make('cover_image')
+                        ->label('Image de couverture')
+                        ->image()
+                        ->disk('public')
+                        ->directory('editions')
+                        ->imagePreviewHeight('120')
+                        ->columnSpanFull(),
+
+                    Forms\Components\KeyValue::make('key_figures')
+                        ->label('Chiffres clés')
+                        ->keyLabel('Indicateur')
+                        ->valueLabel('Valeur')
+                        ->addActionLabel('Ajouter un chiffre')
+                        ->columnSpanFull()
+                        ->helperText('Ex : "Taux de satisfaction" → "94 %", "Femmes" → "52 %"'),
+                ])
+                ->columns(1),
+
             Forms\Components\Section::make('Statut')
                 ->schema([
                     Forms\Components\Toggle::make('registration_open')
@@ -141,7 +169,214 @@ class EditionResource extends Resource
                             : 'Annonce non encore envoyée'),
                 ])
                 ->columns(1),
+
+            // ── Contenu du site ─────────────────────────────────────────────
+
+            Forms\Components\Section::make('Hero — Textes')
+                ->description('Bandeau d\'accueil et introduction de la page principale.')
+                ->schema([
+                    Forms\Components\Textarea::make('hero_patron_text')
+                        ->label('Texte de patronage (bandeau)')
+                        ->rows(2)
+                        ->placeholder('Sous le haut patronage de Monsieur le Ministre...')
+                        ->columnSpanFull(),
+
+                    Forms\Components\Textarea::make('hero_subtitle')
+                        ->label('Sous-titre hero')
+                        ->rows(3)
+                        ->placeholder('Le rendez-vous stratégique des acteurs du commerce extérieur ivoirien…')
+                        ->columnSpanFull(),
+
+                    Forms\Components\Repeater::make('dates_cles')
+                        ->label('Dates clés (carte flottante hero)')
+                        ->schema([
+                            Forms\Components\TextInput::make('lieu')
+                                ->label('Lieu')
+                                ->required()
+                                ->columnSpan(1),
+                            Forms\Components\TextInput::make('sublabel')
+                                ->label('Libellé')
+                                ->required()
+                                ->columnSpan(2),
+                            Forms\Components\TextInput::make('date')
+                                ->label('Date affichée')
+                                ->required()
+                                ->columnSpan(1),
+                        ])
+                        ->columns(4)
+                        ->maxItems(6)
+                        ->addActionLabel('Ajouter une date')
+                        ->collapsed()
+                        ->columnSpanFull(),
+                ])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Mot du Ministre')
+                ->description('Portrait, nom, titre et texte du discours.')
+                ->schema([
+                    Forms\Components\TextInput::make('minister_name')
+                        ->label('Nom du Ministre')
+                        ->placeholder('Kalil KONATÉ'),
+
+                    Forms\Components\TextInput::make('minister_title')
+                        ->label('Titre')
+                        ->placeholder('Ministre du Commerce, de l\'Industrie et de l\'Artisanat'),
+
+                    Forms\Components\Repeater::make('minister_speech')
+                        ->label('Paragraphes du discours')
+                        ->schema([
+                            Forms\Components\Textarea::make('text')
+                                ->label('Paragraphe')
+                                ->rows(4)
+                                ->required(),
+                        ])
+                        ->maxItems(6)
+                        ->addActionLabel('Ajouter un paragraphe')
+                        ->collapsed()
+                        ->columnSpanFull(),
+                ])
+                ->columns(2)
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Statistiques (section Ministre)')
+                ->description('Les 4 cartes de chiffres clés sous le discours du Ministre.')
+                ->schema([
+                    Forms\Components\Repeater::make('stats_cards')
+                        ->label('Cartes statistiques')
+                        ->schema([
+                            Forms\Components\TextInput::make('value')
+                                ->label('Valeur')
+                                ->required()
+                                ->columnSpan(1),
+                            Forms\Components\TextInput::make('label')
+                                ->label('Intitulé')
+                                ->required()
+                                ->columnSpan(2),
+                            Forms\Components\TextInput::make('caption')
+                                ->label('Légende')
+                                ->columnSpan(2),
+                            Forms\Components\Select::make('color')
+                                ->label('Couleur')
+                                ->options(['orange' => 'Orange', 'vert' => 'Vert'])
+                                ->default('orange')
+                                ->columnSpan(1),
+                        ])
+                        ->columns(6)
+                        ->maxItems(4)
+                        ->addActionLabel('Ajouter une statistique')
+                        ->collapsed(),
+                ])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Cap stratégique — Objectifs')
+                ->schema([
+                    Forms\Components\Repeater::make('cap_objectifs')
+                        ->label('Items objectifs')
+                        ->schema([
+                            Forms\Components\TextInput::make('num')->label('N°')->default('01')->columnSpan(1),
+                            Forms\Components\TextInput::make('title')->label('Titre')->required()->columnSpan(3),
+                            Forms\Components\Textarea::make('body')->label('Corps')->rows(2)->required()->columnSpanFull(),
+                        ])
+                        ->columns(4)
+                        ->maxItems(6)
+                        ->addActionLabel('Ajouter un item')
+                        ->collapsed(),
+                ])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Cap stratégique — Résultats attendus')
+                ->schema([
+                    Forms\Components\Repeater::make('cap_resultats')
+                        ->label('Items résultats')
+                        ->schema([
+                            Forms\Components\TextInput::make('num')->label('N°')->default('01')->columnSpan(1),
+                            Forms\Components\TextInput::make('title')->label('Titre')->required()->columnSpan(3),
+                            Forms\Components\Textarea::make('body')->label('Corps')->rows(2)->required()->columnSpanFull(),
+                        ])
+                        ->columns(4)
+                        ->maxItems(6)
+                        ->addActionLabel('Ajouter un item')
+                        ->collapsed(),
+                ])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Cap stratégique — Pourquoi participer')
+                ->schema([
+                    Forms\Components\Repeater::make('cap_pourquoi')
+                        ->label('Items pourquoi')
+                        ->schema([
+                            Forms\Components\TextInput::make('num')->label('N°')->default('01')->columnSpan(1),
+                            Forms\Components\TextInput::make('title')->label('Titre')->required()->columnSpan(3),
+                            Forms\Components\Textarea::make('body')->label('Corps')->rows(2)->required()->columnSpanFull(),
+                        ])
+                        ->columns(4)
+                        ->maxItems(6)
+                        ->addActionLabel('Ajouter un item')
+                        ->collapsed(),
+                ])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Programme — Jour 1 (22 juin · Ouverture)')
+                ->schema([self::programmeDayRepeater('programme_j1')])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Programme — Jour 2 (23 juin · Ateliers)')
+                ->schema([self::programmeDayRepeater('programme_j2')])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Programme — Jour 3 (24 juin · Ateliers)')
+                ->schema([self::programmeDayRepeater('programme_j3')])
+                ->collapsible()
+                ->collapsed(),
+
+            Forms\Components\Section::make('Programme — Jour 4 (25 juin · Clôture)')
+                ->schema([self::programmeDayRepeater('programme_j4')])
+                ->collapsible()
+                ->collapsed(),
+
         ]);
+    }
+
+    private static function programmeDayRepeater(string $field): Forms\Components\Repeater
+    {
+        return Forms\Components\Repeater::make($field)
+            ->label('Activités du jour')
+            ->schema([
+                Forms\Components\TextInput::make('label')
+                    ->label('Activité')
+                    ->required()
+                    ->columnSpan(3),
+                Forms\Components\Select::make('tag')
+                    ->label('Type')
+                    ->options([
+                        'Accueil' => 'Accueil',
+                        'Plénière' => 'Plénière',
+                        'Conférence' => 'Conférence',
+                        'Atelier' => 'Atelier',
+                        'Networking' => 'Networking',
+                        'Pause' => 'Pause',
+                        'Panel' => 'Panel',
+                        'B2B' => 'B2B',
+                        'Presse' => 'Presse',
+                        'Restitution' => 'Restitution',
+                        'Évaluation' => 'Évaluation',
+                        'Cérémonie' => 'Cérémonie',
+                    ])
+                    ->required()
+                    ->columnSpan(1),
+            ])
+            ->columns(4)
+            ->maxItems(10)
+            ->addActionLabel('Ajouter une activité')
+            ->collapsed();
     }
 
     // ── Table ────────────────────────────────────────────────────────────────

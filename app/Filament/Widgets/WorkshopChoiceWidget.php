@@ -2,42 +2,29 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ApplicationStatus;
-use App\Models\Application;
+use App\Enums\EnrollmentStatus;
+use App\Models\Enrollment;
 use Filament\Widgets\ChartWidget;
 
 class WorkshopChoiceWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Choix d\'ateliers';
+    protected static ?string $heading = 'Inscriptions par atelier';
 
     protected static ?int $sort = 6;
 
     protected function getData(): array
     {
-        $slugs = [
-            'zlecaf-cedeao' => 'ZLECAf & CEDEAO',
-            'financement-garanties' => 'Financement & garanties',
-            'commerce-electronique' => 'Commerce électronique',
-            'conformite-qualite' => 'Conformité & qualité',
-        ];
-
-        $counts = array_fill_keys(array_keys($slugs), 0);
-
-        Application::whereNotIn('status', [
-            ApplicationStatus::Draft->value,
-            ApplicationStatus::Withdrawn->value,
-        ])->whereNotNull('chosen_workshops')->each(function ($app) use (&$counts) {
-            foreach ((array) $app->chosen_workshops as $slug) {
-                if (isset($counts[$slug])) {
-                    $counts[$slug]++;
-                }
-            }
-        });
+        $rows = Enrollment::where('enrollments.status', EnrollmentStatus::Enrolled->value)
+            ->join('workshops', 'workshops.id', '=', 'enrollments.workshop_id')
+            ->selectRaw('workshops.title, COUNT(*) as total')
+            ->groupBy('workshops.id', 'workshops.title')
+            ->orderByDesc('total')
+            ->get();
 
         return [
             'datasets' => [[
-                'label' => 'Inscriptions',
-                'data' => array_values($counts),
+                'label' => 'Inscrits',
+                'data' => $rows->pluck('total')->values()->toArray(),
                 'backgroundColor' => [
                     'hsla(145,68%,33%,0.88)',
                     'hsla(145,65%,42%,0.85)',
@@ -46,7 +33,7 @@ class WorkshopChoiceWidget extends ChartWidget
                 ],
                 'borderRadius' => 4,
             ]],
-            'labels' => array_values($slugs),
+            'labels' => $rows->pluck('title')->values()->toArray(),
         ];
     }
 

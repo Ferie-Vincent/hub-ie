@@ -15,6 +15,9 @@ class Edition extends Model
         'year',
         'title',
         'theme',
+        'description',
+        'cover_image',
+        'key_figures',
         'location',
         'application_opens_at',
         'application_closes_at',
@@ -27,6 +30,20 @@ class Edition extends Model
         'registration_open',
         'is_active',
         'launched_at',
+        'hero_patron_text',
+        'hero_subtitle',
+        'dates_cles',
+        'minister_name',
+        'minister_title',
+        'minister_speech',
+        'stats_cards',
+        'cap_objectifs',
+        'cap_resultats',
+        'cap_pourquoi',
+        'programme_j1',
+        'programme_j2',
+        'programme_j3',
+        'programme_j4',
     ];
 
     protected function casts(): array
@@ -37,6 +54,17 @@ class Edition extends Model
             'event_starts_at' => 'datetime',
             'event_ends_at' => 'datetime',
             'launched_at' => 'datetime',
+            'key_figures' => 'array',
+            'dates_cles' => 'array',
+            'minister_speech' => 'array',
+            'stats_cards' => 'array',
+            'cap_objectifs' => 'array',
+            'cap_resultats' => 'array',
+            'cap_pourquoi' => 'array',
+            'programme_j1' => 'array',
+            'programme_j2' => 'array',
+            'programme_j3' => 'array',
+            'programme_j4' => 'array',
             'registration_open' => 'boolean',
             'is_active' => 'boolean',
             'max_participants' => 'integer',
@@ -65,6 +93,11 @@ class Edition extends Model
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
+    }
+
+    public function portfolioPhotos(): HasMany
+    {
+        return $this->hasMany(PortfolioPhoto::class)->orderBy('sort_order');
     }
 
     // ── Business logic ───────────────────────────────────────────────────────

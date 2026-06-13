@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -37,6 +38,14 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logo-hie.png'))
             ->brandLogoHeight('2.25rem')
             ->sidebarCollapsibleOnDesktop()
+            ->navigationItems([
+                NavigationItem::make('Éditions')
+                    ->url('/admin/editions')
+                    ->icon('heroicon-o-archive-box')
+                    ->group('Contenu')
+                    ->sort(50)
+                    ->isActiveWhen(fn () => request()->is('admin/editions*')),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -47,7 +56,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook('panels::head.end', fn () => <<<'HTML'
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700..900;1,9..144,700&family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════════════════════════════
    HUB IMPORT-EXPORT 2026
@@ -450,12 +459,142 @@ label, .fi-fo-field-wrp-label { font-size: 13px !important; font-weight: 500 !im
 .fi-notification-danger  { border-left: 3px solid #ef4444 !important; }
 
 /* ═══════════════════════════════════════════════════════════════
-   LOGIN PAGE
+   LOGIN PAGE — split-screen (mirrors public /login design)
+   Left : #FAFAF7 light panel — logo + heading + form
+   Right: .hie-auth-right dark panel — image + brand content
+   Both are direct children of body, placed via CSS grid.
 ═══════════════════════════════════════════════════════════════ */
-.fi-simple-page, .fi-simple-main { background: var(--ins-body-bg) !important; }
-.fi-simple-main .fi-section {
-  border-radius: var(--ins-radius-xl) !important;
-  box-shadow: var(--ins-shadow) !important;
+body:has(main.fi-simple-main) {
+  background: #FAFAF7 !important;
+  display: grid !important;
+  grid-template-columns: clamp(400px, 42vw, 540px) 1fr !important;
+  grid-template-rows: 1fr !important;
+  min-height: 100vh !important;
+  align-items: stretch !important;
+}
+/* Left column: Filament's simple-layout wrapper */
+body:has(main.fi-simple-main) .fi-simple-layout {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  background: #FAFAF7 !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+}
+body:has(main.fi-simple-main) .fi-simple-main-ctn {
+  flex: 1 !important;
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+}
+/* Form card: flat, full-width, no card styling */
+main.fi-simple-main {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 2.25rem 3rem 3rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.fi-simple-page {
+  background: transparent !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+/* Hide Filament's default logo+heading block (replaced by injected brand header) */
+main.fi-simple-main .fi-simple-header { display: none !important; }
+/* Kill gap created by the section grid when header is gone */
+body:has(main.fi-simple-main) .fi-simple-page > section { display: block !important; gap: 0 !important; }
+/* Logo in injected brand block: keep original colors */
+main.fi-simple-main img[alt] { filter: none !important; max-height: 2.5rem !important; }
+/* Labels: dark muted uppercase */
+main.fi-simple-main label,
+main.fi-simple-main .fi-fo-field-wrp-label {
+  color: rgba(15,12,8,0.38) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+}
+/* Input wrapper: remove Filament's box — underline only */
+main.fi-simple-main .fi-input-wrp {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1.5px solid rgba(15,12,8,0.16) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+  --tw-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+main.fi-simple-main .fi-input-wrp:focus-within {
+  border-bottom-color: var(--ins-green) !important;
+  box-shadow: none !important;
+}
+/* The actual input element */
+main.fi-simple-main .fi-input,
+main.fi-simple-main input[type="email"],
+main.fi-simple-main input[type="password"],
+main.fi-simple-main input[type="text"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: none !important;
+  --tw-ring-offset-shadow: none !important;
+  color: #0F0C08 !important;
+  padding-left: 0 !important;
+}
+main.fi-simple-main input::placeholder { color: rgba(15,12,8,0.25) !important; }
+main.fi-simple-main input:focus { outline: none !important; box-shadow: none !important; }
+/* Password toggle icon */
+main.fi-simple-main .fi-icon-btn-icon { color: rgba(15,12,8,0.35) !important; }
+/* Checkbox */
+main.fi-simple-main .fi-fo-checkbox span,
+main.fi-simple-main [type="checkbox"] + span { color: rgba(15,12,8,0.55) !important; }
+/* Submit: green pill */
+main.fi-simple-main .fi-btn-color-primary.fi-btn-style-filled {
+  background: var(--ins-green) !important;
+  border-color: var(--ins-green) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  width: 100% !important;
+}
+main.fi-simple-main .fi-btn-color-primary.fi-btn-style-filled:hover {
+  opacity: .88 !important;
+  transform: translateY(-1px) !important;
+}
+/* Links */
+main.fi-simple-main a { color: rgba(15,12,8,0.35) !important; }
+main.fi-simple-main a:hover { color: var(--ins-green) !important; }
+/* Section shell inside form */
+main.fi-simple-main .fi-section { background: transparent !important; border: none !important; box-shadow: none !important; }
+/* Right panel (injected via body.start hook) */
+.hie-auth-right {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 100vh !important;
+}
+@media (max-width: 900px) {
+  body:has(main.fi-simple-main) { grid-template-columns: 1fr !important; }
+  .hie-auth-right { display: none !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -473,6 +612,73 @@ main.fi-main { padding-inline: 1.25rem !important; }
 .fi-sidebar-nav-groups { gap: 0 !important; }
 </style>
 HTML)
+            ->renderHook('panels::auth.login.form.before', fn () => <<<'HTML'
+<div style="margin-bottom:2.5rem;">
+  <a href="/" style="display:inline-block;margin-bottom:2.25rem;text-decoration:none;">
+    <img src="/images/logo.svg" alt="Hub Import-Export 2026" style="height:36px;width:auto;object-fit:contain;">
+  </a>
+  <p style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.24em;text-transform:uppercase;color:#27AE60;margin:0 0 0.625rem;">Espace administrateur</p>
+  <h1 style="font-family:'Fraunces',serif;font-size:clamp(1.75rem,2.8vw,2.25rem);font-weight:900;letter-spacing:-0.025em;line-height:1.1;color:#1A1208;margin:0 0 0.625rem;">Bon retour.</h1>
+  <p style="font-size:0.9rem;color:rgba(15,12,8,0.45);line-height:1.65;max-width:24rem;margin:0;">Saisissez vos identifiants pour accéder au panneau de pilotage Hub Import-Export 2026.</p>
+</div>
+HTML)
+            ->renderHook('panels::body.start', function () {
+                if (! request()->routeIs('filament.admin.auth.login')) {
+                    return '';
+                }
+
+                return <<<'HTML'
+<div class="hie-auth-right" aria-hidden="true">
+  <img src="/images/cap-marche.jpg" alt=""
+       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
+  <div style="position:absolute;inset:0;background:linear-gradient(155deg,rgba(10,30,20,0.93) 0%,rgba(15,42,28,0.88) 40%,rgba(8,22,15,0.92) 100%);"></div>
+  <div style="position:relative;z-index:10;height:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:4rem 3.5rem;">
+
+    <div style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.375rem 0.875rem;border-radius:9999px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);font-family:'JetBrains Mono',monospace;font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.75);width:fit-content;margin-bottom:2.5rem;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#4CAF7A;flex-shrink:0;display:inline-block;"></span>
+      Plateforme officielle 2026
+    </div>
+
+    <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,3.5vw,3.125rem);font-weight:900;letter-spacing:-0.025em;line-height:1.1;color:#fff;margin:0 0 1.375rem;">
+      Le commerce extérieur<br>
+      <em style="font-style:italic;color:#E8925A;">ivoirien en action.</em>
+    </h2>
+
+    <p style="font-size:1rem;line-height:1.72;color:rgba(255,255,255,0.55);max-width:28rem;margin:0 0 3rem;">
+      Accédez aux outils de gestion et de pilotage du Hub Import-Export 2026 — formation, candidatures et pointage en un seul espace.
+    </p>
+
+    <div style="display:flex;align-items:center;gap:2rem;margin-bottom:3.5rem;">
+      <div>
+        <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#fff;line-height:1;margin:0 0 0.25rem;">150</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.38);margin:0;">Auditeurs</p>
+      </div>
+      <div style="width:1px;height:2.5rem;background:rgba(255,255,255,0.15);flex-shrink:0;"></div>
+      <div>
+        <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#fff;line-height:1;margin:0 0 0.25rem;">4</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.38);margin:0;">Ateliers</p>
+      </div>
+      <div style="width:1px;height:2.5rem;background:rgba(255,255,255,0.15);flex-shrink:0;"></div>
+      <div>
+        <p style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:#fff;line-height:1;margin:0 0 0.25rem;">22–25</p>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.38);margin:0;">Juin 2026</p>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.10);">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);">MCIA</span>
+      </div>
+      <div>
+        <p style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.85);margin:0 0 0.125rem;">Sous le haut patronage du Ministre du Commerce</p>
+        <p style="font-size:0.6875rem;color:rgba(255,255,255,0.38);margin:0;">République de Côte d'Ivoire</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+HTML;
+            })
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

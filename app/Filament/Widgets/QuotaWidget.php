@@ -2,8 +2,8 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ApplicationStatus;
-use App\Models\Application;
+use App\Enums\EnrollmentStatus;
+use App\Models\Enrollment;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Carbon;
 
@@ -15,20 +15,18 @@ class QuotaWidget extends Widget
 
     protected function getViewData(): array
     {
-        $accepted = Application::where('status', ApplicationStatus::Accepted->value);
-
-        $total = (clone $accepted)->count();
         $quota = 180;
 
-        $women = (clone $accepted)
-            ->join('users', 'users.id', '=', 'applications.user_id')
-            ->where('users.gender', 'F')
-            ->count();
+        $enrolledBase = Enrollment::where('enrollments.status', EnrollmentStatus::Enrolled->value)
+            ->join('users', 'users.id', '=', 'enrollments.user_id');
+
+        $total = Enrollment::where('status', EnrollmentStatus::Enrolled->value)->count();
+
+        $women = (clone $enrolledBase)->where('users.gender', 'F')->count();
         $womenPct = $quota > 0 ? round($women / $quota * 100) : 0;
         $womenTarget = 50;
 
-        $young = Application::where('status', ApplicationStatus::Accepted->value)
-            ->join('users', 'users.id', '=', 'applications.user_id')
+        $young = (clone $enrolledBase)->whereNotNull('users.birth_date')
             ->where('users.birth_date', '>=', Carbon::now()->subYears(35)->toDateString())
             ->count();
         $youngPct = $quota > 0 ? round($young / $quota * 100) : 0;
