@@ -33,7 +33,6 @@
     }
     $navLinks = [
         ['Tableau de bord', route('candidate.dashboard'),   'candidate.dashboard'],
-        ['Ma candidature',  route('candidature.index'),     'candidature.*'],
         ['Documents',       route('participant.downloads'), 'participant.downloads'],
         ['Messages',        route('participant.messages'),  'participant.messages'],
         ['Mon profil',      route('participant.profile'),   'participant.profile'],

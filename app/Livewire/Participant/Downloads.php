@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Participant;
 
-use App\Enums\EnrollmentStatus;
-use App\Models\Enrollment;
+use App\Enums\ApplicationStatus;
+use App\Models\Application;
 use App\Models\WorkshopCourseFile;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
@@ -14,40 +14,36 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 #[Layout('components.layouts.candidate', ['title' => 'Mes documents'])]
 class Downloads extends Component
 {
-    public ?Enrollment $enrollment = null;
+    public ?Application $application = null;
 
     public function mount(): void
     {
-        $enrollment = auth()->user()
-            ->enrollment()
-            ->where('status', EnrollmentStatus::Enrolled->value)
-            ->with('workshop')
+        $application = auth()->user()
+            ->applications()
+            ->where('status', ApplicationStatus::Accepted->value)
+            ->with('workshops')
             ->first();
 
-        if (! $enrollment) {
-            session()->flash('error', 'Vous devez être inscrit à un atelier pour accéder aux documents de cours.');
+        if (! $application) {
+            session()->flash('error', 'Vous devez être inscrit(e) et accepté(e) pour accéder aux documents.');
             $this->redirect(route('candidate.dashboard'), navigate: true);
 
             return;
         }
 
-        $this->enrollment = $enrollment;
+        $this->application = $application;
     }
 
     #[Computed]
     public function workshops(): Collection
     {
-        if (! $this->enrollment) {
-            return collect();
-        }
-
-        return collect([$this->enrollment->workshop])->filter();
+        return $this->application?->workshops ?? collect();
     }
 
     #[Computed]
     public function courseFiles(): Collection
     {
-        if (! $this->enrollment) {
+        if (! $this->application) {
             return collect();
         }
 
@@ -64,7 +60,7 @@ class Downloads extends Component
     #[Computed]
     public function hasNewFiles(): bool
     {
-        if (! $this->enrollment) {
+        if (! $this->application) {
             return false;
         }
 
@@ -79,7 +75,7 @@ class Downloads extends Component
     #[Computed]
     public function newFilesCount(): int
     {
-        if (! $this->enrollment) {
+        if (! $this->application) {
             return 0;
         }
 
@@ -93,7 +89,7 @@ class Downloads extends Component
 
     public function download(int $fileId): ?StreamedResponse
     {
-        if (! $this->enrollment) {
+        if (! $this->application) {
             session()->flash('error', 'Accès non autorisé.');
 
             return null;
