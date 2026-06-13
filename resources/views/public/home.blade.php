@@ -747,47 +747,64 @@ $newsletterSubtitle = $edition?->newsletter_subtitle ?? 'Recevez le programme of
             </h2>
         </div>
 
-        {{-- Grille speakers --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {{-- Grille speakers — v10-format-card (5 effets hover BRIEF §II.5.11) --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
             @foreach($speakers as $speaker)
-            <div class="glass rounded-3xl p-6 text-center reveal hub-card-lift flex flex-col items-center gap-4">
+            <div class="v10-format-card flex flex-col">
 
-                {{-- Photo ou initiales --}}
-                @if($speaker->photo_path)
-                <img
-                    src="{{ asset('storage/'.$speaker->photo_path) }}"
-                    alt="{{ $speaker->full_name }}"
-                    class="w-20 h-20 rounded-2xl object-cover object-center flex-shrink-0"
-                    loading="lazy"
-                >
-                @else
-                <div class="w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl font-serif font-bold text-blanc-pur"
-                     style="background: linear-gradient(135deg, hsl(var(--vert-ivoire)/0.7), hsl(var(--vert-fonce)/0.9));">
-                    {{ mb_strtoupper(mb_substr($speaker->first_name, 0, 1)).mb_strtoupper(mb_substr($speaker->last_name, 0, 1)) }}
-                </div>
-                @endif
+                {{-- Coin décoratif --}}
+                <div class="v10-corner" aria-hidden="true"></div>
 
-                {{-- Infos --}}
-                <div class="flex-1 min-w-0 w-full">
-                    @if($speaker->is_featured)
-                    <span class="inline-block text-[0.6rem] font-bold uppercase tracking-widest text-orange-soft mb-2">Intervenant clé</span>
+                {{-- Photo full-width — portrait crop, top of card --}}
+                <div class="-mx-6 -mt-6 mb-5 overflow-hidden flex-shrink-0" style="height: 220px;">
+                    @if($speaker->photo_path)
+                    <img
+                        src="{{ asset('storage/'.$speaker->photo_path) }}"
+                        alt="{{ $speaker->full_name }}"
+                        class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                    >
+                    @else
+                    <div class="w-full h-full flex items-center justify-center text-4xl font-serif font-bold text-blanc-pur select-none"
+                         style="background: linear-gradient(135deg, hsl(var(--vert-fonce)) 0%, hsl(var(--vert-ivoire)/0.85) 100%);">
+                        {{ mb_strtoupper(mb_substr($speaker->first_name, 0, 1)).mb_strtoupper(mb_substr($speaker->last_name, 0, 1)) }}
+                    </div>
                     @endif
-                    <p class="font-serif font-bold text-blanc-pur text-base leading-tight">{{ $speaker->full_name }}</p>
-                    <p class="text-xs text-blanc-pur/60 mt-1 leading-snug">{{ $speaker->title }}</p>
-                    <p class="text-[0.65rem] font-mono text-vert-soft/80 mt-1 uppercase tracking-wide">{{ $speaker->organization }}</p>
                 </div>
 
-                {{-- LinkedIn --}}
-                @if($speaker->linkedin)
-                <a href="{{ $speaker->linkedin }}"
-                   target="_blank" rel="noopener noreferrer"
-                   class="text-blanc-pur/30 hover:text-vert-ivoire transition-colors"
-                   aria-label="LinkedIn de {{ $speaker->full_name }}">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                </a>
+                {{-- Badge intervenant clé --}}
+                @if($speaker->is_featured)
+                <span class="inline-block text-[0.6rem] font-bold uppercase tracking-widest text-orange-soft mb-2">── Intervenant clé</span>
                 @endif
+
+                {{-- Nom --}}
+                <h3 class="font-serif font-bold text-noir-profond text-base leading-tight mb-1">{{ $speaker->full_name }}</h3>
+                <p class="text-xs text-gris-500 leading-snug mb-3">{{ $speaker->title }}</p>
+
+                {{-- Spacer --}}
+                <div class="flex-1"></div>
+
+                {{-- Ligne basse : icône (v10-float au hover) + orga + LinkedIn --}}
+                <div class="flex items-center gap-3 pt-3 border-t border-sable/60">
+                    <div class="v10-format-icon w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                         style="background: hsl(var(--vert-soft-bg)); border: 1px solid hsl(var(--vert-ivoire)/0.2);">
+                        <svg class="w-4 h-4" fill="none" stroke="hsl(var(--vert-ivoire))" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+                        </svg>
+                    </div>
+                    <p class="text-[0.6rem] font-mono text-gris-500 uppercase tracking-wide flex-1 min-w-0 leading-tight">{{ $speaker->organization }}</p>
+                    @if($speaker->linkedin)
+                    <a href="{{ $speaker->linkedin }}"
+                       target="_blank" rel="noopener noreferrer"
+                       class="text-gris-500/40 hover:text-vert-ivoire transition-colors flex-shrink-0"
+                       aria-label="LinkedIn de {{ $speaker->full_name }}"
+                       @click.stop>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                    @endif
+                </div>
             </div>
             @endforeach
         </div>
