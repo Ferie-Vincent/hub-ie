@@ -5,11 +5,13 @@ namespace App\Notifications;
 use App\Models\Conversation;
 use App\Models\ConversationMessage;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewMessageReceived extends Notification implements ShouldQueue
+class NewMessageReceived extends Notification implements ShouldBroadcast, ShouldQueue
 {
     use Queueable;
 
@@ -20,7 +22,12 @@ class NewMessageReceived extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', 'broadcast'];
+    }
+
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage($this->toDatabase($notifiable));
     }
 
     public function toMail(object $notifiable): MailMessage
