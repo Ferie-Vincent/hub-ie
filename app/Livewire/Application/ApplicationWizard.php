@@ -7,6 +7,7 @@ use App\Enums\ApplicationStatus;
 use App\Enums\DocumentType;
 use App\Models\Application;
 use App\Models\ApplicationDocument;
+use App\Models\Edition;
 use App\Models\Workshop;
 use App\Services\ApplicationStatusService;
 use Illuminate\Database\Eloquent\Collection;
@@ -103,7 +104,10 @@ class ApplicationWizard extends Component
             $this->gender = $user->gender->value;
         }
 
+        $currentEditionId = Edition::current()?->id;
+
         $existing = $user->applications()
+            ->when($currentEditionId, fn ($q) => $q->where('edition_id', $currentEditionId))
             ->whereNotIn('status', [
                 ApplicationStatus::Withdrawn->value,
                 ApplicationStatus::Rejected->value,
