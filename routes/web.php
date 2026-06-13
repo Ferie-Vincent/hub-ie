@@ -60,9 +60,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'candidate'])->group(function () {
-    Route::get('/candidature', fn () => view('candidature.index'))
+    Route::get('/candidature', fn () => redirect()->route('candidate.dashboard'))
         ->name('candidature.index');
-    Route::get('/candidature/confirmation', fn () => view('candidature.confirmation'))
+    Route::get('/candidature/confirmation', fn () => redirect()->route('candidate.dashboard'))
         ->name('application.confirmation');
     Route::get('/mon-espace', fn () => view('candidate.dashboard'))
         ->name('candidate.dashboard');
