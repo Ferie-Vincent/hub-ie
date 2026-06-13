@@ -60,14 +60,14 @@
     $sc = $app ? ($statusColors[$app->status->value] ?? $statusColors['draft']) : null;
 
     $statusMsg = $app ? [
-        'draft'        => 'Votre brouillon n\'est pas encore soumis.',
-        'received'     => 'Dossier en cours d\'instruction administrative.',
-        'incomplete'   => 'Dossier incomplet — veuillez le compléter avant la date limite.',
-        'eligible'     => 'Dossier recevable — en cours d\'évaluation par le comité.',
-        'under_review' => 'En cours d\'évaluation par le comité de sélection.',
-        'shortlisted'  => 'Présélectionné(e) — décision finale sous 7 jours.',
-        'accepted'     => 'Vous êtes retenu(e) comme auditeur au Hub Import-Export 2026 !',
-        'waitlisted'   => 'Sur liste d\'attente — vous serez notifié(e) en cas de place.',
+        'draft'        => 'Inscription en cours de finalisation.',
+        'received'     => 'Inscription confirmée — votre place est réservée.',
+        'incomplete'   => 'Inscription incomplète — contactez l\'organisation.',
+        'eligible'     => 'Inscription validée.',
+        'under_review' => 'Inscription en cours de validation.',
+        'shortlisted'  => 'Inscription confirmée.',
+        'accepted'     => 'Vous êtes inscrit(e) au Hub Import-Export 2026 — à vos côtés le 22 juin à Abidjan !',
+        'waitlisted'   => 'Sur liste d\'attente — vous serez notifié(e) dès qu\'une place se libère.',
     ][$app->status->value] ?? '' : '';
 @endphp
 
@@ -162,43 +162,30 @@
     </p>
     @endif
 
-    @if(!$isAccepted && $app)
+    @if(!$isAccepted && $app && $app->status->canWithdraw())
     <div class="mt-4 flex flex-wrap gap-3">
-        @if(in_array($app->status->value, ['draft', 'incomplete']))
-        <a href="{{ route('candidature.index') }}" class="btn-fill px-5 py-2 text-sm inline-flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-            {{ $app->status->value === 'draft' ? 'Continuer ma candidature' : 'Compléter mon dossier' }}
-        </a>
-        @endif
-        @if($app->status->canWithdraw())
         <form method="POST" action="{{ route('application.withdraw') }}"
-              onsubmit="return confirm('Êtes-vous sûr(e) ? Cette action est irréversible.')">
+              onsubmit="return confirm('Êtes-vous sûr(e) de vouloir annuler votre inscription ? Cette action est irréversible.')">
             @csrf @method('DELETE')
             <button type="submit" class="px-5 py-2 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-colors cursor-pointer">
-                Retirer ma candidature
+                Annuler mon inscription
             </button>
         </form>
-        @endif
     </div>
     @endif
 </div>
 
 @if(!$app)
-{{-- Pas de candidature --}}
-<div class="rounded-3xl bg-white border-2 border-dashed border-gray-200 p-12 text-center shadow-sm">
+{{-- Inscription en attente de traitement --}}
+<div class="rounded-3xl bg-white border border-gray-100 shadow-sm p-10 text-center">
     <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-5"
-         style="background: hsl(var(--orange-soft-bg));">
+         style="background: hsl(var(--vert-soft-bg));">
         <svg class="w-8 h-8" style="color: hsl(var(--vert-ivoire));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
     </div>
-    <h2 class="font-serif font-bold text-xl text-noir-profond mb-2">Déposez votre candidature</h2>
-    <p class="text-sm text-gris-500 mb-6 max-w-sm mx-auto">Rejoignez les acteurs du commerce extérieur ivoirien au Hub Import-Export 2026.</p>
-    <a href="{{ route('candidature.index') }}" class="btn-fill px-8 py-3 text-sm inline-flex items-center gap-2">
-        Déposer ma candidature
-    </a>
+    <h2 class="font-serif font-bold text-xl text-noir-profond mb-2">Inscription en cours de traitement</h2>
+    <p class="text-sm text-gris-500 max-w-sm mx-auto">Votre espace est en cours de configuration. Actualisez la page dans quelques instants.</p>
 </div>
 @else
 
